@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { ViewCell } from 'ng2-smart-table';
+import { ViewCell } from 'projects/ngx-smart-table/src/public-api';
 
 @Component({
   template: `

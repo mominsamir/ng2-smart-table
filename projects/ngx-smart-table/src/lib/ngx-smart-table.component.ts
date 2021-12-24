@@ -9,11 +9,11 @@ import { deepExtend, getPageForRowIndex } from './lib/helpers';
 import { LocalDataSource } from './lib/data-source/local/local.data-source';
 
 @Component({
-  selector: 'ng2-smart-table',
-  styleUrls: ['./ng2-smart-table.component.scss'],
-  templateUrl: './ng2-smart-table.component.html',
+  selector: 'ngx-smart-table',
+  styleUrls: ['./ngx-smart-table.component.scss'],
+  templateUrl: './ngx-smart-table.component.html',
 })
-export class Ng2SmartTableComponent implements OnChanges, OnDestroy {
+export class NgxSmartTableComponent implements OnChanges, OnDestroy {
 
   @Input() source: any;
   @Input() settings: Object = {};

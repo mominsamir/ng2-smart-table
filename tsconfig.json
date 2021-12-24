@@ -19,8 +19,8 @@
       "dom"
     ],
     "paths": {
-      "ng2-smart-table": [
-        "projects/ng2-smart-table/src/public-api.ts"
+      "ngx-smart-table": [
+        "projects/ngx-smart-table/src/public-api.ts"
       ]
     }
   }

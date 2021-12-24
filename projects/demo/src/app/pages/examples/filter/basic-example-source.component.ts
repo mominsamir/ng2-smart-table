@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 
-import { LocalDataSource } from 'ng2-smart-table';
+import { LocalDataSource } from 'projects/ngx-smart-table/src/public-api';
 
 @Component({
   selector: 'basic-example-source',
   template: `
     <input #search class="search" type="text" placeholder="Search..." (keydown.enter)="onSearch(search.value)">
-    <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>
+    <ngx-smart-table [settings]="settings" [source]="source"></ngx-smart-table>
   `,
 })
 export class BasicExampleSourceComponent {

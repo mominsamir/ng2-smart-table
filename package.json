@@ -1,13 +1,13 @@
 {
   "name": "@mominsamir/ngx-smart-table",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build:demo": "ng build demo --aot --prod",
-    "build:lib": "ng build ng2-smart-table --prod",
+    "build:lib": "ng build ngx-smart-table --prod",
     "build:ci": "npm run build:demo && npm run build:lib",
-    "docs:gh-pages": "npm run build:demo -- --base-href '/ng2-smart-table/' && ngh --dir ./dist/demo",
+    "docs:gh-pages": "npm run build:demo -- --base-href '/ngx-smart-table/' && ngh --dir ./dist/demo",
     "test": "ng test",
     "release": "npm run build:lib && npm run publish",
     "publish": "npm publish --access=public dist/ngx-smart-table",
@@ -61,7 +61,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mominsamir/ng2-smart-table.git"
+    "url": "git+https://github.com/mominsamir/ngx-smart-table.git"
   },
   "keywords": [
     "angular",
@@ -70,7 +70,7 @@
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mominsamir/ng2-smart-table/issues"
+    "url": "https://github.com/mominsamir/ngx-smart-table/issues"
   },
-  "homepage": "https://github.com/mominsamir/ng2-smart-table#readme"
+  "homepage": "https://github.com/mominsamir/ngx-smart-table#readme"
 }
