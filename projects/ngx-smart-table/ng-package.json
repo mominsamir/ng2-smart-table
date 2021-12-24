@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/ngx-smart-table",
+  "dest": "../../dist/@mominsamir/ngx-smart-table",
   "whitelistedNonPeerDependencies": [
     "lodash"
   ],
