@@ -60,7 +60,7 @@ export class Grid {
   setSettings(settings: Object) {
     this.settings = settings;
     this.dataSet = new DataSet([], this.getSetting('columns'));
-    this.dataSet.setTruckByMultiSelectByColumn(this.getSetting('keyColumn'));
+    this.dataSet.setTrackByMultiSelectByColumn(this.getSetting('keyColumn'));
 
     if (this.source) {
       this.source.refresh();
@@ -305,8 +305,12 @@ export class Grid {
 
   selectAllRows(status: boolean) {
       if(status) {
-        this.dataSet.getRows().forEach(row => this.dataSet.getMultipleSelectedRows().add(row));
+        this.dataSet.getRows().forEach(row => {
+            row.isSelected = status;
+            this.dataSet.getMultipleSelectedRows().add(row)
+        });
       } else {
+        this.dataSet.getRows().forEach(row => row.isSelected = status);
         this.dataSet.getMultipleSelectedRows().clear();
       }
   }

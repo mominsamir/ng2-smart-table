@@ -9,7 +9,7 @@ export class DataSet {
   protected columns: Array<Column> = [];
   protected rows: Array<Row> = [];
   protected multipleSelectedRows: Set<Row> = new Set();
-  protected truckByMultiSelect: string | undefined = undefined;
+  protected trackByMultiSelect: string | undefined = undefined;
   protected selectedRow: Row;
   protected expandedRow: Row;
   protected willSelect: string;
@@ -82,13 +82,15 @@ export class DataSet {
   isRowSelected (row: Row): boolean {
     return Array.from(this.getMultipleSelectedRows())
         .find((selectedRow: Row) => selectedRow.getKeyValue() === row.getKeyValue()) !== undefined;
+
   }
 
   multipleSelectRow(row: Row): Row {
-//    row.isSelected = !row.isSelected;
-//    this.selectedRow = row;
-    this.multipleSelectedRows.add(row);
-//    return this.selectedRow;
+      if(row.isSelected) {
+            this.multipleSelectedRows.add(row);
+      } else { 
+          this.multipleSelectedRows.delete(row);
+      }
     return row;
   }
 
@@ -153,8 +155,8 @@ export class DataSet {
     this.willSelect = 'last';
   }
 
-  setTruckByMultiSelectByColumn(columnName: string) {
-    this.truckByMultiSelect = columnName;
+  setTrackByMultiSelectByColumn(columnName: string) {
+    this.trackByMultiSelect = columnName;
   }
 
   select(selectedRowIndex?: number): Row | undefined {
@@ -202,7 +204,7 @@ export class DataSet {
     this.rows = [];
     this.data.forEach((el, index) => {
       let row: Row = new Row(index, el, this);
-      row.setKeyValue(el[this.truckByMultiSelect]);
+      row.setKeyValue(el[this.trackByMultiSelect]);
       this.rows.push(row);
     });
   }

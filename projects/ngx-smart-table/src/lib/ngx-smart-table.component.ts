@@ -192,13 +192,15 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
   }
 
   multipleSelectRow(row: Row) {
+    row.isSelected = !row.isSelected;
     this.grid.multipleSelectRow(row);
     this.emitUserSelectRow(row);
     this.emitSelectRow(row);
   }
 
-  onSelectAllRows($event: any) {
+  onSelectAllRows() {
     this.isAllSelected = !this.isAllSelected;
+
     this.grid.selectAllRows(this.isAllSelected);
 
     this.emitUserSelectRow(null);

@@ -3,13 +3,14 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'basic-example-multi-select',
   template: `
-    <ngx-smart-table [settings]="settings" [source]="data"></ngx-smart-table>
+    <ngx-smart-table [settings]="settings" [source]="data" (userRowSelect)="onUserRowSelect($event)"></ngx-smart-table>
   `,
 })
 export class BasicExampleMultiSelectComponent {
 
   settings = {
     selectMode: 'multi',
+    keyColumn: 'id',
     columns: {
       id: {
         title: 'ID',
@@ -94,4 +95,6 @@ export class BasicExampleMultiSelectComponent {
       email: 'Rey.Padberg@rosamond.biz',
     },
   ];
+
+  onUserRowSelect = (data) => console.log(data); 
 }
