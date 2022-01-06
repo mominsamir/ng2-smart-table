@@ -70,6 +70,8 @@ export class DataSet {
   }
 
   selectRow(row: Row): Row | undefined {
+    console.log(row);
+
     const previousIsSelected = row.isSelected;
     this.deselectAll();
 
@@ -82,8 +84,12 @@ export class DataSet {
   isRowSelected (row: Row): boolean {
     return Array.from(this.getMultipleSelectedRows())
         .find((selectedRow: Row) => selectedRow.getKeyValue() === row.getKeyValue()) !== undefined;
-
   }
+
+  isSingleRowSelected (row: Row): boolean {
+    return row.getKeyValue() ===  this.selectedRow?.getKeyValue();
+  }
+
 
   multipleSelectRow(row: Row): Row {
       if(row.isSelected) {

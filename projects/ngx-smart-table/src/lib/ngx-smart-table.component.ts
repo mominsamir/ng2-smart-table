@@ -43,7 +43,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
 
   defaultSettings: Object = {
     mode: 'inline', // inline|external|click-to-edit
-    selectMode: 'single', // single|multi
+    selectMode: 'none', // single|multi|none
     /**
      * Points to an element in all data
      *

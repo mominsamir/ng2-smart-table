@@ -68,6 +68,9 @@ export class Ng2SmartTableTbodyComponent implements  AfterViewInit, OnDestroy  {
   }
 
   isRowSelected  = (row: Row): boolean =>{
+    if(this.isSingleSelectVisible) {
+        return this.grid.getDataSet().isSingleRowSelected(row)
+    }
     return this.grid.getDataSet().isRowSelected(row);
   }
   
@@ -85,6 +88,7 @@ export class Ng2SmartTableTbodyComponent implements  AfterViewInit, OnDestroy  {
       });
   }
 
+  isSingleSelectVisible: boolean;
   isMultiSelectVisible: boolean;
   showActionColumnLeft: boolean;
   showActionColumnRight: boolean;
@@ -102,6 +106,7 @@ export class Ng2SmartTableTbodyComponent implements  AfterViewInit, OnDestroy  {
 
   ngOnChanges() {
     this.isMultiSelectVisible = this.grid.isMultiSelectVisible();
+    this.isSingleSelectVisible  = this.grid.isSingleSelectVisible();
     this.showActionColumnLeft = this.grid.showActionColumn('left');
     this.mode = this.grid.getSetting('mode');
     this.editInputClass = this.grid.getSetting('edit.inputClass');

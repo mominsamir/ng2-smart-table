@@ -1,8 +1,12 @@
 <ng-container  *ngFor="let row of grid.getRows()">
   <tr (click)="userSelectRow.emit(row)" (mouseover)="rowHover.emit(row)" class="ng2-smart-row" [className]="rowClassFunction(row)" [ngClass]="{selected: row.isSelected}">
     <td *ngIf="isMultiSelectVisible" class="ng2-smart-actions ng2-smart-action-multiple-select" (click)="multipleSelectRow.emit(row)">
-      <input type="checkbox" [checked]="isRowSelected(row)" > <!-- [ngModel]="isRowSelected(row)" -->
+      <input type="checkbox" [checked]="isRowSelected(row)" >
     </td>
+    <td *ngIf="isSingleSelectVisible" class="ng2-smart-actions ng2-smart-action-single-select" (click)="userSelectRow.emit(row)">
+        <input type="radio" [checked]="isRowSelected(row)" >
+    </td>
+
     <td *ngIf="!row.isInEditing && showActionColumnLeft" class="ng2-smart-actions">
 
       <ng2-st-tbody-custom 

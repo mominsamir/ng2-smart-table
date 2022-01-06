@@ -8,6 +8,7 @@ import { Column } from "../../../lib/data-set/column";
   selector: '[ng2-st-thead-filters-row]',
   template: `
     <th *ngIf="isMultiSelectVisible"></th>
+    <th *ngIf="isSingleSelectVisible"></th>
     <th ng2-st-add-button *ngIf="showActionColumnLeft"
                           [grid]="grid"
                           (create)="create.emit($event)">
@@ -34,12 +35,14 @@ export class TheadFitlersRowComponent implements OnChanges {
   @Output() create = new EventEmitter<any>();
   @Output() filter = new EventEmitter<any>();
 
+  isSingleSelectVisible: boolean;
   isMultiSelectVisible: boolean;
   showActionColumnLeft: boolean;
   showActionColumnRight: boolean;
   filterInputClass: string;
 
   ngOnChanges() {
+    this.isSingleSelectVisible = this.grid.isSingleSelectVisible();      
     this.isMultiSelectVisible = this.grid.isMultiSelectVisible();
     this.showActionColumnLeft = this.grid.showActionColumn('left');
     this.showActionColumnRight = this.grid.showActionColumn('right');

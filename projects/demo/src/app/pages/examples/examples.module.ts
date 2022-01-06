@@ -15,6 +15,7 @@ import { AdvancedExamplesTypesComponent } from './custom-edit-view/advanced-exam
 import { AdvancedExampleServerComponent } from './server/advanced-example-server.component';
 import { BasicExampleLoadComponent } from './server/basic-example-load.component';
 import { BasicExampleMultiSelectComponent } from './various/basic-example-multi-select.component';
+import { SingleSelectComponent } from './various/single-select.component';
 import { CustomEditorComponent } from './custom-edit-view/custom-editor.component';
 import { BasicExampleSourceComponent } from './filter/basic-example-source.component';
 import { CustomRenderComponent } from './custom-edit-view/custom-render.component';
@@ -25,6 +26,7 @@ import { ServerExamplesComponent } from './server/server-examples.component';
 import { CustomViewEditExamplesComponent } from './custom-edit-view/custom-edit-view-examples.component';
 import { BasicExampleCustomActionsComponent } from './custom-edit-view/basic-example-custom-actions.component';
 import { VariousExamplesComponent } from './various/various-examples.component';
+
 
 import {
   BasicExampleButtonViewComponent,
@@ -50,7 +52,8 @@ const EXAMPLES_COMPONENTS = [
   BasicExampleButtonViewComponent,
   BasicExampleCustomActionsComponent,
   ButtonViewComponent,
-  RowExpandComponent
+  RowExpandComponent,
+  SingleSelectComponent
 ];
 
 @NgModule({
@@ -69,7 +72,7 @@ const EXAMPLES_COMPONENTS = [
     CustomFilterComponent,
     ButtonViewComponent,
     DivViewComponent,
-    RowExpandComponent
+    RowExpandComponent,
   ],
   declarations: [
     ExamplesComponent,

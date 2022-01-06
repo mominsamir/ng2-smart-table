@@ -53,6 +53,10 @@ export class Grid {
     return this.getSetting('selectMode') === 'multi';
   }
 
+  isSingleSelectVisible(): boolean {
+    return this.getSetting('selectMode') === 'single';
+  }
+
   getNewRow(): Row {
     return this.dataSet.newRow;
   }

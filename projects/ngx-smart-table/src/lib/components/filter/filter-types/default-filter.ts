@@ -8,7 +8,7 @@ import { Column } from '../../../lib/data-set/column';
 })
 export class DefaultFilter implements Filter, OnDestroy {
 
-  delay: number = 300;
+  delay: number = 1000;
   changesSubscription: Subscription;
   @Input() query: string;
   @Input() inputClass: string;
