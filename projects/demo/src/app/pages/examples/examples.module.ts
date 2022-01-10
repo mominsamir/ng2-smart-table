@@ -32,6 +32,7 @@ import {
   BasicExampleButtonViewComponent,
   ButtonViewComponent,
 } from './custom-edit-view/basic-example-button-view.component';
+import { EmptyDataComponent } from './custom-edit-view/empty-data-example';
 
 const EXAMPLES_COMPONENTS = [
   AdvancedExampleFiltersComponent,
@@ -53,6 +54,7 @@ const EXAMPLES_COMPONENTS = [
   BasicExampleCustomActionsComponent,
   ButtonViewComponent,
   RowExpandComponent,
+  EmptyDataComponent,
   SingleSelectComponent
 ];
 
@@ -73,6 +75,7 @@ const EXAMPLES_COMPONENTS = [
     ButtonViewComponent,
     DivViewComponent,
     RowExpandComponent,
+    EmptyDataComponent,
   ],
   declarations: [
     ExamplesComponent,

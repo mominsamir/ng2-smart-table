@@ -70,8 +70,6 @@ export class DataSet {
   }
 
   selectRow(row: Row): Row | undefined {
-    console.log(row);
-
     const previousIsSelected = row.isSelected;
     this.deselectAll();
 

@@ -8,7 +8,8 @@ import {
   OnDestroy, 
   AfterViewInit, 
   QueryList, 
-  ViewChildren 
+  ViewChildren, 
+  ChangeDetectorRef
 } from '@angular/core';
 
 import { Grid } from '../../lib/grid';
@@ -16,6 +17,7 @@ import { DataSource } from '../../lib/data-source/data-source';
 import { Cell } from '../../lib/data-set/cell';
 import { delay } from 'rxjs/operators';
 import { Row } from '../../lib/data-set/row';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Component({
   selector: '[ng2-st-tbody]',
@@ -43,24 +45,40 @@ export class Ng2SmartTableTbodyComponent implements  AfterViewInit, OnDestroy  {
   @Output() onExpandRow = new EventEmitter<any>();
 
   @ViewChildren('expandedRowChild',{ read: ViewContainerRef}) expandedRowChild: QueryList<any>;
+  @ViewChildren('emptyDataChild',{ read: ViewContainerRef}) emptyDataChild: QueryList<any>;
   
   customComponent: any;
+  emptyDataComponent: any;
   hasChildComponent: boolean = false;
+  hasEmptyComponent: boolean = false;
 
 
-  constructor(private resolver: ComponentFactoryResolver,private vcRef: ViewContainerRef) {}
+  constructor(private resolver: ComponentFactoryResolver,private vcRef: ViewContainerRef, private cdr: ChangeDetectorRef) {}
 
   ngAfterViewInit(): void {
     let cmp = this.grid.settings['expandedRowComponent'];
-    if (cmp && !this.customComponent) {
+
+    if (cmp  && !this.customComponent) {
       this.expandedRowChild.forEach(c => c.clear());
       this.hasChildComponent = true;
       this.createCustomComponent();
     }  
+
+    let emptyData = this.grid.settings['emptyDataComponent'];
+
+    if (emptyData  && !this.emptyDataComponent) {
+      this.emptyDataChild.forEach(c => c.clear());
+       this.hasEmptyComponent = true;
+       this.createEmptyComponent();
+    }  
+    this.cdr.detectChanges();
+
   }
 
   ngOnDestroy(): void {
     if(this.customComponent) this.customComponent.destroy();
+    if(this.emptyDataComponent) this.emptyDataComponent.destroy();
+
   }
 
   clear() {
@@ -88,6 +106,17 @@ export class Ng2SmartTableTbodyComponent implements  AfterViewInit, OnDestroy  {
       });
   }
 
+  protected createEmptyComponent() {
+    const componentFactory = this.resolver.resolveComponentFactory(this.grid.settings['emptyDataComponent']);
+    this.emptyDataChild.changes
+      .pipe(delay(0))
+      .subscribe(item => {
+        if (item.length) {
+          this.emptyDataComponent  = item.first.createComponent(componentFactory);
+        }
+      });
+  }
+
   isSingleSelectVisible: boolean;
   isMultiSelectVisible: boolean;
   showActionColumnLeft: boolean;
@@ -101,7 +130,8 @@ export class Ng2SmartTableTbodyComponent implements  AfterViewInit, OnDestroy  {
 
   get tableColumnsCount() {
     const actionColumns = this.isActionAdd || this.isActionEdit || this.isActionDelete ? 1 : 0;
-    return this.grid.getColumns().length + actionColumns;
+    const selectColumns = this.isMultiSelectVisible || this.isSingleSelectVisible ? 1 : 0;
+    return this.grid.getColumns().length + actionColumns + selectColumns;
   }
 
   ngOnChanges() {

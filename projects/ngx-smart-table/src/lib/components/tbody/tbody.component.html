@@ -79,8 +79,16 @@
     </td>
   </tr>
 </ng-container>
-<tr *ngIf="grid.getRows().length == 0">
-  <td [attr.colspan]="tableColumnsCount">
+<tr class="ng2-smart-row ng2-smart-row-emtpy" *ngIf="grid.getRows().length == 0">
+  <td class="ng2-smart-column ng2-empty-component" 
+    *ngIf="hasEmptyComponent" 
+    [attr.colspan]="tableColumnsCount" >
+    <ng-template #emptyDataChild ></ng-template>
+  </td>
+
+  <td class="ng2-smart-column ng2-empty-message" 
+    *ngIf="!hasEmptyComponent"
+    [attr.colspan]="tableColumnsCount" >
     {{ noDataMessage }}
   </td>
 </tr>
