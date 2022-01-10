@@ -4,7 +4,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   selector: 'div-view',
   template: `
     <div >
-      I am Empty Data Component
+      Custome Empty Component - {{rowData}}
     </div>
   `,
 })
@@ -12,10 +12,6 @@ export class DivViewComponent {
 
   @Input() rowData: any;
 
-
-  onClick() {
-    alert(this.rowData.name);
-  }
 }
 
 @Component({

@@ -9,7 +9,8 @@ import {
   AfterViewInit, 
   QueryList, 
   ViewChildren, 
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ComponentFactory
 } from '@angular/core';
 
 import { Grid } from '../../lib/grid';
@@ -113,6 +114,9 @@ export class Ng2SmartTableTbodyComponent implements  AfterViewInit, OnDestroy  {
       .subscribe(item => {
         if (item.length) {
           this.emptyDataComponent  = item.first.createComponent(componentFactory);
+          Object.assign(this.emptyDataComponent.instance, {} ,{
+            rowData : this.noDataMessage,
+          });
         }
       });
   }
@@ -126,7 +130,7 @@ export class Ng2SmartTableTbodyComponent implements  AfterViewInit, OnDestroy  {
   isActionAdd: boolean;
   isActionEdit: boolean;
   isActionDelete: boolean;
-  noDataMessage: boolean;
+  noDataMessage: String;
 
   get tableColumnsCount() {
     const actionColumns = this.isActionAdd || this.isActionEdit || this.isActionDelete ? 1 : 0;
