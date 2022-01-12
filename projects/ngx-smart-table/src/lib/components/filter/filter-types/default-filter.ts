@@ -24,6 +24,15 @@ export class DefaultFilter implements Filter, OnDestroy {
   setFilter() {
     this.filter.emit(this.query);
   }
+
+  getDefaultValue() {
+    if(this.column.hasOwnProperty('filter')) {
+      if(this.column.filter && this.column.filter.hasOwnProperty('defaultValue')) {
+        return this.column.filter['defaultValue'];
+      }
+    }
+    return undefined;
+  }
 }
 
 export interface Filter {

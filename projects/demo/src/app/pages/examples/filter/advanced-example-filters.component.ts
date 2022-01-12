@@ -94,6 +94,7 @@ export class AdvancedExampleFiltersComponent {
       passed: {
         title: 'Passed',
         filter: {
+          defaultValue : true,
           type: 'checkbox',
           config: {
             true: 'Yes',

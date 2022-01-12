@@ -24,6 +24,10 @@ export class InputFilterComponent extends DefaultFilter implements OnInit, OnCha
   }
 
   ngOnInit() {
+    if(this.getDefaultValue() !== undefined) {
+      this.query = this.getDefaultValue(); 
+      this.setFilter(); 
+    }    
     if (this.query) {
       this.inputControl.setValue(this.query);
     }

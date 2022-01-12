@@ -31,6 +31,11 @@ export class CompleterFilterComponent extends DefaultFilter implements OnInit {
     config.dataService = this.completerService.local(config.data, config.searchFields, config.titleField);
     config.dataService.descriptionField(config.descriptionField);
 
+    if(this.getDefaultValue() !== undefined) {
+      this.query = this.getDefaultValue(); 
+      this.setFilter(); 
+    }
+
     this.changesSubscription = this.completerContent
       .pipe(
         map((ev: any) => (ev && ev.title) || ev || ''),

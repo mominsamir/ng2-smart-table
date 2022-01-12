@@ -28,6 +28,11 @@ export class SelectFilterComponent extends DefaultFilter implements OnInit {
   }
 
   ngOnInit() {
+    if(this.getDefaultValue() !== undefined) {
+      this.query = this.getDefaultValue(); 
+      this.setFilter(); 
+    }
+
     this.inputControl.valueChanges
       .pipe(
         skip(1),
