@@ -21,6 +21,7 @@ export class FilterDefault {
       field: this.column.id,
       search: query,
       filter: this.column.getFilterFunction(),
+      operator : this.column.filterOperator,
     });
   }
 }

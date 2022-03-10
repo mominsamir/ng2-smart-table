@@ -13,6 +13,7 @@ export class Column {
   isFilterable: boolean = false;
   sortDirection: string = '';
   defaultSortDirection: string = '';
+  filterOperator: string = 'LIKE'; 
   editor: { type: string, config: any, component: any } = { type: '', config: {}, component: null };
   filter: { type: string, config: any, component: any } = { type: '', config: {}, component: null };
   renderComponent: any = null;
@@ -61,6 +62,7 @@ export class Column {
     this.type = this.prepareType();
     this.editor = this.settings['editor'];
     this.filter = this.settings['filter'];
+    this.filterOperator = this.settings['filterOperator'];
     this.renderComponent = this.settings['renderComponent'];
 
     this.isFilterable = typeof this.settings['filter'] === 'undefined' ? true : !!this.settings['filter'];

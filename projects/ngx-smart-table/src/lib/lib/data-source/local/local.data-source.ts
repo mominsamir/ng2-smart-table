@@ -167,6 +167,7 @@ export class LocalDataSource extends DataSource {
   }
 
   addFilter(fieldConf: any, andOperator = true, doEmit: boolean = true): LocalDataSource {
+
     if (!fieldConf['field'] || typeof fieldConf['search'] === 'undefined') {
       throw new Error('Filter configuration object is not valid');
     }

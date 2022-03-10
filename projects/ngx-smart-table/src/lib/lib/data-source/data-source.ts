@@ -82,6 +82,7 @@ export abstract class DataSource {
   }
 
   setFilter(conf: Array<any>, andOperator?: boolean, doEmit?: boolean) {
+
     if (doEmit) {
       this.emitOnChanged('filter');
     }

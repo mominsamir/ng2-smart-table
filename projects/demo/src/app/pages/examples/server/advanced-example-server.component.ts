@@ -16,15 +16,19 @@ export class AdvancedExampleServerComponent {
     columns: {
       id: {
         title: 'ID',
+        operator : '',
       },
       albumId: {
         title: 'Album',
+        filterOperator : 'EQUAL',
       },
       title: {
         title: 'Title',
+        filterOperator : 'EQUAL',
       },
       url: {
         title: 'Url',
+        operator : 'EQUAL',
       },
     },
   };

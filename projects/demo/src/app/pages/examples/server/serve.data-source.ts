@@ -31,6 +31,7 @@ export class CustomServerDataSource extends LocalDataSource {
 
     if (this.filterConf.filters) {
       this.filterConf.filters.forEach((fieldConf) => {
+
         if (fieldConf['search']) {
           url += `${fieldConf['field']}_like=${fieldConf['search']}&`;
         }

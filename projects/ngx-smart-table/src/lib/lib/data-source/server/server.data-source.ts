@@ -93,11 +93,14 @@ export class ServerDataSource extends LocalDataSource {
   }
 
   protected addFilterRequestParams(httpParams: HttpParams): HttpParams {
-
     if (this.filterConf.filters) {
       this.filterConf.filters.forEach((fieldConf: any) => {
         if (fieldConf['search']) {
-          httpParams = httpParams.set(this.conf.filterFieldKey.replace('#field#', fieldConf['field']), fieldConf['search']);
+          var field_operator = this.conf.filterFieldKey.replace('#field#', fieldConf['field']);
+          var operator = this.conf.filterFieldOperator.replace('#operator#', fieldConf['operator']);
+          if((operator !== 'undefined') && operator !== '')
+              field_operator = field_operator +'_'+operator;
+          httpParams = httpParams.set(this.conf.filterFieldKey.replace('#field#', field_operator), fieldConf['search']);
         }
       });
     }
