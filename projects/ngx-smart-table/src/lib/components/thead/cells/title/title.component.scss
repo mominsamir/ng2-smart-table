@@ -1,24 +1,24 @@
-a.sort {
+.sort-container {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
 
-  &.asc, &.desc {
-    font-weight: bold;
-
-    &::after {
-      content: '';
-      display: inline-block;
-      width: 0;
-      height: 0;
-      border-bottom: 4px solid rgba(0, 0, 0, 0.3);
-      border-top: 4px solid transparent;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      margin-bottom: 2px;
+  .sort {
+    svg {
+      width: 13px;
+      height: 10px;
     }
-  }
 
-  &.desc::after {
-    -webkit-transform: rotate(-180deg);
-            transform: rotate(-180deg);
-    margin-bottom: -2px;
+    &.desc {
+      -webkit-transform: rotateX(-180deg);
+      transform: rotateX(-180deg);
+    }
+
+    &.active {
+      svg {
+        fill: #606c71;
+      }
+    }
   }
 }
