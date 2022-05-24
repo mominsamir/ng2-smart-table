@@ -9,6 +9,7 @@ import { Column } from '../../../../lib/data-set/column';
   styleUrls: ['./title.component.scss'],
   template: `
     <div *ngIf="column.isSortable" class="ng2-smart-sort-link sort-container" (click)="_sort($event)">
+      <span></span>
       <span>{{ column.title }}</span>
       <span class="sort" [ngClass]="{active: currentDirection, desc: currentDirection === 'desc'}">
         <svg width="20" height="16" viewBox="0 0 20 16" fill="#A6AEBD" xmlns="http://www.w3.org/2000/svg">
