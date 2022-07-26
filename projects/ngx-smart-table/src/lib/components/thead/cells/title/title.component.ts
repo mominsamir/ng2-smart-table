@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { DataSource } from '../../../../lib/data-source/data-source';
@@ -9,7 +9,7 @@ import { Column } from '../../../../lib/data-set/column';
   styleUrls: ['./title.component.scss'],
   template: `
     <div *ngIf="column.isSortable" class="ng2-smart-sort-link sort-container" (click)="_sort($event)">
-      <span></span>
+      <span class="ng-column-icon"><ng-template #iconChild ></ng-template></span>
       <span>{{ column.title }}</span>
       <span class="sort" [ngClass]="{active: currentDirection, desc: currentDirection === 'desc'}">
         <svg width="20" height="16" viewBox="0 0 20 16" fill="#A6AEBD" xmlns="http://www.w3.org/2000/svg">
@@ -20,12 +20,26 @@ import { Column } from '../../../../lib/data-set/column';
     <span class="ng2-smart-sort" *ngIf="!column.isSortable">{{ column.title }}</span>
   `,
 })
-export class TitleComponent implements OnChanges {
+export class TitleComponent implements OnChanges, AfterViewInit {
 
   currentDirection = '';
   @Input() column: Column;
   @Input() source: DataSource;
   @Output() sort = new EventEmitter<any>();
+  customComponent: any;
+
+  @ViewChildren('iconChild',{ read: ViewContainerRef}) iconChild: QueryList<any>;
+
+  constructor(private resolver: ComponentFactoryResolver,private vcRef: ViewContainerRef, private cdr: ChangeDetectorRef) {}
+
+  ngAfterViewInit(): void {
+    let cmp = this.column.icon;
+
+    if (cmp  && !this.customComponent) {
+      this.iconChild.forEach(c => c.clear());
+      this.createCustomComponent();
+    }  
+  }
 
   protected dataChangedSub: Subscription;
 
@@ -71,5 +85,10 @@ export class TitleComponent implements OnChanges {
       this.currentDirection = this.column.sortDirection;
     }
     return this.currentDirection;
+  }
+
+  protected createCustomComponent() {
+    const componentFactory = this.resolver.resolveComponentFactory(this.column.icon);
+    this.customComponent  = this.iconChild.first.createComponent(componentFactory);
   }
 }

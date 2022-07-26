@@ -27,8 +27,7 @@ import { Grid } from "../../../lib/grid";
         event.stopPropagation();
         this.onExpandRow.emit(this.row);
     }
-  
-  
+    
     ngOnChanges(){
         this.expandRowButtonContent = this.grid.getSetting('expand.expandRowButtonContent');
     }

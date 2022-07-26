@@ -39,6 +39,22 @@ export class DivViewComponent {
 }
 
 @Component({
+  selector: 'icon',
+  template: `
+    <div>IC</div>
+  `,
+})
+export class IconComponent {
+
+  @Input() rowData: any;
+
+
+  onClick() {
+    alert(this.rowData.name);
+  }
+}
+
+@Component({
   selector: 'row-expand-view',
   template: `
     <ngx-smart-table [settings]="settings" [source]="data"></ngx-smart-table>
@@ -51,6 +67,7 @@ export class RowExpandComponent implements OnInit {
     columns: {
       id: {
         title: 'ID',
+        icon :IconComponent
       },
       name: {
         title: 'Full Name',
