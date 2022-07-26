@@ -17,11 +17,13 @@ export class FilterDefault {
   query: string = '';
 
   onFilter(query: string) {
-    this.source.addFilter({
+    const filter = {
       field: this.column.id,
       search: query,
       filter: this.column.getFilterFunction(),
       operator : this.column.filterOperator,
-    });
+    }
+    this.source.addFilter(filter);
+    this.filter.emit(filter);
   }
 }
