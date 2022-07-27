@@ -1,8 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectorRef, ViewContainerRef, ComponentFactoryResolver, AfterViewInit, QueryList, ViewChildren, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { DataSource } from '../../../../lib/data-source/data-source';
 import { Column } from '../../../../lib/data-set/column';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'ng2-smart-table-title',
@@ -20,7 +21,7 @@ import { Column } from '../../../../lib/data-set/column';
     <span class="ng2-smart-sort" *ngIf="!column.isSortable">{{ column.title }}</span>
   `,
 })
-export class TitleComponent implements OnChanges, AfterViewInit {
+export class TitleComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   currentDirection = '';
   @Input() column: Column;
@@ -30,11 +31,11 @@ export class TitleComponent implements OnChanges, AfterViewInit {
 
   @ViewChildren('iconChild',{ read: ViewContainerRef}) iconChild: QueryList<any>;
 
-  constructor(private resolver: ComponentFactoryResolver,private vcRef: ViewContainerRef, private cdr: ChangeDetectorRef) {}
+  constructor(private resolver: ComponentFactoryResolver) {}
+
 
   ngAfterViewInit(): void {
     let cmp = this.column.icon;
-
     if (cmp  && !this.customComponent) {
       this.iconChild.forEach(c => c.clear());
       this.createCustomComponent();
@@ -91,4 +92,9 @@ export class TitleComponent implements OnChanges, AfterViewInit {
     const componentFactory = this.resolver.resolveComponentFactory(this.column.icon);
     this.customComponent  = this.iconChild.first.createComponent(componentFactory);
   }
+
+  ngOnDestroy(): void {
+    if(this.customComponent) this.customComponent.destroy();
+  }
+
 }
