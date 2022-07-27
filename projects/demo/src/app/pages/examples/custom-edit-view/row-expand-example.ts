@@ -41,17 +41,13 @@ export class DivViewComponent {
 @Component({
   selector: 'icon',
   template: `
-    <div>IC</div>
+    <svg width="5" height="5">
+      <circle cx='5' cy='5' r='4' stroke='green' stroke-width='1' fill='yellow'></circle>
+    </svg>  
   `,
 })
 export class IconComponent {
 
-  @Input() rowData: any;
-
-
-  onClick() {
-    alert(this.rowData.name);
-  }
 }
 
 @Component({
