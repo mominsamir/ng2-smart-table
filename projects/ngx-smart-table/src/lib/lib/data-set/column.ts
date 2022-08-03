@@ -6,6 +6,7 @@ export class Column {
   type: string = '';
   class: string = '';
   width: string = '';
+  icon : any = '';
   hide: boolean = false;
   isSortable: boolean = false;
   isEditable: boolean = true;
@@ -64,6 +65,7 @@ export class Column {
     this.filter = this.settings['filter'];
     this.filterOperator = this.settings['filterOperator'];
     this.renderComponent = this.settings['renderComponent'];
+    this.icon = this.settings['icon'];
 
     this.isFilterable = typeof this.settings['filter'] === 'undefined' ? true : !!this.settings['filter'];
     this.defaultSortDirection = ['asc', 'desc']
@@ -91,4 +93,6 @@ export class Column {
     // TODO: determine type by data
     return 'text';
   }
+
+
 }

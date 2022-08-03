@@ -30,6 +30,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
   @Output() editConfirm = new EventEmitter<any>();
   @Output() createConfirm = new EventEmitter<any>();
   @Output() rowHover: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onFilter: EventEmitter<any> = new EventEmitter<any>();
 
   tableClass: string;
   tableId: string;
@@ -251,6 +252,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
   }
 
   filter($event: any) {
+    this.onFilter.emit($event);
     this.resetAllSelector();
   }
 

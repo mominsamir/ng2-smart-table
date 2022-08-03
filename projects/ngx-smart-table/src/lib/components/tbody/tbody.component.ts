@@ -9,8 +9,7 @@ import {
   AfterViewInit, 
   QueryList, 
   ViewChildren, 
-  ChangeDetectorRef,
-  ComponentFactory
+  ChangeDetectorRef
 } from '@angular/core';
 
 import { Grid } from '../../lib/grid';
@@ -18,7 +17,6 @@ import { DataSource } from '../../lib/data-source/data-source';
 import { Cell } from '../../lib/data-set/cell';
 import { delay } from 'rxjs/operators';
 import { Row } from '../../lib/data-set/row';
-import { BehaviorSubject, Subject } from 'rxjs';
 
 @Component({
   selector: '[ng2-st-tbody]',
