@@ -1,0 +1,72 @@
+import {
+  Component,
+  Input,
+  ChangeDetectionStrategy,
+  Output,
+  EventEmitter,
+  OnChanges,
+  AfterViewInit,
+  OnDestroy,
+  ViewChildren, ViewContainerRef, QueryList, ComponentFactoryResolver, ChangeDetectorRef, SimpleChanges
+} from '@angular/core';
+
+import {Cell} from '../../../lib/data-set/cell';
+import {Column} from '../../../lib/data-set/column';
+import {DataSource} from '../../../lib/data-source/data-source';
+import {Subscription} from 'rxjs';
+import {Grid} from '../../../lib/grid';
+
+@Component({
+  selector: 'tree-table-action-cell-view-mode',
+  template: `
+    <span class="ng-column-icon" (click)="onExpandAction(cell.getRow())">
+        <ng-template #iconChild></ng-template>
+      </span>
+  `,
+})
+export class TreeActionViewCellComponent implements OnChanges, AfterViewInit, OnDestroy {
+  @Input() cell: Cell;
+  @Input() grid: Grid;
+  @Input() source: DataSource;
+  @Output() expandRow = new EventEmitter<any>();
+
+  customComponent: any;
+
+  @ViewChildren('iconChild', {read: ViewContainerRef}) iconChild: QueryList<any>;
+
+  constructor(private resolver: ComponentFactoryResolver, private vcRef: ViewContainerRef, private cdr: ChangeDetectorRef) {
+  }
+
+  onExpandAction(event: any): boolean {
+    this.expandRow.next(event);
+    return true;
+  }
+
+  ngAfterViewInit(): void {
+    let cmp = this.cell.getColumn().icon;
+    if (cmp && !this.customComponent) {
+      this.iconChild.forEach(c => c.clear());
+      this.createCustomComponent(cmp);
+      this.cdr.detectChanges();
+    }
+  }
+
+  protected dataChangedSub: Subscription;
+
+  ngOnChanges(changes: SimpleChanges) {
+  }
+
+  protected createCustomComponent(iconComponent: any) {
+    const componentFactory = this.resolver.resolveComponentFactory(iconComponent);
+    if (this.iconChild.length !== 0) {
+      this.iconChild.first.createComponent(componentFactory);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.customComponent) {
+      this.customComponent.destroy();
+    }
+  }
+
+}

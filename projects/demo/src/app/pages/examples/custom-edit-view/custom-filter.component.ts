@@ -6,7 +6,7 @@ import { DefaultFilter } from 'projects/ngx-smart-table/src/public-api';
 
 @Component({
   template: `
-    <input 
+    <input
       #number
       [ngClass]="inputClass"
       [formControl]="inputControl"

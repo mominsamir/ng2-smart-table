@@ -1,19 +1,19 @@
-import { Component, Input, Output, SimpleChange, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {Component, Input, Output, SimpleChange, EventEmitter, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {Subject, Subscription} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
-import { Grid } from './lib/grid';
-import { DataSource } from './lib/data-source/data-source';
-import { Row } from './lib/data-set/row';
-import { deepExtend, getPageForRowIndex } from './lib/helpers';
-import { LocalDataSource } from './lib/data-source/local/local.data-source';
+import {Grid} from './lib/grid';
+import {DataSource} from './lib/data-source/data-source';
+import {Row} from './lib/data-set/row';
+import {deepExtend, getPageForRowIndex} from './lib/helpers';
+import {LocalDataSource} from './lib/data-source/local/local.data-source';
 
 @Component({
   selector: 'ngx-smart-table',
   styleUrls: ['./ngx-smart-table.component.scss'],
   templateUrl: './ngx-smart-table.component.html',
 })
-export class NgxSmartTableComponent implements OnChanges, OnDestroy {
+export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
 
   @Input() source: any;
   @Input() settings: Object = {};
@@ -38,11 +38,14 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
   isHideHeader: boolean;
   isHideSubHeader: boolean;
   isPagerDisplay: boolean;
+  tableType: string;
+  fixedColNumber: string;
   rowClassFunction: Function;
 
   grid: Grid;
 
   defaultSettings: Object = {
+    tableType: 'default',
     mode: 'inline', // inline|external|click-to-edit
     selectMode: 'none', // single|multi|none
     /**
@@ -107,6 +110,23 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
   private onDeselectRowSubscription: Subscription;
   private destroyed$: Subject<void> = new Subject<void>();
 
+  constructor() {
+
+  }
+
+  ngOnInit() {
+    // need to know for fixed columns css.
+    if (this.grid) {
+      const fixedColList = [];
+      this.grid.getColumns().map(col => {
+        if (!col.isScrollable) {
+          fixedColList.push(col);
+        }
+      });
+      this.fixedColNumber = fixedColList.length * 200 + 'px';
+    }
+  }
+
   ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
     if (this.grid) {
       if (changes['settings']) {
@@ -126,6 +146,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
     this.isPagerDisplay = this.grid.getSetting('pager.display');
     this.isPagerDisplay = this.grid.getSetting('pager.display');
     this.perPageSelect = this.grid.getSetting('pager.perPageSelect');
+    this.tableType = this.grid.getSetting('tableType');
     this.rowClassFunction = this.grid.getSetting('rowClassFunction');
   }
 

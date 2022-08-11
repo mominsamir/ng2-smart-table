@@ -21,6 +21,11 @@ export class Cell {
     return this.row;
   }
 
+  // added
+  getGroupBy(): boolean {
+    return this.getColumn().groupBy;
+  }
+
   getValue(): any {
     const valid = this.column.getValuePrepareFunction() instanceof Function;
     const prepare = valid ? this.column.getValuePrepareFunction() : Cell.PREPARE;
