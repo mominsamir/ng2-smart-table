@@ -1,5 +1,5 @@
-import { Row } from './row';
-import { Column } from './column';
+import {Row} from './row';
+import {Column} from './column';
 
 export class DataSet {
 
@@ -38,6 +38,51 @@ export class DataSet {
     return this.rows;
   }
 
+  // added
+  expandTreeRows(rowId) {
+    if (this.rows) {
+      this.rows.map(item => {
+        if (item.getData().id === rowId) {
+          item.hide = !item.hide;
+          item.onChange = !item.onChange;
+        }
+      });
+    }
+    console.log('expandTreeRows');
+  }
+
+  getTreeRows(): Array<Row> {
+    if (this.rows) {
+      return this.treeTableProcess(this.rows);
+    }
+  }
+
+  treeTableProcess(data) {
+    const result = [];
+    const groupById = data.reduce((group, list) => {
+      const {id} = list.data;
+      group[id] = group[id] ?? [];
+      group[id].push(list);
+      return group;
+    }, {});
+    Object.keys(groupById).map(item => {
+      groupById[item].map((value, index) => {
+        value.rowspan = groupById[item].length > 2;
+        if (index === 0) {
+          value.parent = true;
+        }
+        if (!value.onChange) {
+          value.hide = index > 1;
+          value.children = index > 1;
+        } else {
+          value.hide = false;
+        }
+        result.push(value);
+      });
+    });
+    return result;
+  }
+
   getMultipleSelectedRows(): Set<Row> {
     return this.multipleSelectedRows;
   }
@@ -56,7 +101,7 @@ export class DataSet {
 
   deselectAll() {
     //this.rows.forEach((row) => { row.isSelected = false;});
-     this.getMultipleSelectedRows().clear();
+    this.getMultipleSelectedRows().clear();
     // we need to clear selectedRow field because no one row selected
     this.selectedRow = undefined;
   }
@@ -79,34 +124,34 @@ export class DataSet {
     return this.selectedRow;
   }
 
-  isRowSelected (row: Row): boolean {
+  isRowSelected(row: Row): boolean {
     return Array.from(this.getMultipleSelectedRows())
-        .find((selectedRow: Row) => selectedRow.getKeyValue() === row.getKeyValue()) !== undefined;
+      .find((selectedRow: Row) => selectedRow.getKeyValue() === row.getKeyValue()) !== undefined;
   }
 
-  isSingleRowSelected (row: Row): boolean {
-    return row.getKeyValue() ===  this.selectedRow?.getKeyValue();
+  isSingleRowSelected(row: Row): boolean {
+    return row.getKeyValue() === this.selectedRow?.getKeyValue();
   }
 
 
   multipleSelectRow(row: Row): Row {
-      if(row.isSelected) {
-            this.multipleSelectedRows.add(row);
-      } else { 
-          this.multipleSelectedRows.delete(row);
-      }
+    if (row.isSelected) {
+      this.multipleSelectedRows.add(row);
+    } else {
+      this.multipleSelectedRows.delete(row);
+    }
     return row;
   }
 
   expandRow(row: Row): Row {
     const previousIsExpanded = row.isExpanded;
     this.clearExpandAll();
-    if(row.index !== this.expandedRow?.index){
+    if (row.index !== this.expandedRow?.index) {
       this.expandedRow = undefined;
     }
     row.isExpanded = !previousIsExpanded;
     this.expandedRow = row;
-    return  this.expandedRow;
+    return this.expandedRow;
   }
 
   selectPreviousRow(): Row {
@@ -195,11 +240,19 @@ export class DataSet {
   createColumns(settings: any) {
     for (const id in settings) {
       if (settings.hasOwnProperty(id)) {
-        this.columns.push(new Column(id, settings[id], this));
+        if (!/^\d/.test(id)) {
+          this.columns.push(new Column(id, settings[id], this));
+        }
+      }
+    }
+    for (const id in settings) {
+      if (settings.hasOwnProperty(id)) {
+        if (/^\d/.test(id)) {
+          this.columns.push(new Column(id, settings[id], this));
+        }
       }
     }
   }
-
   /**
    * Create rows based on current data prepared in data source
    * @private
@@ -213,3 +266,12 @@ export class DataSet {
     });
   }
 }
+
+
+
+
+
+
+
+
+

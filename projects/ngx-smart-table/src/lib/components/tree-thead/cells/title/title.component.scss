@@ -1,0 +1,24 @@
+.sort-container {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+
+  .sort {
+    svg {
+      width: 13px;
+      height: 10px;
+    }
+
+    &.asc {
+      -webkit-transform: rotateX(-180deg);
+      transform: rotateX(-180deg);
+    }
+
+    &.active {
+      svg {
+        fill: #0b8ac7;
+      }
+    }
+  }
+}

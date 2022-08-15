@@ -1,0 +1,73 @@
+:host {
+  .ng2-smart-row {
+    .ng2-smart-actions {
+      &.ng2-smart-action-multiple-select {
+        text-align: center;
+      }
+      &.ng2-smart-action-single-select {
+        text-align: center;
+      }
+    }
+  }
+  ::ng-deep ng2-st-tbody-edit-delete, ::ng-deep ng2-st-tbody-create-cancel, ::ng-deep ng2-smart-action-expand-expand {
+    a:first-child {
+      margin-right: 0.25rem;
+    }
+  }
+  .children_cell {
+    border-top:none;
+    border-bottom:none;
+  }
+  .parent_cell {
+    border-bottom:none;
+  }
+  td, th {
+    height: 48px;
+    width:200px;
+
+  }
+  .col1{
+    position:absolute;
+    height: 48px;
+    left:0;
+    width:200px;
+  }
+  .col2{
+    position:absolute;
+    height: 48px;
+    left:200px;
+    width:200px;
+  }
+  .col3{
+    position:absolute;
+    height: 48px;
+    left:400px;
+    width:200px;
+  }
+  .col4{
+    position:absolute;
+    height: 48px;
+    left:600px;
+    width:200px;
+  }
+  .col5{
+    position:absolute;
+    height: 48px;
+    left:800px;
+    width:200px;
+  }
+  .col6{
+    position:absolute;
+    height: 48px;
+    left:1000px;
+    width:200px;
+  }
+  .col7{
+    position:absolute;
+    height: 48px;
+    left:1200px;
+    width:200px;
+  }
+.fixed {
+}
+}

@@ -9,6 +9,8 @@ import { TBodyModule } from './components/tbody/tbody.module';
 import { THeadModule } from './components/thead/thead.module';
 
 import { NgxSmartTableComponent } from './ngx-smart-table.component';
+import {TreeTBodyModule} from './components/tree-tbody/tbody.module';
+import {TreeTHeadModule} from './components/tree-thead/thead.module';
 
 @NgModule({
   imports: [
@@ -20,6 +22,8 @@ import { NgxSmartTableComponent } from './ngx-smart-table.component';
     PagerModule,
     TBodyModule,
     THeadModule,
+    TreeTBodyModule,
+    TreeTHeadModule,
   ],
   declarations: [
     NgxSmartTableComponent,

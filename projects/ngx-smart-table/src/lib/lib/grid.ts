@@ -98,6 +98,13 @@ export class Grid {
   getRows(): Array<Row> {
     return this.dataSet.getRows();
   }
+//changed
+  getTreeRows(): Array<Row> {
+    return this.dataSet.getTreeRows();
+  }
+  expandTreeRows(rowId) {
+    this.dataSet.expandTreeRows(rowId);
+  }
 
   selectRow(row: Row) {
     this.dataSet.selectRow(row);
@@ -131,7 +138,7 @@ export class Grid {
     if(this.hasKeyColumn()) {
         return this.settings.keyColumn;
     }
-    return undefined; 
+    return undefined;
   }
 
   create(row: Row, confirmEmitter: EventEmitter<any>) {
