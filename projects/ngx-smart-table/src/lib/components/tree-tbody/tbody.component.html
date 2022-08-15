@@ -1,4 +1,4 @@
-<ng-container *ngFor="let row of grid.getTreeRows()" style="position: relative">
+<ng-container *ngFor="let row of grid.getTreeRows()  let rowIndex = index" style="position: relative">
   <tr (click)="userSelectRow.emit(row)" (mouseover)="rowHover.emit(row)" class="ng2-smart-row"
       [className]="rowClassFunction(row)" [ngClass]="{selected: row.isSelected}">
     <td *ngIf="isMultiSelectVisible" class="ng2-smart-actions ng2-smart-action-multiple-select"
@@ -72,12 +72,12 @@
   <tr>
     <!--action column-->
     <ng-container *ngFor="let cell of getVisibleCells(row.cells) let i = index">
-      <td rowspan="2" *ngIf="cell.getGroupBy() && !cell.getRow().hide"
+      <td rowspan="2" *ngIf="cell.getGroupBy() && !cell.getRow().hide && cell.getId() === 'expandAction'"
           class="fixed col{{i+1}}"
-          [ngStyle]="!cell.getRow().parent? {'border-top':'none'}:{'border-bottom':'none'}"
-          [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().parent}"
+          [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().parent,
+                        'remove-border-top': !cell.getRow().parent,
+                        'remove-border-bottom': cell.getRow().parent && rowIndex !== grid.getTreeRows().length -1}"
       >
-<!--        +-->
         <ng2-smart-tree-table-cell [cell]="cell"
                                    [grid]="grid"
                                    [row]="row"
@@ -95,10 +95,11 @@
     <!--Id column-->
 
     <ng-container *ngFor="let cell of getVisibleCells(row.cells) let i = index">
-      <td rowspan="2" *ngIf="cell.getGroupBy() && !cell.getRow().hide && cell.getId() !== 'act'"
+      <td rowspan="2" *ngIf="cell.getGroupBy() && !cell.getRow().hide && cell.getId() !== 'expandAction'"
           class="fixed col{{i+1}}"
-          [ngStyle]="!cell.getRow().parent? {'border-top':'none'}:{'border-bottom':'none'}"
-          [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().parent}"
+          [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().parent,
+                        'remove-border-top': !cell.getRow().parent,
+                        'remove-border-bottom': cell.getRow().parent && rowIndex !== grid.getTreeRows().length -1}"
       >
         <ng2-smart-tree-table-cell [cell]="cell"
                                    [grid]="grid"

@@ -46,7 +46,9 @@
         }
       }
     }
-
+     td, th {
+      border: 1px solid black;
+    }
     a {
       color: #1e6bb8;
       text-decoration: none;
@@ -58,16 +60,17 @@
 
     .tree-table {
       table-layout: fixed;
+      margin-left: -1px;
       width: 100%;
     }
 
     .outer {
       position: relative;
+      width: 100vw;
     }
 
     .inner {
       overflow-x: scroll;
-      width: 50%;
     }
 
   }

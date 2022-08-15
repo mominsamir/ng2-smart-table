@@ -123,7 +123,8 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
           fixedColList.push(col);
         }
       });
-      this.fixedColNumber = fixedColList.length * 200 + 'px';
+      console.log(fixedColList.length);
+      this.fixedColNumber = fixedColList.length * 171 - fixedColList.length + 2 + 'px';
     }
   }
 
