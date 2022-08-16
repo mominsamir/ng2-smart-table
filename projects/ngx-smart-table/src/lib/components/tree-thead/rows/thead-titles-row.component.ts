@@ -19,6 +19,7 @@ import {Column} from '../../../lib/data-set/column';
     <th *ngFor="let column of getVisibleColumns(grid.getColumns()) let i=index"
         class="ng2-smart-th {{ column.id }} {{column.class}}"
         [style.width]="column.width"
+        [ngStyle]=" {'left': 'calc('+calculateCellPosition(column.width,column,i)+' - '+i+'px)' }"
         [ngClass]="!column.isScrollable ? 'col-'+ (i+1) : 'title'"
     >
       <ng2-st-column-title [source]="source" [column]="column" (sort)="sort.emit($event)"></ng2-st-column-title>
@@ -54,5 +55,26 @@ export class TheadTitlesRowComponent implements OnChanges {
 
   getVisibleColumns(columns: Array<Column>): Array<Column> {
     return (columns || []).filter((column: Column) => !column.hide);
+  }
+  calculateCellPosition(width, originCell, cellIndex) {
+    let currentCellIndex;
+    const percentList = [];
+    this.grid.getTreeRows().map(row => {
+      if (row.getData().id === cellIndex) {
+        row.cells.map((col, i) => {
+          if (col.getId() === originCell.id) {
+            currentCellIndex = i;
+          }
+          if (currentCellIndex === undefined) {
+            if(col.getColumn().width){
+              const numbers = parseFloat(col.getColumn().width.replace('%', ''));
+              percentList.push(numbers);
+            }
+          }
+        });
+      }
+    });
+    const percent = percentList.reduce((num, a) => num + a, 0);
+    return percent + '%';
   }
 }

@@ -16,6 +16,8 @@ import { Column } from "../../../lib/data-set/column";
     </th>
     <th *ngFor="let column of getVisibleColumns(grid.getColumns()) let i=index"
         class="ng2-smart-th {{ column.id }}"
+        [style.width]="column.width"
+        [ngStyle]=" {'left': 'calc('+calculateCellPosition(column.width,column,i)+' - '+i+'px)' }"
         [ngClass]="!column.isScrollable ? 'col-filter-'+ (i+1) : ''">
       <ng2-smart-table-filter [source]="source"
                               [column]="column"
@@ -54,5 +56,27 @@ export class TheadFitlersRowComponent implements OnChanges {
 
   getVisibleColumns(columns: Array<Column>): Array<Column> {
     return (columns || []).filter((column: Column) => !column.hide);
+  }
+
+  calculateCellPosition(width, originCell, cellIndex) {
+    let currentCellIndex;
+    const percentList = [];
+    this.grid.getTreeRows().map(row => {
+      if (row.getData().id === cellIndex) {
+        row.cells.map((col, i) => {
+          if (col.getId() === originCell.id) {
+            currentCellIndex = i;
+          }
+          if (currentCellIndex === undefined) {
+            if(col.getColumn().width){
+              const numbers = parseFloat(col.getColumn().width.replace('%', ''));
+              percentList.push(numbers);
+            }
+          }
+        });
+      }
+    });
+    const percent = percentList.reduce((num, a) => num + a, 0);
+    return percent + '%';
   }
 }

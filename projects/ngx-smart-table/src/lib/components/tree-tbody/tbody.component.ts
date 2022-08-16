@@ -1,29 +1,29 @@
 import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ViewContainerRef,
-  ComponentFactoryResolver,
-  OnDestroy,
   AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ComponentFactoryResolver,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
   QueryList,
   ViewChildren,
-  ChangeDetectorRef
+  ViewContainerRef
 } from '@angular/core';
 
-import { Grid } from '../../lib/grid';
-import { DataSource } from '../../lib/data-source/data-source';
-import { Cell } from '../../lib/data-set/cell';
-import { delay } from 'rxjs/operators';
-import { Row } from '../../lib/data-set/row';
+import {Grid} from '../../lib/grid';
+import {DataSource} from '../../lib/data-source/data-source';
+import {Cell} from '../../lib/data-set/cell';
+import {delay} from 'rxjs/operators';
+import {Row} from '../../lib/data-set/row';
 
 @Component({
   selector: '[ng2-st-tree-tbody]',
   styleUrls: ['./tbody.component.scss'],
   templateUrl: './tbody.component.html',
 })
-export class Ng2SmartTreeTableTbodyComponent implements  AfterViewInit, OnDestroy  {
+export class Ng2SmartTreeTableTbodyComponent implements AfterViewInit, OnDestroy {
 
   @Input() grid: Grid;
   @Input() source: DataSource;
@@ -43,21 +43,21 @@ export class Ng2SmartTreeTableTbodyComponent implements  AfterViewInit, OnDestro
   @Output() rowHover = new EventEmitter<any>();
   @Output() onExpandRow = new EventEmitter<any>();
 
-  @ViewChildren('expandedRowChild',{ read: ViewContainerRef}) expandedRowChild: QueryList<any>;
-  @ViewChildren('emptyDataChild',{ read: ViewContainerRef}) emptyDataChild: QueryList<any>;
-
+  @ViewChildren('expandedRowChild', {read: ViewContainerRef}) expandedRowChild: QueryList<any>;
+  @ViewChildren('emptyDataChild', {read: ViewContainerRef}) emptyDataChild: QueryList<any>;
   customComponent: any;
   emptyDataComponent: any;
   hasChildComponent: boolean = false;
   hasEmptyComponent: boolean = false;
 
 
-  constructor(private resolver: ComponentFactoryResolver,private vcRef: ViewContainerRef, private cdr: ChangeDetectorRef) {
+  constructor(private resolver: ComponentFactoryResolver, private vcRef: ViewContainerRef, private cdr: ChangeDetectorRef) {
   }
+
   ngAfterViewInit(): void {
     let cmp = this.grid.settings['expandedRowComponent'];
 
-    if (cmp  && !this.customComponent) {
+    if (cmp && !this.customComponent) {
       this.expandedRowChild.forEach(c => c.clear());
       this.hasChildComponent = true;
       this.createCustomComponent();
@@ -65,18 +65,22 @@ export class Ng2SmartTreeTableTbodyComponent implements  AfterViewInit, OnDestro
 
     let emptyData = this.grid.settings['emptyDataComponent'];
 
-    if (emptyData  && !this.emptyDataComponent) {
+    if (emptyData && !this.emptyDataComponent) {
       this.emptyDataChild.forEach(c => c.clear());
-       this.hasEmptyComponent = true;
-       this.createEmptyComponent();
+      this.hasEmptyComponent = true;
+      this.createEmptyComponent();
     }
     this.cdr.detectChanges();
 
   }
 
   ngOnDestroy(): void {
-    if(this.customComponent) this.customComponent.destroy();
-    if(this.emptyDataComponent) this.emptyDataComponent.destroy();
+    if (this.customComponent) {
+      this.customComponent.destroy();
+    }
+    if (this.emptyDataComponent) {
+      this.emptyDataComponent.destroy();
+    }
 
   }
 
@@ -84,12 +88,12 @@ export class Ng2SmartTreeTableTbodyComponent implements  AfterViewInit, OnDestro
     this.vcRef.clear();
   }
 
-  isRowSelected  = (row: Row): boolean =>{
-    if(this.isSingleSelectVisible) {
-        return this.grid.getDataSet().isSingleRowSelected(row)
+  isRowSelected = (row: Row): boolean => {
+    if (this.isSingleSelectVisible) {
+      return this.grid.getDataSet().isSingleRowSelected(row);
     }
     return this.grid.getDataSet().isRowSelected(row);
-  }
+  };
 
   protected createCustomComponent() {
     const componentFactory = this.resolver.resolveComponentFactory(this.grid.settings['expandedRowComponent']);
@@ -97,9 +101,9 @@ export class Ng2SmartTreeTableTbodyComponent implements  AfterViewInit, OnDestro
       .pipe(delay(0))
       .subscribe(item => {
         if (item.length) {
-          this.customComponent  = item.first.createComponent(componentFactory);
-          Object.assign(this.customComponent.instance, this.grid.dataSet.expandRow,{
-            rowData : this.grid.dataSet.getExpandedRow().getData(),
+          this.customComponent = item.first.createComponent(componentFactory);
+          Object.assign(this.customComponent.instance, this.grid.dataSet.expandRow, {
+            rowData: this.grid.dataSet.getExpandedRow().getData(),
           });
         }
       });
@@ -111,9 +115,9 @@ export class Ng2SmartTreeTableTbodyComponent implements  AfterViewInit, OnDestro
       .pipe(delay(0))
       .subscribe(item => {
         if (item.length) {
-          this.emptyDataComponent  = item.first.createComponent(componentFactory);
-          Object.assign(this.emptyDataComponent.instance, {} ,{
-            rowData : this.noDataMessage,
+          this.emptyDataComponent = item.first.createComponent(componentFactory);
+          Object.assign(this.emptyDataComponent.instance, {}, {
+            rowData: this.noDataMessage,
           });
         }
       });
@@ -138,7 +142,7 @@ export class Ng2SmartTreeTableTbodyComponent implements  AfterViewInit, OnDestro
 
   ngOnChanges() {
     this.isMultiSelectVisible = this.grid.isMultiSelectVisible();
-    this.isSingleSelectVisible  = this.grid.isSingleSelectVisible();
+    this.isSingleSelectVisible = this.grid.isSingleSelectVisible();
     this.showActionColumnLeft = this.grid.showActionColumn('left');
     this.mode = this.grid.getSetting('mode');
     this.editInputClass = this.grid.getSetting('edit.inputClass');
@@ -151,12 +155,30 @@ export class Ng2SmartTreeTableTbodyComponent implements  AfterViewInit, OnDestro
 
   getVisibleCells(cells: Array<Cell>): Array<Cell> {
     const result = (cells || []).filter((cell: Cell) => !cell.getColumn().hide);
-    // console.log(result);
     return result;
   }
 
-  onExpandRowClick(row:Row){
-    console.log('onExpandRowClick');
+  onExpandRowClick(row: Row) {
     this.onExpandRow.emit(row);
+  }
+
+  calculateCellPosition(width, originCell, cellIndex) {
+    let currentCellIndex;
+    const percentList = [];
+    this.grid.getTreeRows().map(row => {
+      if (row.getData().id === cellIndex) {
+        row.cells.map((col, i) => {
+          if (col.getId() === originCell.getId()) {
+            currentCellIndex = i;
+          }
+          if (currentCellIndex === undefined) {
+            const numbers = parseFloat(col.getColumn().width.replace('%', ''));
+            percentList.push(numbers);
+          }
+        });
+      }
+    });
+    const percent = percentList.reduce((num, a) => num + a, 0);
+    return percent + '%';
   }
 }

@@ -16,5 +16,4 @@ export class DemoComponent {
     dataTemplate: require('raw-loader!./snippets/data-template.md').default,
     basicFull: require('raw-loader!./snippets/basic-full.md').default,
   };
-
 }

@@ -1,7 +1,8 @@
 <ng-container [ngSwitch]="tableType">
   <ng-container *ngSwitchCase="'tree'">
     <div class="outer">
-      <div class="inner" [ngStyle]=" {'margin-left': fixedColNumber}">
+      <div class="inner" [ngStyle]=" {'margin-left': 'calc('+ fixedColNumber+' - '+ 5+'px)' }"
+           [style.width]="scrollableCellWidth">
         <table [id]="tableId" [ngClass]="tableClass" class="tree-table">
 
           <thead ng2-st-tree-thead *ngIf="!isHideHeader || !isHideSubHeader"

@@ -40,6 +40,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
   isPagerDisplay: boolean;
   tableType: string;
   fixedColNumber: string;
+  scrollableCellWidth: string;
   rowClassFunction: Function;
 
   grid: Grid;
@@ -115,16 +116,16 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    // need to know for fixed columns css.
     if (this.grid) {
-      const fixedColList = [];
-      this.grid.getColumns().map(col => {
-        if (!col.isScrollable) {
-          fixedColList.push(col);
-        }
+      const percentList = [];
+      const allWidthPercentage  = this.grid.getColumns().filter(item => item.width && !item.isScrollable);
+      allWidthPercentage.map(col => {
+        const numbers = parseFloat(col.width.replace('%', ''));
+        percentList.push(numbers);
       });
-      console.log(fixedColList.length);
-      this.fixedColNumber = fixedColList.length * 171 - fixedColList.length + 2 + 'px';
+      const percent = percentList.reduce((num, a) => num + a, 0);
+      this.scrollableCellWidth = 100 - percent + '%';
+      this.fixedColNumber = percent + '%';
     }
   }
 

@@ -8,6 +8,7 @@ import { routes } from './demo.routes';
 
 import { DemoComponent } from './demo.component';
 
+
 const DEMO_COMPONENTS = [
   DemoComponent,
 ];
