@@ -49,7 +49,6 @@ export class TreeActionViewCellComponent implements OnChanges, AfterViewInit, On
   }
 
   onExpandAction(event: any): boolean {
-    console.log(event);
     this.expandRow.next(event);
     return true;
   }
