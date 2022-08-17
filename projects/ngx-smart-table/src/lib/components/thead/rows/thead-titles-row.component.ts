@@ -40,7 +40,7 @@ export class TheadTitlesRowComponent implements OnChanges {
 
 
   ngOnChanges() {
-    this.isSingleSelectVisible = this.grid.isSingleSelectVisible();  
+    this.isSingleSelectVisible = this.grid.isSingleSelectVisible();
     this.isMultiSelectVisible = this.grid.isMultiSelectVisible();
     this.showActionColumnLeft = this.grid.showActionColumn('left');
     this.showActionColumnRight = this.grid.showActionColumn('right');

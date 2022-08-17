@@ -98,10 +98,11 @@ export class Grid {
   getRows(): Array<Row> {
     return this.dataSet.getRows();
   }
-//changed
+// added
   getTreeRows(): Array<Row> {
     return this.dataSet.getTreeRows();
   }
+  // added
   expandTreeRows(rowId) {
     this.dataSet.expandTreeRows(rowId);
   }

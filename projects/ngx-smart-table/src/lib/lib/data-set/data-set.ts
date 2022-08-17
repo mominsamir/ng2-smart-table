@@ -17,7 +17,6 @@ export class DataSet {
   constructor(data: Array<any> = [], protected columnSettings: Object) {
     this.createColumns(columnSettings);
     this.setData(data);
-
     this.createNewRow();
   }
 
@@ -48,7 +47,6 @@ export class DataSet {
         }
       });
     }
-    console.log('expandTreeRows');
   }
 
   getTreeRows(): Array<Row> {
@@ -233,26 +231,28 @@ export class DataSet {
   }
 
   /**
-   * Create columns by mapping from the settings
+   * Create columns and order by mapping from the settings
    * @param settings
    * @private
    */
   createColumns(settings: any) {
     for (const id in settings) {
       if (settings.hasOwnProperty(id)) {
-        if (!/^\d/.test(id)) {
+        if (!/^\d/.test(id) && id !== 'action') {
           this.columns.push(new Column(id, settings[id], this));
         }
       }
     }
+
     for (const id in settings) {
       if (settings.hasOwnProperty(id)) {
-        if (/^\d/.test(id)) {
+        if (/^\d/.test(id) || id === 'action') {
           this.columns.push(new Column(id, settings[id], this));
         }
       }
     }
   }
+
   /**
    * Create rows based on current data prepared in data source
    * @private

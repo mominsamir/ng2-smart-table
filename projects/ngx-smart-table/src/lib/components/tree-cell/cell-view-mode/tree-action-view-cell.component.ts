@@ -19,9 +19,20 @@ import {Grid} from '../../../lib/grid';
 @Component({
   selector: 'tree-table-action-cell-view-mode',
   template: `
-    <span class="ng-column-icon" (click)="onExpandAction(cell.getRow())">
-        <ng-template #iconChild></ng-template>
-      </span>
+    <div [ngSwitch]="cell.getColumn().type">
+      <ng-container *ngSwitchCase="'custom'">
+        <ng-container *ngIf="cell.getRow().parent && cell.getRow().rowspan">
+      <custom-view-component (click)="onExpandAction(cell.getRow())"  [cell]="cell"></custom-view-component>
+        </ng-container>
+      </ng-container>
+      <div *ngSwitchCase="'html'" [innerHTML]="cell.getValue()"></div>
+      <div *ngSwitchDefault>
+        <ng-container *ngIf="cell.getRow().parent && cell.getRow().rowspan">
+          {{ cell.getValue()}}
+        </ng-container>
+      </div>
+    </div>
+
   `,
 })
 export class TreeActionViewCellComponent implements OnChanges, AfterViewInit, OnDestroy {
@@ -38,6 +49,7 @@ export class TreeActionViewCellComponent implements OnChanges, AfterViewInit, On
   }
 
   onExpandAction(event: any): boolean {
+    console.log(event);
     this.expandRow.next(event);
     return true;
   }

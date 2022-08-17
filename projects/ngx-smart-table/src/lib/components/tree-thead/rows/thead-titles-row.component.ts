@@ -20,7 +20,7 @@ import {Column} from '../../../lib/data-set/column';
         class="ng2-smart-th {{ column.id }} {{column.class}}"
         [style.width]="column.width"
         [ngStyle]=" {'left': 'calc('+calculateCellPosition(column.width,column,i)+' - '+i+'px)' }"
-        [ngClass]="!column.isScrollable ? 'col-'+ (i+1) : 'title'"
+        [ngClass]="[!column.isScrollable ? 'col-'+ (i+1) : 'title', column.lastFixedCell ? 'break_line':'']"
     >
       <ng2-st-column-title [source]="source" [column]="column" (sort)="sort.emit($event)"></ng2-st-column-title>
     </th>
@@ -41,10 +41,6 @@ export class TheadTitlesRowComponent implements OnChanges {
   showActionColumnLeft: boolean;
   showActionColumnRight: boolean;
 
-  fixedColClassName(i) {
-    console.log(i * 100);
-    return i * 100;
-  }
 
   ngOnChanges() {
     this.isSingleSelectVisible = this.grid.isSingleSelectVisible();

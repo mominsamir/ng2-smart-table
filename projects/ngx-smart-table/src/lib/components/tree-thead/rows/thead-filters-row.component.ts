@@ -18,7 +18,7 @@ import { Column } from "../../../lib/data-set/column";
         class="ng2-smart-th {{ column.id }}"
         [style.width]="column.width"
         [ngStyle]=" {'left': 'calc('+calculateCellPosition(column.width,column,i)+' - '+i+'px)' }"
-        [ngClass]="!column.isScrollable ? 'col-filter-'+ (i+1) : ''">
+        [ngClass]="[!column.isScrollable ? 'col-filter-'+ (i+1) : '', column.lastFixedCell ? 'break_line':'']">
       <ng2-smart-table-filter [source]="source"
                               [column]="column"
                               [inputClass]="filterInputClass"

@@ -42,7 +42,7 @@ export class TheadFitlersRowComponent implements OnChanges {
   filterInputClass: string;
 
   ngOnChanges() {
-    this.isSingleSelectVisible = this.grid.isSingleSelectVisible();      
+    this.isSingleSelectVisible = this.grid.isSingleSelectVisible();
     this.isMultiSelectVisible = this.grid.isMultiSelectVisible();
     this.showActionColumnLeft = this.grid.showActionColumn('left');
     this.showActionColumnRight = this.grid.showActionColumn('right');

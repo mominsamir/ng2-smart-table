@@ -97,9 +97,9 @@
 
     <ng-container *ngFor="let cell of getVisibleCells(row.cells) let i = index">
       <td rowspan="2" *ngIf="cell.getGroupBy() && !cell.getRow().hide && cell.getId() !== 'expandAction'"
-          class="fixed col{{i+1}}"
+          class="fixed col{{i+1}} {{cell.getId()}}"
           [style.width]="cell.getColumn().width"
-          [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn().width,cell,i)+' - '+'1px)' }"
+          [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell,i)+' - '+'1px)' }"
           [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().parent,
                         'remove-border-top': !cell.getRow().parent,
                         'remove-border-bottom': cell.getRow().parent && rowIndex !== grid.getTreeRows().length -1}"
@@ -121,8 +121,9 @@
     <ng-container *ngFor="let cell of getVisibleCells(row.cells) let i = index">
       <td *ngIf="!cell.getGroupBy() && !cell.getColumn().isScrollable &&!cell.getRow().hide"
           [style.width]="cell.getColumn().width"
-          [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn().width,cell,i)+' - '+i+'px)' }"
-          class="fixed col{{i+1}}">
+          [ngClass]="{break_line: cell.getColumn().lastFixedCell}"
+          [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell,i)+' - '+i+'px)' }"
+          class="fixed col{{i+1}} {{cell.getId()}}">
         <ng2-smart-tree-table-cell [cell]="cell"
                                    [grid]="grid"
                                    [row]="row"
@@ -137,8 +138,9 @@
     <!--    -->
 
     <!--    dynamic header (scrollable area)-->
-    <ng-container *ngFor="let cell of getVisibleCells(row.cells)">
+    <ng-container *ngFor="let cell of getVisibleCells(row.cells) let i = index">
       <td *ngIf="!cell.getGroupBy()&& cell.getColumn().isScrollable && !cell.getRow().hide"
+          class="{{cell.getId()}}"
           [style.width]="cell.getColumn().width">
         <ng2-smart-tree-table-cell [cell]="cell"
                                    [grid]="grid"

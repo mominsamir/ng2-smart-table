@@ -19,6 +19,7 @@ export class Column {
   filter: { type: string, config: any, component: any } = { type: '', config: {}, component: null };
   renderComponent: any = null;
   isScrollable: boolean = false; //added
+  lastFixedCell: boolean = false; //added
   groupBy: boolean = false; //added
   compareFunction: Function;
   valuePrepareFunction: Function;
@@ -69,8 +70,9 @@ export class Column {
     this.renderComponent = this.settings['renderComponent'];
     this.icon = this.settings['icon'];
 
-    this.isScrollable = this.settings['isScrollable']; //changed
-    this.groupBy = this.settings['groupBy']; //changed
+    this.lastFixedCell = this.settings['lastFixedCell']; //added
+    this.isScrollable = this.settings['isScrollable']; //added
+    this.groupBy = this.settings['groupBy']; //added
 
     this.isFilterable = typeof this.settings['filter'] === 'undefined' ? true : !!this.settings['filter'];
     this.defaultSortDirection = ['asc', 'desc']

@@ -162,16 +162,19 @@ export class Ng2SmartTreeTableTbodyComponent implements AfterViewInit, OnDestroy
     this.onExpandRow.emit(row);
   }
 
-  calculateCellPosition(width, originCell, cellIndex) {
+  calculateCellPosition(column, originCell, cellIndex) {
     let currentCellIndex;
     const percentList = [];
-    this.grid.getTreeRows().map(row => {
+    const test = [];
+    const test2 = [];
+    this.grid.getTreeRows().map((row,index) => {
       if (row.getData().id === cellIndex) {
         row.cells.map((col, i) => {
           if (col.getId() === originCell.getId()) {
             currentCellIndex = i;
           }
           if (currentCellIndex === undefined) {
+            test2.push(col)
             const numbers = parseFloat(col.getColumn().width.replace('%', ''));
             percentList.push(numbers);
           }
@@ -180,5 +183,11 @@ export class Ng2SmartTreeTableTbodyComponent implements AfterViewInit, OnDestroy
     });
     const percent = percentList.reduce((num, a) => num + a, 0);
     return percent + '%';
+  }
+  checkFirstCell(cell) {
+    console.log(cell);
+    this.grid.getTreeRows().map(row => {
+      console.log(row);
+    })
   }
 }
