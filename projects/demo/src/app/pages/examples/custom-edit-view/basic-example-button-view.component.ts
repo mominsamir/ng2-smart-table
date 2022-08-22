@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ViewCell } from 'projects/demo/src/app/ngx-smart-table/src/public-api';
+import { ViewCell } from 'projects/ngx-smart-table/src/public-api';
 
 @Component({
   selector: 'button-view',

@@ -22,6 +22,8 @@ export class Column {
   lastFixedCell: boolean = false; //added
   groupBy: boolean = false; //added
   groupByFilter: boolean = false; //added
+  customHeaderClass: string = ''; //added
+
   compareFunction: Function;
   valuePrepareFunction: Function;
   filterFunction: Function;
@@ -75,6 +77,7 @@ export class Column {
     this.isScrollable = this.settings['isScrollable']; //added
     this.groupBy = this.settings['groupBy']; //added
     this.groupByFilter = this.settings['groupByFilter']; //added
+    this.customHeaderClass = this.settings['customHeaderClass']; //added
 
     this.isFilterable = typeof this.settings['filter'] === 'undefined' ? true : !!this.settings['filter'];
     this.defaultSortDirection = ['asc', 'desc']

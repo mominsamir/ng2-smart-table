@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { LocalDataSource } from 'projects/demo/src/app/ngx-smart-table/src/public-api';
+import { LocalDataSource } from 'projects/ngx-smart-table/src/public-api';
 
 @Component({
   selector: 'advance-example-comfirm',

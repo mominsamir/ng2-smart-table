@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { NgxSmartTableModule } from 'projects/demo/src/app/ngx-smart-table/src/public-api';
+import { NgxSmartTableModule } from 'projects/ngx-smart-table/src/public-api';
 
 import { HeaderComponent } from './components/header/header.component';
 import { BasicExampleDataComponent } from './components/basic-example/basic-example-data.component';

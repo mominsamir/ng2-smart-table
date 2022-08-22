@@ -39,7 +39,6 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
   isHideSubHeader: boolean;
   isPagerDisplay: boolean;
   tableType: string; // added
-  benchmark: string; // added
   fixedColNumber: string;
   scrollableCellWidth: string;
   rowClassFunction: Function;
@@ -150,7 +149,6 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
     this.isPagerDisplay = this.grid.getSetting('pager.display');
     this.perPageSelect = this.grid.getSetting('pager.perPageSelect');
     this.tableType = this.grid.getSetting('tableType'); // added
-    this.benchmark = this.grid.getSetting('benchmark'); // added
     this.rowClassFunction = this.grid.getSetting('rowClassFunction');
   }
 

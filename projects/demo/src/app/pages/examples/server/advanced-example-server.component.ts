@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ServerDataSource } from 'projects/demo/src/app/ngx-smart-table/src/public-api';
+import { ServerDataSource } from 'projects/ngx-smart-table/src/public-api';
 
 @Component({
   selector: 'advanced-example-server',

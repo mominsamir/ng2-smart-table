@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { NgxSmartTableModule } from 'projects/demo/src/app/ngx-smart-table/src/public-api';
+import { NgxSmartTableModule } from 'projects/ngx-smart-table/src/public-api';
 
 import { PagesModule } from './pages/pages.module';
 import { AppComponent } from './app.component';

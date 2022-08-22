@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { DefaultEditor } from 'projects/demo/src/app/ngx-smart-table/src/public-api';
+import { DefaultEditor } from 'projects/ngx-smart-table/src/public-api';
 
 @Component({
   template: `

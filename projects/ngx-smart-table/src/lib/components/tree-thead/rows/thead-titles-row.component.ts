@@ -17,7 +17,7 @@ import {Column} from '../../../lib/data-set/column';
     <th *ngIf="isSingleSelectVisible"></th>
     <th ng2-st-actions-title *ngIf="showActionColumnLeft" [grid]="grid"></th>
     <th *ngFor="let column of getVisibleColumns(grid.getColumns()) let i=index"
-        class="ng2-smart-th {{ column.id }} {{column.class}} {{getHighlightColor(column.title, this.grid.settings.benchmarkValue)}}"
+        class="ng2-smart-th {{ column.id }} {{column.class}} {{column.customHeaderClass}}"
         [style.width]="column.width"
         [ngStyle]=" {'left': 'calc('+calculateCellPosition(column.width,column,i)+' - '+i+'px)' }"
         [ngClass]="[!column.isScrollable ? 'col-'+ (i+1) : 'title',
@@ -41,17 +41,6 @@ export class TheadTitlesRowComponent implements OnChanges {
   isMultiSelectVisible: boolean;
   showActionColumnLeft: boolean;
   showActionColumnRight: boolean;
-
-  getHighlightColor(title, benchmarkValue) {
-    if (parseFloat(title) > parseFloat(benchmarkValue)) {
-      return 'forecast';
-    } else if (parseFloat(title) <= parseFloat(benchmarkValue)) {
-      return 'actual';
-    } else {
-      return false;
-    }
-
-  }
 
 
   ngOnChanges() {

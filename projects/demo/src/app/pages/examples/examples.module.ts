@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { NgxSmartTableModule } from 'projects/demo/src/app/ngx-smart-table/src/public-api';
+import { NgxSmartTableModule } from 'projects/ngx-smart-table/src/public-api';
 
 import { SharedModule } from '../../shared/shared.module';
 import { routes } from './examples.routes';
