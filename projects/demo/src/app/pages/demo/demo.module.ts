@@ -7,7 +7,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { routes } from './demo.routes';
 
 import { DemoComponent } from './demo.component';
-
+import {NgxSmartTableModule} from '../../ngx-smart-table/src/lib/ngx-smart-table.module';
 
 const DEMO_COMPONENTS = [
   DemoComponent,
@@ -18,6 +18,7 @@ const DEMO_COMPONENTS = [
     CommonModule,
     RouterModule.forChild(routes),
     SharedModule,
+    NgxSmartTableModule,
   ],
   declarations: [
     ...DEMO_COMPONENTS,

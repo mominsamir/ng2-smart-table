@@ -1,0 +1,197 @@
+<ng-container *ngFor="let row of grid.getTreeRows()  let rowIndex = index" style="position: relative">
+  <tr (click)="userSelectRow.emit(row)" (mouseover)="rowHover.emit(row)" class="ng2-smart-row"
+      [className]="rowClassFunction(row)" [ngClass]="{selected: row.isSelected}">
+    <td *ngIf="isMultiSelectVisible" class="ng2-smart-actions ng2-smart-action-multiple-select"
+        (click)="multipleSelectRow.emit(row)">
+      <input type="checkbox" [checked]="isRowSelected(row)">
+    </td>
+    <td *ngIf="isSingleSelectVisible" class="ng2-smart-actions ng2-smart-action-single-select"
+        (click)="userSelectRow.emit(row)">
+      <input type="radio" [checked]="isRowSelected(row)">
+    </td>
+
+    <td *ngIf="!row.isInEditing && showActionColumnLeft" class="ng2-smart-actions">
+
+      <ng2-st-tbody-custom
+        [grid]="grid"
+        (custom)="custom.emit($event)"
+        [row]="row"
+        [source]="source">
+      </ng2-st-tbody-custom>
+
+
+      <ng2-st-tbody-edit-delete [grid]="grid"
+                                [deleteConfirm]="deleteConfirm"
+                                [editConfirm]="editConfirm"
+                                (edit)="edit.emit(row)"
+                                (delete)="delete.emit(row)"
+                                (editRowSelect)="editRowSelect.emit($event)"
+                                [row]="row"
+                                [source]="source">
+      </ng2-st-tbody-edit-delete>
+    </td>
+    <td *ngIf="row.isInEditing && showActionColumnLeft" class="ng2-smart-actions">
+      <ng2-st-tbody-create-cancel [grid]="grid" [row]="row" [editConfirm]="editConfirm"></ng2-st-tbody-create-cancel>
+    </td>
+
+    <td *ngIf="row.isInEditing && showActionColumnRight" class="ng2-smart-actions">
+      <ng2-st-tbody-create-cancel [grid]="grid" [row]="row" [editConfirm]="editConfirm"></ng2-st-tbody-create-cancel>
+    </td>
+
+    <td *ngIf="!row.isInEditing && showActionColumnRight" class="ng2-smart-actions">
+      <ng2-st-tbody-custom [grid]="grid" (custom)="custom.emit($event)" [row]="row"
+                           [source]="source"></ng2-st-tbody-custom>
+
+      <ng2-st-tbody-expand
+        *ngIf="hasChildComponent"
+        [grid]="grid"
+        [row]="row"
+        (onExpandRow)="onExpandRow.emit(row)">
+      </ng2-st-tbody-expand>
+
+      <ng2-st-tbody-edit-delete [grid]="grid"
+                                [deleteConfirm]="deleteConfirm"
+                                [editConfirm]="editConfirm"
+                                [row]="row"
+                                [source]="source"
+                                (edit)="edit.emit(row)"
+                                (delete)="delete.emit(row)"
+                                (editRowSelect)="editRowSelect.emit($event)">
+      </ng2-st-tbody-edit-delete>
+    </td>
+  </tr>
+
+  <tr class="ng2-smart-row ng2-smart-row-detail" *ngIf="row.isExpanded">
+    <td [attr.colspan]="tableColumnsCount" class="ng2-smart-column-expandedDetail">
+      <ng-template #expandedRowChild></ng-template>
+    </td>
+  </tr>
+
+<!--  create for expand col action-->
+
+  <tr>
+    <!--expand action column-->
+    <ng-container *ngFor="let cell of getVisibleCells(row.cells) let i = index">
+      <td *ngIf="cell.getGroupBy() && !cell.getRow().hide && cell.getId() === 'expandAction'"
+          class="fixed col{{i+1}}"
+          [style.width]="cell.getColumn().width"
+          [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().parent,
+                        'remove-border-top': !cell.getRow().parent,
+                        'remove-border-bottom': cell.getRow().parent && rowIndex !== grid.getTreeRows().length -1}"
+      >
+        <ng2-smart-tree-table-cell [cell]="cell"
+                                   [grid]="grid"
+                                   [row]="row"
+                                   [isNew]="false"
+                                   [mode]="mode"
+                                   [editConfirm]="editConfirm"
+                                   [inputClass]="editInputClass"
+                                   [isInEditing]="row.isInEditing">
+        </ng2-smart-tree-table-cell>
+      </td>
+    </ng-container>
+  </tr>
+
+  <tr>
+    <!--Id column-->
+
+    <ng-container *ngFor="let cell of getVisibleCells(row.cells) let i = index">
+      <td *ngIf="cell.getGroupBy() && !cell.getRow().hide && cell.getId() !== 'expandAction'"
+          class="fixed col{{i+1}} {{cell.getId()}}"
+          [style.width]="cell.getColumn().width"
+          [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell,i)+' - '+'1px)' }"
+          [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().parent,
+                        'remove-border-top': !cell.getRow().parent,
+                        'remove-border-bottom': cell.getRow().parent && rowIndex !== grid.getTreeRows().length -1,
+                        'collapsed-cell': cell.getRow().rowspan}"
+      >
+        <ng2-smart-tree-table-cell [cell]="cell"
+                                   [grid]="grid"
+                                   [row]="row"
+                                   [isNew]="false"
+                                   [mode]="mode"
+                                   [editConfirm]="editConfirm"
+                                   [inputClass]="editInputClass"
+                                   [isInEditing]="row.isInEditing">
+        </ng2-smart-tree-table-cell>
+      </td>
+    </ng-container>
+    <!--  -->
+
+    <!--  fixed header e.g. station, etc..-->
+    <ng-container *ngFor="let cell of getVisibleCells(row.cells) let i = index">
+      <td *ngIf="!cell.getGroupBy() && !cell.getColumn().isScrollable &&!cell.getRow().hide"
+          [style.width]="cell.getColumn().width"
+          [ngClass]="{break_line: cell.getColumn().lastFixedCell, 'collapsed-cell': cell.getRow().rowspan}"
+          [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell,i)+' - '+i+'px)' }"
+          class="fixed col{{i+1}} {{cell.getId()}}">
+        <ng2-smart-tree-table-cell [cell]="cell"
+                                   [grid]="grid"
+                                   [row]="row"
+                                   [isNew]="false"
+                                   [mode]="mode"
+                                   [editConfirm]="editConfirm"
+                                   [inputClass]="editInputClass"
+                                   [isInEditing]="row.isInEditing">
+        </ng2-smart-tree-table-cell>
+      </td>
+    </ng-container>
+    <!--    -->
+
+    <!--    dynamic cell (scrollable area)-->
+    <ng-container *ngFor="let cell of getVisibleCells(row.cells) let i = index">
+      <td *ngIf="!cell.getGroupBy()&& cell.getColumn().isScrollable && !cell.getRow().hide && cell.getColumn().type !== 'custom'"
+          class="{{cell.getId()}}"
+          [ngClass]="{'collapsed-cell': cell.getRow().rowspan}"
+          [style.width]="cell.getColumn().width">
+        <ng2-smart-tree-table-cell [cell]="cell"
+                                   [grid]="grid"
+                                   [row]="row"
+                                   [isNew]="false"
+                                   [mode]="mode"
+                                   [editConfirm]="editConfirm"
+                                   [inputClass]="editInputClass"
+                                   [isInEditing]="row.isInEditing">
+        </ng2-smart-tree-table-cell>
+      </td>
+    </ng-container>
+    <!--    -->
+
+    <!--    action cell (scrollable area)-->
+    <ng-container *ngFor="let cell of getVisibleCells(row.cells) let i = index">
+      <td *ngIf="!cell.getGroupBy()&& cell.getColumn().isScrollable && !cell.getRow().hide && cell.getColumn().type === 'custom'"
+          class="{{cell.getId()}}"
+          [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().parent,
+                        'remove-border-top': !cell.getRow().parent,
+                        'remove-border-bottom': cell.getRow().parent && rowIndex !== grid.getTreeRows().length -1,
+                        'collapsed-cell': cell.getRow().rowspan}"
+          [style.width]="cell.getColumn().width">
+        <ng2-smart-tree-table-cell [cell]="cell"
+                                   [grid]="grid"
+                                   [row]="row"
+                                   [isNew]="false"
+                                   [mode]="mode"
+                                   [editConfirm]="editConfirm"
+                                   [inputClass]="editInputClass"
+                                   [isInEditing]="row.isInEditing">
+        </ng2-smart-tree-table-cell>
+      </td>
+    </ng-container>
+    <!--    -->
+  </tr>
+</ng-container>
+
+<tr class="ng2-smart-row ng2-smart-row-emtpy" *ngIf="grid.getRows().length == 0">
+  <td class="ng2-smart-column ng2-empty-component"
+      *ngIf="hasEmptyComponent"
+      [attr.colspan]="tableColumnsCount">
+    <ng-template #emptyDataChild></ng-template>
+  </td>
+
+  <td class="ng2-smart-column ng2-empty-message"
+      *ngIf="!hasEmptyComponent"
+      [attr.colspan]="tableColumnsCount">
+    {{ noDataMessage }}
+  </td>
+</tr>
+

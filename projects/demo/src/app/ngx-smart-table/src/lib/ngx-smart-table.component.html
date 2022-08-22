@@ -1,0 +1,75 @@
+<ng-container [ngSwitch]="tableType">
+  <ng-container *ngSwitchCase="'tree'">
+    <div class="outer">
+      <div class="inner" [ngStyle]=" {'margin-left': 'calc('+ fixedColNumber+' - '+ 5+'px)' }"
+           [style.width]="scrollableCellWidth">
+        <table [id]="tableId" [ngClass]="tableClass" class="tree-table">
+
+          <thead ng2-st-tree-thead *ngIf="!isHideHeader || !isHideSubHeader"
+                 [grid]="grid"
+                 [isAllSelected]="isAllSelected"
+                 [source]="source"
+                 [createConfirm]="createConfirm"
+                 (create)="create.emit($event)"
+                 (selectAllRows)="onSelectAllRows()"
+                 (sort)="sort($event)"
+                 (filter)="filter($event)">
+          </thead>
+
+          <tbody ng2-st-tree-tbody
+                 [grid]="grid"
+                 [source]="source"
+                 [deleteConfirm]="deleteConfirm"
+                 [editConfirm]="editConfirm"
+                 [rowClassFunction]="rowClassFunction"
+                 (edit)="edit.emit($event)"
+                 (delete)="delete.emit($event)"
+                 (custom)="custom.emit($event)"
+                 (userSelectRow)="onUserSelectRow($event)"
+                 (editRowSelect)="editRowSelect($event)"
+                 (multipleSelectRow)="multipleSelectRow($event)"
+                 (onExpandRow)="onExpandRow($event)"
+                 (rowHover)="onRowHover($event)">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchDefault>
+    <table [id]="tableId" [ngClass]="tableClass">
+
+      <thead ng2-st-thead *ngIf="!isHideHeader || !isHideSubHeader"
+             [grid]="grid"
+             [isAllSelected]="isAllSelected"
+             [source]="source"
+             [createConfirm]="createConfirm"
+             (create)="create.emit($event)"
+             (selectAllRows)="onSelectAllRows()"
+             (sort)="sort($event)"
+             (filter)="filter($event)">
+      </thead>
+      <tbody ng2-st-tbody
+             [grid]="grid"
+             [source]="source"
+             [deleteConfirm]="deleteConfirm"
+             [editConfirm]="editConfirm"
+             [rowClassFunction]="rowClassFunction"
+             (edit)="edit.emit($event)"
+             (delete)="delete.emit($event)"
+             (custom)="custom.emit($event)"
+             (userSelectRow)="onUserSelectRow($event)"
+             (editRowSelect)="editRowSelect($event)"
+             (multipleSelectRow)="multipleSelectRow($event)"
+             (onExpandRow)="onExpandRow($event)"
+             (rowHover)="onRowHover($event)">
+      </tbody>
+    </table>
+  </ng-container>
+
+</ng-container>
+
+<ng2-smart-table-pager *ngIf="isPagerDisplay"
+                       [source]="source"
+                       [perPageSelect]="perPageSelect"
+                       (changePage)="changePage($event)">
+</ng2-smart-table-pager>
