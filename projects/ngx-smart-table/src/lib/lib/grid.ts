@@ -100,7 +100,7 @@ export class Grid {
   }
 // added
   getTreeRows(): Array<Row> {
-    return this.dataSet.getTreeRows();
+    return this.dataSet.getTreeRows(this.settings);
   }
   // added
   expandTreeRows(rowId) {

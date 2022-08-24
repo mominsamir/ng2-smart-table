@@ -8,12 +8,12 @@ import {Cell} from '../../../lib/data-set/cell';
   template: `
     <div [ngSwitch]="cell.getColumn().type">
       <ng-container *ngSwitchCase="'custom'">
-        <custom-view-component *ngIf="cell.getRow().parent && cell.getRow().rowspan"
+        <custom-view-component *ngIf="cell.getRow().showFirstValueInGroup"
                                [cell]="cell"></custom-view-component>
       </ng-container>
       <div *ngSwitchCase="'html'" [innerHTML]="cell.getValue()"></div>
       <div *ngSwitchDefault>
-        <ng-container>
+        <ng-container *ngIf="!(!cell.getRow().isFirstColumn && cell.getColumn().isMergeColumn)">
           {{ cell.getValue()}}
         </ng-container>
       </div>

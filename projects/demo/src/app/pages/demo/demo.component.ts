@@ -6,7 +6,7 @@ import {LocalDataSource} from '../../../../../ngx-smart-table/src/lib/lib/data-s
   templateUrl: './demo.component.html',
 })
 export class DemoComponent {
-
+source: LocalDataSource;
   snippets = {
     install: require('raw-loader!./snippets/install.md').default,
     require: require('raw-loader!./snippets/require.md').default,
@@ -17,5 +17,9 @@ export class DemoComponent {
     dataTemplate: require('raw-loader!./snippets/data-template.md').default,
     basicFull: require('raw-loader!./snippets/basic-full.md').default,
   };
+
+  constructor() {
+
+  }
 
 }

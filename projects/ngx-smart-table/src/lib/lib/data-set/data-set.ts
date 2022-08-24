@@ -49,36 +49,57 @@ export class DataSet {
     }
   }
 
-  getTreeRows(): Array<Row> {
+  getTreeRows(settings): Array<Row> {
     if (this.rows) {
-      return this.treeTableProcess(this.rows);
+      return this.treeTableProcess(this.rows,settings);
     }
   }
 
-  treeTableProcess(data) {
+  treeTableProcess(data, settings) {
     const result = [];
-
     const groupById = data.reduce((group, list) => {
       const {id} = list.data;
       group[id] = group[id] ?? [];
       group[id].push(list);
       return group;
     }, {});
+
     const valueListForGroup = this.getGroupingValue(groupById);
     Object.keys(groupById).map(item => {
       if (valueListForGroup.length < groupById[item].length) {
-        groupById[item].isSpendable = true;
+        groupById[item].isExpandable = true;
       }
+
+
       groupById[item].map((value, index) => {
-        if (groupById[item].isSpendable) {
-          value.rowspan = true;
+        if(settings.isMergeMultipleCell){
+          Object.keys(value.data.isFirstRowMap).map(row => {
+            if (value.data.isFirstRowMap[row]) {
+              value.isFirstColumn = true;
+              value.cells.map(cell => {
+                if (cell.column.id === row) {
+                  cell.column.isMergeColumn = true;
+                }
+              });
+            }
+          });
         }
+
+
+
+        // console.log(groupById[item]);
+        // config for show Rowspan Botton
+        if (groupById[item].isExpandable) {
+          value.showRowspanBotton = true;
+        }
+        // flag for value in first column
         if (index === 0) {
-          value.parent = true;
+          value.showFirstValueInGroup = true;
         }
         if (!value.onChange) {
-          value.hide = index > valueListForGroup.length - 1;
-          value.children = index > valueListForGroup.length - 1;
+          value.hide = !value.data.parent;
+          // value.hide = !!value.data.child;
+          // value.hide = index > valueListForGroup.length - 1;
         } else {
           value.hide = false;
         }
@@ -91,7 +112,7 @@ export class DataSet {
     let nameForGroupBy;
     const valueList = [];
     this.columns.map(col => {
-      if (col.groupByFilter) {
+      if (col.groupByValue) {
         nameForGroupBy = col.id;
       }
     });

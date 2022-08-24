@@ -21,13 +21,13 @@ import {Grid} from '../../../lib/grid';
   template: `
     <div [ngSwitch]="cell.getColumn().type">
       <ng-container *ngSwitchCase="'custom'">
-        <ng-container *ngIf="cell.getRow().parent && cell.getRow().rowspan">
+        <ng-container *ngIf="cell.getRow().showFirstValueInGroup && cell.getRow().showRowspanBotton">
       <custom-view-component (click)="onExpandAction(cell.getRow())"  [cell]="cell"></custom-view-component>
         </ng-container>
       </ng-container>
       <div *ngSwitchCase="'html'" [innerHTML]="cell.getValue()"></div>
       <div *ngSwitchDefault>
-        <ng-container *ngIf="cell.getRow().parent && cell.getRow().rowspan">
+        <ng-container *ngIf="cell.getRow().showFirstValueInGroup && cell.getRow().showRowspanBotton">
           {{ cell.getValue()}}
         </ng-container>
       </div>

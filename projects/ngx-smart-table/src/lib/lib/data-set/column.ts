@@ -21,8 +21,12 @@ export class Column {
   isScrollable: boolean = false; //added
   lastFixedCell: boolean = false; //added
   groupBy: boolean = false; //added
-  groupByFilter: boolean = false; //added
+  groupByValue: boolean = false; //added
+  mergeRow: boolean = false; //added
+  singleRow: string = ''; //added
   customHeaderClass: string = ''; //added
+  isFirstColumn: boolean = false; //added
+  isMergeColumn: boolean = false; //added
 
   compareFunction: Function;
   valuePrepareFunction: Function;
@@ -76,8 +80,12 @@ export class Column {
     this.lastFixedCell = this.settings['lastFixedCell']; //added
     this.isScrollable = this.settings['isScrollable']; //added
     this.groupBy = this.settings['groupBy']; //added
-    this.groupByFilter = this.settings['groupByFilter']; //added
+    this.groupByValue = this.settings['groupByValue']; //added
+    this.mergeRow = this.settings['mergeRow']; //added
+    this.singleRow = this.settings['singleRow']; //added
     this.customHeaderClass = this.settings['customHeaderClass']; //added
+    this.isFirstColumn = this.settings['isFirstColumn']; //added
+    this.isMergeColumn = this.settings['isMergeColumn']; //added
 
     this.isFilterable = typeof this.settings['filter'] === 'undefined' ? true : !!this.settings['filter'];
     this.defaultSortDirection = ['asc', 'desc']

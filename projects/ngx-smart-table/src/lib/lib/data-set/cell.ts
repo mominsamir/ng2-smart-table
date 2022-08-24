@@ -26,8 +26,16 @@ export class Cell {
     return this.getColumn().groupBy;
   }
   // added
-  groupByFilter(): boolean {
-    return this.getColumn().groupByFilter;
+  groupByValue(): boolean {
+    return this.getColumn().groupByValue;
+  }
+  // added
+  mergeRow(): boolean {
+    return this.getColumn().mergeRow;
+  }
+  // added
+  singleRow(): string {
+    return this.getColumn().singleRow;
   }
 
   getValue(): any {

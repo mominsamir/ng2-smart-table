@@ -7,13 +7,12 @@ export class Row {
   isSelected: boolean = false;
   isInEditing: boolean = false;
   isExpanded: boolean = false;
-  //changed
-  parent: boolean = false;
-  hide: boolean = false;
-  onChange: boolean = false;
-  // hide: boolean = true;
-  children: boolean = false;
-  rowspan: boolean = false;
+
+  hide: boolean = false; //added
+  onChange: boolean = false; //added
+  showFirstValueInGroup: boolean = false; //added
+  isFirstColumn: boolean = false; //added
+  showRowspanBotton: boolean = false; //added
 
   cells: Array<Cell> = [];
   keyValue : string| number | undefined = undefined;

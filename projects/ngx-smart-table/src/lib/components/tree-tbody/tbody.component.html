@@ -67,7 +67,7 @@
     </td>
   </tr>
 
-<!--  create for expand col action-->
+  <!--  create for expand col action-->
 
   <tr>
     <!--expand action column-->
@@ -75,10 +75,9 @@
       <td *ngIf="cell.getGroupBy() && !cell.getRow().hide && cell.getId() === 'expandAction'"
           class="fixed col{{i+1}}"
           [style.width]="cell.getColumn().width"
-          [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().parent,
-                        'remove-border-top': !cell.getRow().parent,
-                        'remove-border-bottom': cell.getRow().parent && rowIndex !== grid.getTreeRows().length -1}"
-      >
+          [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().showFirstValueInGroup,
+                        'remove-border-top': !cell.getRow().showFirstValueInGroup,
+                        'remove-border-bottom': cell.getRow().showFirstValueInGroup && rowIndex !== grid.getTreeRows().length -1}">
         <ng2-smart-tree-table-cell [cell]="cell"
                                    [grid]="grid"
                                    [row]="row"
@@ -99,11 +98,11 @@
       <td *ngIf="cell.getGroupBy() && !cell.getRow().hide && cell.getId() !== 'expandAction'"
           class="fixed col{{i+1}} {{cell.getId()}}"
           [style.width]="cell.getColumn().width"
-          [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell,i)+' - '+'1px)' }"
-          [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().parent,
-                        'remove-border-top': !cell.getRow().parent,
-                        'remove-border-bottom': cell.getRow().parent && rowIndex !== grid.getTreeRows().length -1,
-                        'collapsed-cell': cell.getRow().rowspan}"
+          [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell)+' - '+'1px)' }"
+          [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().showFirstValueInGroup,
+                        'remove-border-top': !cell.getRow().showFirstValueInGroup,
+                        'remove-border-bottom': cell.getRow().showFirstValueInGroup && rowIndex !== grid.getTreeRows().length -1,
+                        'collapsed-cell': cell.getRow().showRowspanBotton}"
       >
         <ng2-smart-tree-table-cell [cell]="cell"
                                    [grid]="grid"
@@ -120,10 +119,14 @@
 
     <!--  fixed header e.g. station, etc..-->
     <ng-container *ngFor="let cell of getVisibleCells(row.cells) let i = index">
+
       <td *ngIf="!cell.getGroupBy() && !cell.getColumn().isScrollable &&!cell.getRow().hide"
           [style.width]="cell.getColumn().width"
-          [ngClass]="{break_line: cell.getColumn().lastFixedCell, 'collapsed-cell': cell.getRow().rowspan}"
-          [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell,i)+' - '+i+'px)' }"
+          [ngClass]="{break_line: cell.getColumn().lastFixedCell,
+                      'collapsed-cell': cell.getRow().showRowspanBotton,
+                      'testing': cell.getRow().isFirstColumn && cell.getColumn().isMergeColumn,
+                      'testing2': !cell.getRow().isFirstColumn && cell.getColumn().isMergeColumn}"
+          [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell)+' - '+i+'px)' }"
           class="fixed col{{i+1}} {{cell.getId()}}">
         <ng2-smart-tree-table-cell [cell]="cell"
                                    [grid]="grid"
@@ -136,14 +139,16 @@
         </ng2-smart-tree-table-cell>
       </td>
     </ng-container>
+
     <!--    -->
 
     <!--    dynamic cell (scrollable area)-->
     <ng-container *ngFor="let cell of getVisibleCells(row.cells) let i = index">
-      <td *ngIf="!cell.getGroupBy()&& cell.getColumn().isScrollable && !cell.getRow().hide && cell.getColumn().type !== 'custom'"
-          class="{{cell.getId()}}"
-          [ngClass]="{'collapsed-cell': cell.getRow().rowspan}"
-          [style.width]="cell.getColumn().width">
+      <td
+        *ngIf="!cell.getGroupBy()&& cell.getColumn().isScrollable && !cell.getRow().hide && cell.getColumn().type !== 'custom'"
+        class="{{cell.getId()}}"
+        [ngClass]="{'highlight-row': cell.getRow().getData().highlightRow}"
+        [style.width]="cell.getColumn().width">
         <ng2-smart-tree-table-cell [cell]="cell"
                                    [grid]="grid"
                                    [row]="row"
@@ -159,13 +164,14 @@
 
     <!--    action cell (scrollable area)-->
     <ng-container *ngFor="let cell of getVisibleCells(row.cells) let i = index">
-      <td *ngIf="!cell.getGroupBy()&& cell.getColumn().isScrollable && !cell.getRow().hide && cell.getColumn().type === 'custom'"
-          class="{{cell.getId()}}"
-          [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().parent,
-                        'remove-border-top': !cell.getRow().parent,
-                        'remove-border-bottom': cell.getRow().parent && rowIndex !== grid.getTreeRows().length -1,
-                        'collapsed-cell': cell.getRow().rowspan}"
-          [style.width]="cell.getColumn().width">
+      <td
+        *ngIf="!cell.getGroupBy()&& cell.getColumn().isScrollable && !cell.getRow().hide && cell.getColumn().type === 'custom'"
+        class="{{cell.getId()}} "
+        [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().showFirstValueInGroup,
+                        'remove-border-top': !cell.getRow().showFirstValueInGroup,
+                        'remove-border-bottom': cell.getRow().showFirstValueInGroup && rowIndex !== grid.getTreeRows().length -1,
+                        'collapsed-cell': cell.getRow().showRowspanBotton}"
+        [style.width]="cell.getColumn().width">
         <ng2-smart-tree-table-cell [cell]="cell"
                                    [grid]="grid"
                                    [row]="row"

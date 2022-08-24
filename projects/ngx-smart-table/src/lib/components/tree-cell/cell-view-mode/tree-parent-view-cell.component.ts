@@ -10,7 +10,7 @@ import { Cell } from '../../../lib/data-set/cell';
         <custom-view-component *ngSwitchCase="'custom'" [cell]="cell"></custom-view-component>
         <div *ngSwitchCase="'html'" [innerHTML]="cell.getValue()"></div>
         <div *ngSwitchDefault>
-          <ng-container *ngIf="cell.getRow().parent">
+          <ng-container *ngIf="cell.getRow().showFirstValueInGroup">
           {{ cell.getValue()}}
           </ng-container>
         </div>
