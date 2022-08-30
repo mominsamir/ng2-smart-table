@@ -49,13 +49,21 @@ export class DataSet {
     }
   }
 
-  getTreeRows(settings): Array<Row> {
+  getTreeRows(settings, filterApplied): Array<Row> {
     if (this.rows) {
-      return this.treeTableProcess(this.rows,settings);
+      return this.treeTableProcess(this.rows, settings, filterApplied);
     }
   }
 
-  treeTableProcess(data, settings) {
+  treeTableProcess(data, settings, filterApplied) {
+    let filterAppliedFlag = false;
+
+    if (filterApplied.length > 0) {
+      const test = filterApplied.filter(item => item.search.length > 0);
+      if (test.length > 0) {
+        filterAppliedFlag = true;
+      }
+    }
     const result = [];
     const groupById = data.reduce((group, list) => {
       const {id} = list.data;
@@ -70,36 +78,46 @@ export class DataSet {
         groupById[item].isExpandable = true;
       }
 
-
+      const uniqueValue = [];
       groupById[item].map((value, index) => {
-        if(settings.isMergeMultipleCell){
+        if (settings.isMergeMultipleCell) {
           Object.keys(value.data.isFirstRowMap).map(row => {
-            if (value.data.isFirstRowMap[row]) {
-              value.isFirstColumn = true;
-              value.cells.map(cell => {
-                if (cell.column.id === row) {
-                  cell.column.isMergeColumn = true;
-                }
-              });
+            if (!filterAppliedFlag) {
+              if (value.data.isFirstRowMap[row]) {
+                value.isFirstColumn = true;
+                value.cells.map(cell => {
+                  if (cell.column.id === row) {
+                    cell.column.isMergeColumn = true;
+                  }
+                });
+              }
+            }else{
+              if (!uniqueValue.includes(value.data[row])){
+                uniqueValue.push(value.data[row]);
+                value.isFirstColumn = true;
+              }
+              if (value.data.isFirstRowMap[row]) {
+                value.isFirstColumn = true;
+                value.cells.map(cell => {
+                  if (cell.column.id === row) {
+                    cell.column.isMergeColumn = true;
+                  }
+                });
+              }
             }
           });
         }
 
-
-
-        // console.log(groupById[item]);
         // config for show Rowspan Botton
         if (groupById[item].isExpandable) {
           value.showRowspanBotton = true;
         }
-        // flag for value in first column
+        // flag for value in first column for id
         if (index === 0) {
           value.showFirstValueInGroup = true;
         }
         if (!value.onChange) {
           value.hide = !value.data.parent;
-          // value.hide = !!value.data.child;
-          // value.hide = index > valueListForGroup.length - 1;
         } else {
           value.hide = false;
         }
@@ -108,6 +126,7 @@ export class DataSet {
     });
     return result;
   }
+
   getGroupingValue(groupById) {
     let nameForGroupBy;
     const valueList = [];
@@ -123,7 +142,7 @@ export class DataSet {
         }
       });
     });
-    return [... new Set(valueList)];
+    return [...new Set(valueList)];
   }
 
   getMultipleSelectedRows(): Set<Row> {
@@ -283,19 +302,24 @@ export class DataSet {
   createColumns(settings: any) {
     for (const id in settings) {
       if (settings.hasOwnProperty(id)) {
-        if (!/^\d/.test(id) && id !== 'action') {
+        if (!/^\d/.test(id) && id !== 'action' && !settings[id].lastCellPosition) {
+          // console.log(id);
           this.columns.push(new Column(id, settings[id], this));
         }
       }
     }
-
+    // console.log(this.columns);
     for (const id in settings) {
       if (settings.hasOwnProperty(id)) {
-        if (/^\d/.test(id) || id === 'action') {
+        if (/^\d/.test(id) || id === 'action' && !settings[id].lastCellPosition) {
+          this.columns.push(new Column(id, settings[id], this));
+        }
+        if (settings[id].lastCellPosition) {
           this.columns.push(new Column(id, settings[id], this));
         }
       }
     }
+    // console.log(this.columns);
   }
 
   /**

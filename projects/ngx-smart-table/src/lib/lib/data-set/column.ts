@@ -20,11 +20,12 @@ export class Column {
   renderComponent: any = null;
   isScrollable: boolean = false; //added
   lastFixedCell: boolean = false; //added
+  lastCellPosition: boolean = false; //added
+  columnClass: string = ''; //added
   groupBy: boolean = false; //added
   groupByValue: boolean = false; //added
   mergeRow: boolean = false; //added
   singleRow: string = ''; //added
-  customHeaderClass: string = ''; //added
   isFirstColumn: boolean = false; //added
   isMergeColumn: boolean = false; //added
 
@@ -78,12 +79,13 @@ export class Column {
     this.icon = this.settings['icon'];
 
     this.lastFixedCell = this.settings['lastFixedCell']; //added
+    this.lastCellPosition = this.settings['lastCellPosition']; //added
+    this.columnClass = this.settings['columnClass']; //added
     this.isScrollable = this.settings['isScrollable']; //added
     this.groupBy = this.settings['groupBy']; //added
     this.groupByValue = this.settings['groupByValue']; //added
     this.mergeRow = this.settings['mergeRow']; //added
     this.singleRow = this.settings['singleRow']; //added
-    this.customHeaderClass = this.settings['customHeaderClass']; //added
     this.isFirstColumn = this.settings['isFirstColumn']; //added
     this.isMergeColumn = this.settings['isMergeColumn']; //added
 

@@ -15,7 +15,7 @@ import {Column} from '../../../lib/data-set/column';
         (create)="create.emit($event)">
     </th>
     <th *ngFor="let column of getVisibleColumns(grid.getColumns()) let i=index"
-        class="ng2-smart-th {{ column.id }}"
+        class="ng2-smart-th {{ column.id }} {{ column.columnClass }}"
         [style.width]="column.width"
         [ngStyle]=" {'left': 'calc('+calculateCellPosition(column.width,column)+' - '+i+'px)' }"
         [ngClass]="[!column.isScrollable ? 'col-filter-'+ (i+1) : '', column.lastFixedCell ? 'break_line':'']">
@@ -61,22 +61,38 @@ export class TheadFitlersRowComponent implements OnChanges {
   calculateCellPosition(width, originCell) {
     let currentCellIndex;
     const percentList = [];
-    this.grid.getTreeRows().map(row => {
-      if (row.index) {
-        row.cells.map((col, i) => {
-          if (col.getId() === originCell.id) {
-            currentCellIndex = i;
-          }
-          if (currentCellIndex === undefined) {
-            if (col.getColumn().width) {
-              const numbers = parseFloat(col.getColumn().width.replace('%', ''));
-              percentList.push(numbers);
+    switch (this.grid.getTreeRows().length) {
+      case 0 :
+        Object.keys(this.grid.settings.columns).map(row => {
+          if (row){
+            if (!/^\d/.test(row) && row !== 'action'){
+              const numbers = parseFloat(this.grid.settings.columns[row].width.replace('%', ''));
+              percentList.push(numbers)
+              const sum = percentList.reduce((num, a) => num + a, 0);
+              return numbers + sum + '%';
             }
           }
         });
-      }
-    });
-    const percent = percentList.reduce((num, a) => num + a, 0);
-    return percent + '%';
+        break;
+      default:
+        this.grid.getTreeRows().map(row => {
+          if (row.index) {
+            row.cells.map((col, i) => {
+              if (col.getId() === originCell.id) {
+                currentCellIndex = i;
+              }
+              if (currentCellIndex === undefined) {
+                if (col.getColumn().width) {
+                  const numbers = parseFloat(col.getColumn().width.replace('%', ''));
+                  percentList.push(numbers);
+                }
+              }
+            });
+          }
+        });
+        const percent = percentList.reduce((num, a) => num + a, 0);
+        return percent + '%';
+        break;
+    }
   }
 }

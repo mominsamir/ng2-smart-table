@@ -124,8 +124,8 @@
           [style.width]="cell.getColumn().width"
           [ngClass]="{break_line: cell.getColumn().lastFixedCell,
                       'collapsed-cell': cell.getRow().showRowspanBotton,
-                      'testing': cell.getRow().isFirstColumn && cell.getColumn().isMergeColumn,
-                      'testing2': !cell.getRow().isFirstColumn && cell.getColumn().isMergeColumn}"
+                      'border-bottom-none': cell.getRow().isFirstColumn && cell.getColumn().isMergeColumn,
+                      'border-top-bottom-none': !cell.getRow().isFirstColumn && cell.getColumn().isMergeColumn}"
           [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell)+' - '+i+'px)' }"
           class="fixed col{{i+1}} {{cell.getId()}}">
         <ng2-smart-tree-table-cell [cell]="cell"
@@ -146,7 +146,7 @@
     <ng-container *ngFor="let cell of getVisibleCells(row.cells) let i = index">
       <td
         *ngIf="!cell.getGroupBy()&& cell.getColumn().isScrollable && !cell.getRow().hide && cell.getColumn().type !== 'custom'"
-        class="{{cell.getId()}}"
+        class="{{cell.getId()}} {{ cell.getColumnClass() }}"
         [ngClass]="{'highlight-row': cell.getRow().getData().highlightRow}"
         [style.width]="cell.getColumn().width">
         <ng2-smart-tree-table-cell [cell]="cell"

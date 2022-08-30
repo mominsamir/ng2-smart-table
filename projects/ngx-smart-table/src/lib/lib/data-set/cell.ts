@@ -48,6 +48,10 @@ export class Cell {
     this.newValue = value;
   }
 
+  getColumnClass(): string {
+    return this.getColumn().columnClass ? this.getColumn().columnClass : '';
+  }
+
   getId(): string {
     return this.getColumn().id;
   }

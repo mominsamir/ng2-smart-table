@@ -15,6 +15,7 @@ export class Grid {
   source: DataSource;
   settings: any;
   dataSet: DataSet;
+  filterApplied: Array<any> = [];
 
   onSelectRowSource = new Subject<any>();
   onDeselectRowSource = new Subject<any>();
@@ -98,9 +99,10 @@ export class Grid {
   getRows(): Array<Row> {
     return this.dataSet.getRows();
   }
-// added
+  // added
   getTreeRows(): Array<Row> {
-    return this.dataSet.getTreeRows(this.settings);
+    // console.log(this.dataSet);
+    return this.dataSet.getTreeRows(this.settings, this.filterApplied);
   }
   // added
   expandTreeRows(rowId) {

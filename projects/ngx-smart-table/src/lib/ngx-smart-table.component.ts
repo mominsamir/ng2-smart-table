@@ -275,6 +275,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
   }
 
   filter($event: any) {
+    this.grid.filterApplied = $event.filterConf.filters;
     this.onFilter.emit($event);
     this.resetAllSelector();
   }
