@@ -74,4 +74,12 @@
   .fixed {
     position: relative;
   }
+  ::ng-deep .show-selected-col-true,
+  ::ng-deep .show-selected-col,
+  {
+    display: flow;
+  }
+  ::ng-deep .show-selected-col-false {
+    display: none;
+  }
 }

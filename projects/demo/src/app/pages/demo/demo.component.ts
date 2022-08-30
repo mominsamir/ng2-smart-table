@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+
 @Component({
   selector: 'demo',
   templateUrl: './demo.component.html',
@@ -14,5 +15,4 @@ export class DemoComponent {
     dataTemplate: require('raw-loader!./snippets/data-template.md').default,
     basicFull: require('raw-loader!./snippets/basic-full.md').default,
   };
-
 }

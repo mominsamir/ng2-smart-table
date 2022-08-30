@@ -24,8 +24,6 @@ export class Column {
   columnClass: string = ''; //added
   groupBy: boolean = false; //added
   groupByValue: boolean = false; //added
-  mergeRow: boolean = false; //added
-  singleRow: string = ''; //added
   isFirstColumn: boolean = false; //added
   isMergeColumn: boolean = false; //added
 
@@ -84,8 +82,6 @@ export class Column {
     this.isScrollable = this.settings['isScrollable']; //added
     this.groupBy = this.settings['groupBy']; //added
     this.groupByValue = this.settings['groupByValue']; //added
-    this.mergeRow = this.settings['mergeRow']; //added
-    this.singleRow = this.settings['singleRow']; //added
     this.isFirstColumn = this.settings['isFirstColumn']; //added
     this.isMergeColumn = this.settings['isMergeColumn']; //added
 

@@ -1,4 +1,4 @@
-import {Component, Input, Output, SimpleChange, EventEmitter, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChange} from '@angular/core';
 import {Subject, Subscription} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -16,6 +16,7 @@ import {LocalDataSource} from './lib/data-source/local/local.data-source';
 export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
 
   @Input() source: any;
+  @Input() toggleEvent: any;
   @Input() settings: Object = {};
 
 
@@ -41,6 +42,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
   tableType: string; // added
   fixedColNumber: string;
   scrollableCellWidth: string;
+  customClassName: string;
   rowClassFunction: Function;
 
   grid: Grid;
@@ -117,6 +119,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
 
   ngOnInit() {
     if (this.grid) {
+      this.getHideCustomClassName();
       const percentList = [];
       const allWidthPercentage  = this.grid.getColumns().filter(item => item.width && !item.isScrollable);
       allWidthPercentage.map(col => {
@@ -138,6 +141,12 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
         this.source = this.prepareSource();
         this.grid.setSource(this.source);
       }
+      if(changes['toggleEvent']){
+        console.log(this.customClassName);
+        this.updateCustomClassName(this.customClassName);
+        this.grid.setSettings(this.prepareSettings());
+      }
+
     } else {
       this.initGrid();
     }
@@ -150,6 +159,30 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
     this.perPageSelect = this.grid.getSetting('pager.perPageSelect');
     this.tableType = this.grid.getSetting('tableType'); // added
     this.rowClassFunction = this.grid.getSetting('rowClassFunction');
+  }
+
+  getHideCustomClassName() {
+    const customClassNameList = [];
+    if (this.settings['columns']) {
+      Object.keys(this.settings['columns']).map(key => {
+        if (this.settings['columns'][key].columnClass) {
+          customClassNameList.push(this.settings['columns'][key].columnClass);
+        }
+      });
+    }
+    this.customClassName = customClassNameList.filter((v, i, a) => a.indexOf(v) === i)[0];
+  }
+
+  updateCustomClassName(customClassName) {
+    const settings = this.settings;
+    if (settings['columns']) {
+      Object.keys(settings['columns']).map(key => {
+        if (settings['columns'][key].columnClass) {
+          settings['columns'][key].columnClass = customClassName + '-' + this.toggleEvent;
+        }
+      });
+    }
+    this.settings = settings;
   }
 
   ngOnDestroy(): void {

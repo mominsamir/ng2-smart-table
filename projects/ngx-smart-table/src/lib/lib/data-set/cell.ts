@@ -29,14 +29,6 @@ export class Cell {
   groupByValue(): boolean {
     return this.getColumn().groupByValue;
   }
-  // added
-  mergeRow(): boolean {
-    return this.getColumn().mergeRow;
-  }
-  // added
-  singleRow(): string {
-    return this.getColumn().singleRow;
-  }
 
   getValue(): any {
     const valid = this.column.getValuePrepareFunction() instanceof Function;
