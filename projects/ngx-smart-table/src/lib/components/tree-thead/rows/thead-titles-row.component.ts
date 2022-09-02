@@ -59,11 +59,11 @@ export class TheadTitlesRowComponent implements OnChanges {
     const percentList = [];
     switch (this.grid.getTreeRows().length) {
       case 0 :
-        Object.keys(this.grid.settings.columns).map(row => {
+        Object.keys(this.grid.getColumns()).map(row => {
           if (row){
             if (!/^\d/.test(row) && row !== 'action'){
-              const numbers = parseFloat(this.grid.settings.columns[row].width.replace('%', ''));
-              percentList.push(numbers)
+              const numbers = parseFloat(this.grid.getColumns()[row]?.width?.replace('%', '')) || '10';
+              percentList.push(numbers);
               const sum = percentList.reduce((num, a) => num + a, 0);
               return numbers + sum + '%';
             }
