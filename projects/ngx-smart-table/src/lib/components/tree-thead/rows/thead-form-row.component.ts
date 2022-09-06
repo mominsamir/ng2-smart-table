@@ -1,29 +1,29 @@
-import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
 
-import { Grid } from '../../../lib/grid';
-import { Row } from '../../../lib/data-set/row';
-import { Cell } from '../../../lib/data-set/cell';
+import {Grid} from '../../../lib/grid';
+import {Row} from '../../../lib/data-set/row';
+import {Cell} from '../../../lib/data-set/cell';
 
 @Component({
   selector: '[ng2-st-thead-form-row]',
   template: `
-      <td></td>
-      <td  *ngIf="showActionColumnLeft"  class="ng2-smart-actions">
-        <ng2-st-actions [grid]="grid" (create)="onCreate($event)"></ng2-st-actions>
-      </td>
-      <td *ngFor="let cell of getVisibleCells(grid.getNewRow().getCells())">
-        <ng2-smart-table-cell [cell]="cell"
-                              [grid]="grid"
-                              [isNew]="true"
-                              [createConfirm]="createConfirm"
-                              [inputClass]="addInputClass"
-                              [isInEditing]="grid.getNewRow().isInEditing"
-                              (edited)="onCreate($event)">
-        </ng2-smart-table-cell>
-      </td>
-      <td  *ngIf="showActionColumnRight"  class="ng2-smart-actions">
-        <ng2-st-actions [grid]="grid" (create)="onCreate($event)"></ng2-st-actions>
-      </td>
+    <td></td>
+    <td *ngIf="showActionColumnLeft" class="ng2-smart-actions">
+      <ng2-st-actions [grid]="grid" (create)="onCreate($event)"></ng2-st-actions>
+    </td>
+    <td *ngFor="let cell of getVisibleCells(grid.getNewRow().getCells())">
+      <ng2-smart-table-cell [cell]="cell"
+                            [grid]="grid"
+                            [isNew]="true"
+                            [createConfirm]="createConfirm"
+                            [inputClass]="addInputClass"
+                            [isInEditing]="grid.getNewRow().isInEditing"
+                            (edited)="onCreate($event)">
+      </ng2-smart-table-cell>
+    </td>
+    <td *ngIf="showActionColumnRight" class="ng2-smart-actions">
+      <ng2-st-actions [grid]="grid" (create)="onCreate($event)"></ng2-st-actions>
+    </td>
   `,
 })
 export class TheadFormRowComponent implements OnChanges {
@@ -45,7 +45,7 @@ export class TheadFormRowComponent implements OnChanges {
     this.grid.create(this.grid.getNewRow(), this.createConfirm);
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
     this.isMultiSelectVisible = this.grid.isMultiSelectVisible();
     this.showActionColumnLeft = this.grid.showActionColumn('left');
     this.showActionColumnRight = this.grid.showActionColumn('right');

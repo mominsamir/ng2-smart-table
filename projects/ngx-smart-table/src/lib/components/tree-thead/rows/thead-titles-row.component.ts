@@ -71,21 +71,21 @@ export class TheadTitlesRowComponent implements OnChanges {
     //     });
     //     break;
     //   default:
-        this.grid.getTreeRows().map(row => {
-          row.cells.map((col, i) => {
-            if (col.getId() === originCell.id) {
-              currentCellIndex = i;
-            }
-            if (currentCellIndex === undefined) {
-              if (col.getColumn().width) {
-                const numbers = parseFloat(col.getColumn().width.replace('%', ''));
-                percentList.push(numbers);
-              }
-            }
-          });
-        });
-        const percent = percentList.reduce((num, a) => num + a, 0);
-        return percent + '%';
+    this.grid.getTreeRows().map(row => {
+      row.cells.map((col, i) => {
+        if (col.getId() === originCell.id) {
+          currentCellIndex = i;
+        }
+        if (currentCellIndex === undefined) {
+          if (col.getColumn().width) {
+            const numbers = parseFloat(col.getColumn().width.replace('%', ''));
+            percentList.push(numbers);
+          }
+        }
+      });
+    });
+    const percent = percentList.reduce((num, a) => num + a, 0);
+    return percent + '%';
     //     break;
     // }
   }
