@@ -84,7 +84,7 @@ export class DataSet {
           Object.keys(value.data.isFirstRowMap).map(row => {
             if (!filterAppliedFlag) {
               if (value.data.isFirstRowMap[row]) {
-                value.isFirstColumn = true;
+                value.isFirstRow = true;
                 value.cells.map(cell => {
                   if (cell.column.id === row) {
                     cell.column.isMergeColumn = true;
@@ -94,10 +94,10 @@ export class DataSet {
             }else{
               if (!uniqueValue.includes(value.data[row])){
                 uniqueValue.push(value.data[row]);
-                value.isFirstColumn = true;
+                value.isFirstRow = true;
               }
               if (value.data.isFirstRowMap[row]) {
-                value.isFirstColumn = true;
+                value.isFirstRow = true;
                 value.cells.map(cell => {
                   if (cell.column.id === row) {
                     cell.column.isMergeColumn = true;

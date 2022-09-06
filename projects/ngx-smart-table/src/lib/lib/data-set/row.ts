@@ -11,7 +11,7 @@ export class Row {
   hide: boolean = false; //added
   onChange: boolean = false; //added
   showFirstValueInGroup: boolean = false; //added
-  isFirstColumn: boolean = false; //added
+  isFirstRow: boolean = false; //added
   showRowspanBotton: boolean = false; //added
 
   cells: Array<Cell> = [];

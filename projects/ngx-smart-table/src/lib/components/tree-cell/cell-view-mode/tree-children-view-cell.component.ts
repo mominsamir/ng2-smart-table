@@ -13,7 +13,7 @@ import {Cell} from '../../../lib/data-set/cell';
       </ng-container>
       <div *ngSwitchCase="'html'" [innerHTML]="cell.getValue()"></div>
       <div *ngSwitchDefault>
-        <ng-container *ngIf="!(!cell.getRow().isFirstColumn && cell.getColumn().isMergeColumn)">
+        <ng-container *ngIf="!(!cell.getRow().isFirstRow && cell.getColumn().isMergeColumn)">
           {{ cell.getValue()}}
         </ng-container>
       </div>

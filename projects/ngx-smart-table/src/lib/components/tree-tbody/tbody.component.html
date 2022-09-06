@@ -98,7 +98,7 @@
       <td *ngIf="cell.getGroupBy() && !cell.getRow().hide && cell.getId() !== 'expandAction'"
           class="fixed col{{i+1}} {{cell.getId()}}"
           [style.width]="cell.getColumn().width"
-          [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell)+' - '+'1px)' }"
+          [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell, i)+')' }"
           [ngClass]="{'parent_cell': !cell.getRow().hide && !cell.getRow().showFirstValueInGroup,
                         'remove-border-top': !cell.getRow().showFirstValueInGroup,
                         'remove-border-bottom': cell.getRow().showFirstValueInGroup && rowIndex !== grid.getTreeRows().length -1,
@@ -126,7 +126,7 @@
                       'collapsed-cell': cell.getRow().showRowspanBotton,
                       'border-bottom-none': cell.getRow().isFirstColumn && cell.getColumn().isMergeColumn,
                       'border-top-bottom-none': !cell.getRow().isFirstColumn && cell.getColumn().isMergeColumn}"
-          [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell)+' - '+i+'px)' }"
+          [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell, i)+')' }"
           class="fixed col{{i+1}} {{cell.getId()}}">
         <ng2-smart-tree-table-cell [cell]="cell"
                                    [grid]="grid"

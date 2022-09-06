@@ -162,25 +162,25 @@ export class Ng2SmartTreeTableTbodyComponent implements AfterViewInit, OnDestroy
     this.onExpandRow.emit(row);
   }
 
-  calculateCellPosition(column, originCell) {
+  calculateCellPosition(column, originCell, cellIndex) {
     let currentCellIndex;
     const percentList = [];
     this.grid.getTreeRows().map(row => {
-      if (row.index) {
-        row.cells.map((col, i) => {
-          if (col.getId() === originCell.getId()) {
-            currentCellIndex = i;
-          }
-          if (currentCellIndex === undefined) {
-            const numbers = parseFloat(col.getColumn().width.replace('%', ''));
-            percentList.push(numbers);
-          }
-        });
-      }
+      row.cells.map((col, i) => {
+        if (col.getId() === originCell.getId()) {
+          currentCellIndex = i;
+        }
+        if (currentCellIndex === undefined) {
+          const numbers = parseFloat(col.getColumn().width.replace('%', ''));
+          percentList.push(numbers);
+        }
+      });
     });
     const percent = percentList.reduce((num, a) => num + a, 0);
-    return percent + '%';
-  }
-  checkFirstCol(cell) {
+    if (column.isFirstColumn) {
+      return percent + '%';
+    } else {
+      return `${percent}% - ${cellIndex}px`;
+    }
   }
 }
