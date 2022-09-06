@@ -72,14 +72,27 @@ export class DataSet {
       return group;
     }, {});
 
-    const valueListForGroup = this.getGroupingValue(groupById);
+    //check groupByValue exist if don't, group by parent value
+
+    const groupByValueFlag = Object.keys(settings.columns).filter(key => settings.columns[key].groupByValue);
+    let valueListForGroup;
+    if (groupByValueFlag.length > 0) {
+      valueListForGroup = this.getGroupingValue(groupById);
+    } else {
+      valueListForGroup = this.getNumberOfParents(groupById);
+    }
+    // console.log(valueListForGroup);
+
     Object.keys(groupById).map(item => {
       if (valueListForGroup.length < groupById[item].length) {
         groupById[item].isExpandable = true;
       }
 
+      // console.log(groupById[item]);
+
       const uniqueValue = [];
       groupById[item].map((value, index) => {
+        // console.log(value);
         if (settings.isMergeMultipleCell) {
           Object.keys(value.data.isFirstRowMap).map(row => {
             if (!filterAppliedFlag) {
@@ -91,8 +104,8 @@ export class DataSet {
                   }
                 });
               }
-            }else{
-              if (!uniqueValue.includes(value.data[row])){
+            } else {
+              if (!uniqueValue.includes(value.data[row])) {
                 uniqueValue.push(value.data[row]);
                 value.isFirstRow = true;
               }
@@ -129,20 +142,46 @@ export class DataSet {
 
   getGroupingValue(groupById) {
     let nameForGroupBy;
-    const valueList = [];
+    const result = [];
     this.columns.map(col => {
       if (col.groupByValue) {
         nameForGroupBy = col.id;
+        Object.keys(groupById).map(item => {
+          groupById[item].map((value, index) => {
+            if (value.data[nameForGroupBy]) {
+              result.push(value.data[nameForGroupBy]);
+            }
+          });
+        });
       }
     });
+    return [...new Set(result)];
+  }
+
+  getNumberOfParents(groupById) {
+    const result = [];
+    const valueList = [];
     Object.keys(groupById).map(item => {
-      groupById[item].map((value, index) => {
-        if (value.data[nameForGroupBy]) {
-          valueList.push(value.data[nameForGroupBy]);
+      groupById[item].map(value => {
+        if (value.data.parent) {
+          valueList.push(value.data);
         }
       });
     });
-    return [...new Set(valueList)];
+    const parentList = [...new Set(valueList)];
+    const groupByParent = parentList.reduce((group, list) => {
+      const {id} = list;
+      group[id] = group[id] ?? [];
+      group[id].push(list);
+      return group;
+    }, {});
+    Object.keys(groupByParent).map(key => result.push(groupByParent[key].length));
+    const maxNumOfParent = [...new Set(result)][0];
+    const finalResult = [];
+    for (let i = 0; i < maxNumOfParent; i++) {
+      finalResult.push(i);
+    }
+    return finalResult;
   }
 
   getMultipleSelectedRows(): Set<Row> {

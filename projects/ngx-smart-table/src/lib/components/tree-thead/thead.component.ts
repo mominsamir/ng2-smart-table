@@ -1,30 +1,28 @@
 import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
 
-import { Grid } from '../../lib/grid';
-import { DataSource } from '../../lib/data-source/data-source';
+import {Grid} from '../../lib/grid';
+import {DataSource} from '../../lib/data-source/data-source';
 
 @Component({
-    selector: '[ng2-st-tree-thead]',
-    styleUrls: ['../tree-tbody/tbody.component.scss'],
-    templateUrl: './thead.component.html',
+  selector: '[ng2-st-tree-thead]',
+  styleUrls: ['../tree-tbody/tbody.component.scss'],
+  templateUrl: './thead.component.html',
 })
 export class Ng2SmartTableTheadComponent implements OnChanges {
 
-    @Input() grid: Grid;
-    @Input() source: DataSource;
-    @Input() isAllSelected: boolean;
-    @Input() createConfirm: EventEmitter<any>;
+  @Input() grid: Grid;
+  @Input() source: DataSource;
+  @Input() isAllSelected: boolean;
+  @Input() hideHeader: boolean;
+  @Input() hideSubHeader: boolean;
+  @Input() createConfirm: EventEmitter<any>;
 
-    @Output() sort = new EventEmitter<any>();
-    @Output() selectAllRows = new EventEmitter<any>();
-    @Output() create = new EventEmitter<any>();
-    @Output() filter = new EventEmitter<any>();
-
-    isHideHeader: boolean;
-    isHideSubHeader: boolean;
+  @Output() sort = new EventEmitter<any>();
+  @Output() selectAllRows = new EventEmitter<any>();
+  @Output() create = new EventEmitter<any>();
+  @Output() filter = new EventEmitter<any>();
 
   ngOnChanges() {
-      this.isHideHeader = this.grid.getSetting('hideHeader');
-      this.isHideSubHeader = this.grid.getSetting('hideSubHeader');
-    }
+
+  }
 }

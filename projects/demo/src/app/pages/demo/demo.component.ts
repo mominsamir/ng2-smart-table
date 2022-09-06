@@ -5,6 +5,7 @@ import {Component} from '@angular/core';
   templateUrl: './demo.component.html',
 })
 export class DemoComponent {
+
   snippets = {
     install: require('raw-loader!./snippets/install.md').default,
     require: require('raw-loader!./snippets/require.md').default,

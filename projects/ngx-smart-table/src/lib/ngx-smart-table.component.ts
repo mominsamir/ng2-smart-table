@@ -36,10 +36,10 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
   tableClass: string;
   tableId: string;
   perPageSelect: any;
-  isHideHeader: boolean;
-  isHideSubHeader: boolean;
   isPagerDisplay: boolean;
   tableType: string; // added
+  hideHeader: boolean; // added
+  hideSubHeader: boolean; // added
   fixedColNumber: string;
   scrollableCellWidth: string;
   customClassName: string;
@@ -150,14 +150,15 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
     } else {
       this.initGrid();
     }
+    console.log(this.grid.getSetting('hideSubHeader'));
     this.tableId = this.grid.getSetting('attr.id');
     this.tableClass = this.grid.getSetting('attr.class');
-    this.isHideHeader = this.grid.getSetting('hideHeader');
-    this.isHideSubHeader = this.grid.getSetting('hideSubHeader');
     this.isPagerDisplay = this.grid.getSetting('pager.display');
     this.isPagerDisplay = this.grid.getSetting('pager.display');
     this.perPageSelect = this.grid.getSetting('pager.perPageSelect');
     this.tableType = this.grid.getSetting('tableType'); // added
+    this.hideSubHeader = this.grid.getSetting('hideSubHeader'); // added
+    this.hideHeader = this.grid.getSetting('hideHeader'); // added
     this.rowClassFunction = this.grid.getSetting('rowClassFunction');
   }
 

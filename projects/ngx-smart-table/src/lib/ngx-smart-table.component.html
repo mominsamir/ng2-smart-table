@@ -5,8 +5,10 @@
            [style.width]="scrollableCellWidth">
         <table [id]="tableId" [ngClass]="tableClass" class="tree-table">
 
-          <thead ng2-st-tree-thead *ngIf="!isHideHeader || !isHideSubHeader"
+          <thead ng2-st-tree-thead
                  [grid]="grid"
+                 [hideSubHeader]="hideSubHeader"
+                 [hideHeader]="hideHeader"
                  [isAllSelected]="isAllSelected"
                  [source]="source"
                  [createConfirm]="createConfirm"
@@ -38,8 +40,10 @@
   <ng-container *ngSwitchDefault>
     <table [id]="tableId" [ngClass]="tableClass">
 
-      <thead ng2-st-thead *ngIf="!isHideHeader || !isHideSubHeader"
+      <thead ng2-st-thead
              [grid]="grid"
+             [hideSubHeader]="hideSubHeader"
+             [hideHeader]="hideHeader"
              [isAllSelected]="isAllSelected"
              [source]="source"
              [createConfirm]="createConfirm"
