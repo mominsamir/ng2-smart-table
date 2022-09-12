@@ -8,8 +8,11 @@ import {Cell} from '../../../lib/data-set/cell';
   template: `
     <div [ngSwitch]="cell.getColumn().type">
       <ng-container *ngSwitchCase="'custom'">
-        <custom-view-component *ngIf="cell.getRow().showFirstValueInGroup"
+        <custom-view-component *ngIf="cell.getRow().showFirstValueInGroup && cell.getColumn().mergeCustomTypeCell else defaultCustomCell"
                                [cell]="cell"></custom-view-component>
+        <ng-template #defaultCustomCell>
+          <custom-view-component [cell]="cell"></custom-view-component>
+        </ng-template>
       </ng-container>
       <div *ngSwitchCase="'html'" [innerHTML]="cell.getValue()"></div>
       <div *ngSwitchDefault>

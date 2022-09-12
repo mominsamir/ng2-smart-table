@@ -20,6 +20,7 @@ export class Column {
   renderComponent: any = null;
   isScrollable: boolean = false; //added
   lastFixedCell: boolean = false; //added
+  mergeCustomTypeCell: boolean = false; //added
   lastCellPosition: boolean = false; //added
   columnClass: string = ''; //added
   groupBy: boolean = false; //added
@@ -77,6 +78,7 @@ export class Column {
     this.icon = this.settings['icon'];
 
     this.lastFixedCell = this.settings['lastFixedCell']; //added
+    this.mergeCustomTypeCell = this.settings['mergeCustomTypeCell']; //added
     this.lastCellPosition = this.settings['lastCellPosition']; //added
     this.columnClass = this.settings['columnClass']; //added
     this.isScrollable = this.settings['isScrollable']; //added

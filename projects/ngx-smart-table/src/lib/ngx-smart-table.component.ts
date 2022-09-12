@@ -142,7 +142,6 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
         this.grid.setSource(this.source);
       }
       if(changes['toggleEvent']){
-        console.log(this.customClassName);
         this.updateCustomClassName(this.customClassName);
         this.grid.setSettings(this.prepareSettings());
       }
@@ -150,7 +149,6 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy, OnInit {
     } else {
       this.initGrid();
     }
-    console.log(this.grid.getSetting('hideSubHeader'));
     this.tableId = this.grid.getSetting('attr.id');
     this.tableClass = this.grid.getSetting('attr.class');
     this.isPagerDisplay = this.grid.getSetting('pager.display');

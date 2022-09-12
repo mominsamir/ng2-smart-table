@@ -9,9 +9,11 @@ import {Row} from '../../lib/data-set/row';
   template: `
 
     <ng-container *ngIf="cell.getGroupBy() else defaultCell">
+<!--      expandAction-->
       <tree-table-action-cell-view-mode *ngIf="!isInEditing && cell.getId() === 'expandAction' else parent" [cell]="cell" [grid]="grid"
                                         (expandRow)="expandRow($event)"></tree-table-action-cell-view-mode>
       <ng-template #parent>
+<!--        id-->
         <tree-table-parent-cell-view-mode *ngIf="!isInEditing" [cell]="cell"></tree-table-parent-cell-view-mode>
       </ng-template>
     </ng-container>

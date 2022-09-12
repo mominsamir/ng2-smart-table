@@ -1,14 +1,14 @@
 import {
-  Component, 
-  Input, 
-  Output, 
-  EventEmitter,  
-  ViewContainerRef, 
-  ComponentFactoryResolver, 
-  OnDestroy, 
-  AfterViewInit, 
-  QueryList, 
-  ViewChildren, 
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ViewContainerRef,
+  ComponentFactoryResolver,
+  OnDestroy,
+  AfterViewInit,
+  QueryList,
+  ViewChildren,
   ChangeDetectorRef
 } from '@angular/core';
 
@@ -45,7 +45,7 @@ export class Ng2SmartTableTbodyComponent implements  AfterViewInit, OnDestroy  {
 
   @ViewChildren('expandedRowChild',{ read: ViewContainerRef}) expandedRowChild: QueryList<any>;
   @ViewChildren('emptyDataChild',{ read: ViewContainerRef}) emptyDataChild: QueryList<any>;
-  
+
   customComponent: any;
   emptyDataComponent: any;
   hasChildComponent: boolean = false;
@@ -61,7 +61,7 @@ export class Ng2SmartTableTbodyComponent implements  AfterViewInit, OnDestroy  {
       this.expandedRowChild.forEach(c => c.clear());
       this.hasChildComponent = true;
       this.createCustomComponent();
-    }  
+    }
 
     let emptyData = this.grid.settings['emptyDataComponent'];
 
@@ -69,7 +69,7 @@ export class Ng2SmartTableTbodyComponent implements  AfterViewInit, OnDestroy  {
       this.emptyDataChild.forEach(c => c.clear());
        this.hasEmptyComponent = true;
        this.createEmptyComponent();
-    }  
+    }
     this.cdr.detectChanges();
 
   }
@@ -90,7 +90,7 @@ export class Ng2SmartTableTbodyComponent implements  AfterViewInit, OnDestroy  {
     }
     return this.grid.getDataSet().isRowSelected(row);
   }
-  
+
   protected createCustomComponent() {
     const componentFactory = this.resolver.resolveComponentFactory(this.grid.settings['expandedRowComponent']);
     this.expandedRowChild.changes
@@ -153,8 +153,7 @@ export class Ng2SmartTableTbodyComponent implements  AfterViewInit, OnDestroy  {
     return (cells || []).filter((cell: Cell) => !cell.getColumn().hide);
   }
 
-  onExpandRowClick(row:Row){
-    console.log('onExpandRowClick');
+  onExpandRowClick(row: Row){
     this.onExpandRow.emit(row);
   }
 }
