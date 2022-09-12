@@ -124,8 +124,8 @@
           [style.width]="cell.getColumn().width"
           [ngClass]="{break_line: cell.getColumn().lastFixedCell,
                       'collapsed-cell': cell.getRow().showRowspanBotton,
-                      'border-bottom-none': cell.getRow().isFirstRow && cell.getColumn().isMergeColumn,
-                      'border-top-bottom-none': !cell.getRow().isFirstRow && cell.getColumn().isMergeColumn}"
+                      'remove-border-bottom': cell.getRow().isFirstRow && cell.getColumn().isMergeColumn,
+                      'remove-border-top': !cell.getRow().isFirstRow && cell.getColumn().isMergeColumn}"
           [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell, i)+')' }"
           class="fixed col{{i+1}} {{cell.getId()}}">
         <ng2-smart-tree-table-cell [cell]="cell"
