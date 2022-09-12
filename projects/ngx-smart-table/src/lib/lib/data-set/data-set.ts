@@ -81,18 +81,14 @@ export class DataSet {
     } else {
       valueListForGroup = this.getNumberOfParents(groupById);
     }
-    // console.log(valueListForGroup);
 
     Object.keys(groupById).map(item => {
       if (valueListForGroup.length < groupById[item].length) {
         groupById[item].isExpandable = true;
       }
 
-      // console.log(groupById[item]);
-
       const uniqueValue = [];
       groupById[item].map((value, index) => {
-        // console.log(value);
         if (settings.isMergeMultipleCell) {
           Object.keys(value.data.isFirstRowMap).map(row => {
             if (!filterAppliedFlag) {
@@ -127,8 +123,9 @@ export class DataSet {
         }
         // flag for value in first column for id
         if (index === 0) {
-          value.showFirstValueInGroup = true;
+           value.showFirstValueInGroup = true;
         }
+
         if (!value.onChange) {
           value.hide = !value.data.parent;
         } else {
@@ -342,12 +339,10 @@ export class DataSet {
     for (const id in settings) {
       if (settings.hasOwnProperty(id)) {
         if (!/^\d/.test(id) && id !== 'action' && !settings[id].lastCellPosition) {
-          // console.log(id);
           this.columns.push(new Column(id, settings[id], this));
         }
       }
     }
-    // console.log(this.columns);
     for (const id in settings) {
       if (settings.hasOwnProperty(id)) {
         if (/^\d/.test(id) || id === 'action' && !settings[id].lastCellPosition) {
@@ -358,7 +353,6 @@ export class DataSet {
         }
       }
     }
-    // console.log(this.columns);
   }
 
   /**

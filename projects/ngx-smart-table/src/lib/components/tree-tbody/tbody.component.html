@@ -1,4 +1,4 @@
-<ng-container *ngFor="let row of grid.getTreeRows()  let rowIndex = index" style="position: relative">
+<ng-container *ngFor="let row of grid.getTreeRows()  let rowIndex = index" style="position: relative;">
   <tr (click)="userSelectRow.emit(row)" (mouseover)="rowHover.emit(row)" class="ng2-smart-row"
       [className]="rowClassFunction(row)" [ngClass]="{selected: row.isSelected}">
     <td *ngIf="isMultiSelectVisible" class="ng2-smart-actions ng2-smart-action-multiple-select"
@@ -124,8 +124,8 @@
           [style.width]="cell.getColumn().width"
           [ngClass]="{break_line: cell.getColumn().lastFixedCell,
                       'collapsed-cell': cell.getRow().showRowspanBotton,
-                      'border-bottom-none': cell.getRow().isFirstColumn && cell.getColumn().isMergeColumn,
-                      'border-top-bottom-none': !cell.getRow().isFirstColumn && cell.getColumn().isMergeColumn}"
+                      'border-bottom-none': cell.getRow().isFirstRow && cell.getColumn().isMergeColumn,
+                      'border-top-bottom-none': !cell.getRow().isFirstRow && cell.getColumn().isMergeColumn}"
           [ngStyle]=" {'left': 'calc('+calculateCellPosition(cell.getColumn(),cell, i)+')' }"
           class="fixed col{{i+1}} {{cell.getId()}}">
         <ng2-smart-tree-table-cell [cell]="cell"

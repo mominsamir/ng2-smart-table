@@ -101,7 +101,6 @@ export class Grid {
   }
   // added
   getTreeRows(): Array<Row> {
-    // console.log(this.dataSet);
     return this.dataSet.getTreeRows(this.settings, this.filterApplied);
   }
   // added
