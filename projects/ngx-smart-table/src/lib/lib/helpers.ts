@@ -121,83 +121,83 @@ export function fieldSorter(fields: any[]): any {
 	};
 }
 
-export function calculateValueChange(obj: any, key: number, currentValue: any): boolean {
-//	obj[key]
-	if(Object.keys(obj).length === 0) return false;
-
-	return obj.hasOwnProperty(key) && (obj[key].value !== currentValue);
+export function calculateValueChange(obj: any, keyInd: number, currentValue: any): boolean {
+	if (Object.keys(obj).length === 0) return false;
+	return obj.hasOwnProperty(keyInd) && (obj[keyInd].value !== currentValue);
 }
 
-export function hasParentValueChanged(obj: any, key: number): boolean {
+// TODO: remvoe?
+export function hasParentValueChanged(obj: any, keyInd: number): boolean {
 	//	obj[key]
 		if(Object.keys(obj).length === 0) return false;
-	
+
 	//	check if key has parent, in that case we should check parent has changed?
-		if(obj.hasOwnProperty(key-1)) {
-			console.log("IS PARENT " + obj[key-1].key + " " + obj[key-1].hasChanged);
-			return obj[key-1].hasChanged;
+		if(obj.hasOwnProperty(keyInd-1)) {
+			console.log("hasParentValueChanged IS PARENT " + obj[keyInd-1].key + " " + obj[keyInd-1].hasChanged);
+			return obj[keyInd-1].hasChanged;
 		} else {
-			console.log("Key NOT exists "+ key);
+			console.log("hasParentValueChanged Key NOT exists "+ keyInd);
 		}
 		return false;
 }
 
-var currentValueMapIndex  = {
-	
-}
-
 export function sortAndGroupColumns(data: any[], groupCols: any[]): any[] {
-	let currentValueMapIndex = {};
+	let currentValueMapIndex = {}; // current row
+	let previousValueMapIndex = {}; // previous row
 	var sortedData = data.sort(fieldSorter(groupCols));
-	for (let index = sortedData.length - 1; index >= 0; index--) {
+
+  for (let index = sortedData.length - 1; index >= 0; index--) {
+    // Temporary: for simplicity, introduce a separate data holder for previous and current rows
+    previousValueMapIndex = currentValueMapIndex;
+    currentValueMapIndex = {}; // reset
+
 		const row = sortedData[index];
+    let rowParentColChanged = false;
 
-		Object.keys(row).forEach((k, keyIndex) => {
-
+    // Create an ordered list of parameters: groupCols (in order) followed by all other columns
+    [...groupCols, ...Object.keys(row).filter(k => !groupCols.includes(k))].forEach((k, keyIndex) => {
+      // Key is part of groupCols
 			if (groupCols.indexOf(k) !== -1) {
 				let currentKeyValue = row[k];
-				let valueChnaged = false;
-				
-				console.debug(currentValueMapIndex);
+				// let valueChnaged = false;
+        let rowSpan = 1;
 
-				if(hasParentValueChanged(currentValueMapIndex, keyIndex)) {
-					console.log('PARENT changed for '+ k + ' value ' + currentKeyValue);
-					row[k] = {
-						value: currentKeyValue,
-						rowSpan: 1,
-						firstRow: false,
-					};
+        // Check: column value for current row vs. previous row OR previous columns for this row have changed.
+        if (calculateValueChange(previousValueMapIndex, keyIndex, currentKeyValue) || rowParentColChanged) {
+          /*
+           * Column value has changed from previous row.
+           * 1. Reset previous row: firstRow = true
+           * 2. Set current row to default: firstRow = false, rowSpan = 1 (this is default)
+           */
+          if (index != (sortedData.length - 1)) {
+            const prevRow = sortedData[index + 1];
+            prevRow[k] = {
+              ...prevRow[k],
+              firstRow: true,
+            };
+          }
+          rowParentColChanged = true; // Further "children" are forced to reset rowSpan as well
+        } else {
+          /*
+           * Column value is same as previous row AND previous columns for this row have not changed.
+           * 1. Set current row: rowSPan = prev.rowSpan + 1 (if exists, else 1)
+           */
+          rowSpan = previousValueMapIndex[keyIndex]?.rowSpan === undefined ? 1 : previousValueMapIndex[keyIndex]?.rowSpan + 1;
+        }
 
-					delete currentValueMapIndex[keyIndex+1];
-					console.log(Object.keys(currentValueMapIndex).length)
-					valueChnaged = true;
-				} else {
-					console.log('PARENT NOT CHANGED '+ k + ' value ' + currentKeyValue);
-					valueChnaged = calculateValueChange(currentValueMapIndex, keyIndex, currentKeyValue);
-					console.log('CURRENT VALUE CHANGED '+ k + ' value ' + valueChnaged);
-					if(valueChnaged) {
-						row[k] = {
-							value: currentKeyValue,
-							rowSpan: 1,
-							firstRow: false,
-						};
-						valueChnaged = false;
-					} else {
-						row[k] = {
-							value: currentKeyValue,
-							rowSpan: currentValueMapIndex[keyIndex]?.rowSpan === undefined ? 1 : currentValueMapIndex[keyIndex]?.rowSpan + 1,
-							firstRow: true,
-						};
-					}
-				}
-
-				currentValueMapIndex[keyIndex] = {
-					key: k,
-					hasChanged : valueChnaged,
-					value: currentKeyValue,
-					rowSpan: 1
-				}
-
+        // Update tracking for this row and key
+        row[k] = {
+          value: currentKeyValue,
+          rowSpan: rowSpan,
+          firstRow: false, // only the next row may reset this to "true"
+        };
+        // Add keyIndex to tracking for current row
+        currentValueMapIndex[keyIndex] = {
+          key: k,
+          // hasChanged: valueChnaged,
+          value: currentKeyValue,
+          rowSpan: rowSpan,
+        }
 			} else {
 				row[k] = {
 					value: row[k],
@@ -207,11 +207,22 @@ export function sortAndGroupColumns(data: any[], groupCols: any[]): any[] {
 			}
 		});
 	}
-	
+
+  // Final step: update first data row with firstRow = true
+  if (sortedData.length >= 1) {
+    const rowOne = sortedData[0];
+    Object.keys(rowOne).forEach((k, keyIndex) => {
+      rowOne[k] = {
+        ...rowOne[k],
+        firstRow: true,
+      };
+    });
+  }
+
 	return sortedData;
 }
 
-
+// TODO: remove?
 export function sortAndGroupColumnsAsc(data: any[], groupCols: any[]): any[] {
 	let currentValueMapIndex = {};
 	var sortedData = data.sort(fieldSorter(groupCols));
@@ -222,7 +233,7 @@ export function sortAndGroupColumnsAsc(data: any[], groupCols: any[]): any[] {
 			if (groupCols.indexOf(k) !== -1) {
 				let currentKeyValue = row[k];
 				let valueChnaged = false;
-				
+
 				console.debug(currentValueMapIndex);
 
 				if(hasParentValueChanged(currentValueMapIndex, keyIndex)) {
