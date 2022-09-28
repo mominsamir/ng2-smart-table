@@ -50,6 +50,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
      *
      * when < 0 all lines must be deselected
      */
+    tableMode: 'regular', //'regular', 'pivot'
     selectedRowIndex: 0,
     switchPageToSelectedRowPage: false,
     hideHeader: false,

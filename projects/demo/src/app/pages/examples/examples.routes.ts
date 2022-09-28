@@ -5,6 +5,8 @@ import { FilterExamplesComponent } from './filter/filter-examples.component';
 import { ServerExamplesComponent } from './server/server-examples.component';
 import { CustomViewEditExamplesComponent } from './custom-edit-view/custom-edit-view-examples.component';
 import { VariousExamplesComponent } from './various/various-examples.component';
+import { PivotDemoComponent } from './pivot/pivot.component';
+import { PivotExamplesComponent } from './pivot/pivot-examples.component';
 
 export const routes: Routes = [
   {
@@ -30,6 +32,10 @@ export const routes: Routes = [
       {
         path: 'various',
         component: VariousExamplesComponent,
+      },
+      {
+        path: 'pivot',
+        component: PivotExamplesComponent,
       },
     ],
   },

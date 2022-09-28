@@ -1,5 +1,6 @@
 import { Row } from './row';
 import { Column } from './column';
+import { sortAndGroupColumns } from '../helpers';
 
 export class DataSet {
 
@@ -191,11 +192,31 @@ export class DataSet {
    * Create columns by mapping from the settings
    * @param settings
    * @private
-   */
+
   createColumns(settings: any) {
     for (const id in settings) {
       if (settings.hasOwnProperty(id)) {
         this.columns.push(new Column(id, settings[id], this));
+      }
+    }
+  }
+   */
+  createColumns(settings: any) {
+    for (const id in settings) {
+      if (settings.hasOwnProperty(id)) {
+        if (!/^\d/.test(id) && id !== 'action' && !settings[id].lastCellPosition) {
+          this.columns.push(new Column(id, settings[id], this));
+        }
+      }
+    }
+    for (const id in settings) {
+      if (settings.hasOwnProperty(id)) {
+        if (/^\d/.test(id) || id === 'action' && !settings[id].lastCellPosition) {
+          this.columns.push(new Column(id, settings[id], this));
+        }
+        if (settings[id].lastCellPosition) {
+          this.columns.push(new Column(id, settings[id], this));
+        }
       }
     }
   }
@@ -206,7 +227,11 @@ export class DataSet {
    */
   createRows() {
     this.rows = [];
-    this.data.forEach((el, index) => {
+    let sortedData = sortAndGroupColumns(this.data, ['factorId','seasonName','seasonId']);
+
+    console.log(sortedData);
+
+    sortedData.forEach((el, index) => {
       let row: Row = new Row(index, el, this);
       row.setKeyValue(el[this.trackByMultiSelect]);
       this.rows.push(row);

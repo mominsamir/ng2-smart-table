@@ -8,8 +8,8 @@ import { Cell } from '../../../lib/data-set/cell';
   template: `
     <div [ngSwitch]="cell.getColumn().type">
         <custom-view-component *ngSwitchCase="'custom'" [cell]="cell"></custom-view-component>
-        <div *ngSwitchCase="'html'" [innerHTML]="cell.getValue()"></div>
-        <div *ngSwitchDefault>{{ cell.getValue() }}</div>
+        <div *ngSwitchCase="'html'" [innerHTML]="cell.getValue().value"></div>
+        <div *ngSwitchDefault>{{ cell.getValue().value}}</div>
     </div>
     `,
 })

@@ -26,6 +26,7 @@ import { ServerExamplesComponent } from './server/server-examples.component';
 import { CustomViewEditExamplesComponent } from './custom-edit-view/custom-edit-view-examples.component';
 import { BasicExampleCustomActionsComponent } from './custom-edit-view/basic-example-custom-actions.component';
 import { VariousExamplesComponent } from './various/various-examples.component';
+import { PivotDemoComponent } from './pivot/pivot.component';
 
 
 import {
@@ -33,6 +34,8 @@ import {
   ButtonViewComponent,
 } from './custom-edit-view/basic-example-button-view.component';
 import { EmptyDataComponent } from './custom-edit-view/empty-data-example';
+import { PivotExamplesComponent } from './pivot/pivot-examples.component';
+
 
 const EXAMPLES_COMPONENTS = [
   AdvancedExampleFiltersComponent,
@@ -55,7 +58,9 @@ const EXAMPLES_COMPONENTS = [
   ButtonViewComponent,
   RowExpandComponent,
   EmptyDataComponent,
-  SingleSelectComponent
+  SingleSelectComponent,
+  PivotDemoComponent,
+  PivotExamplesComponent
 ];
 
 @NgModule({

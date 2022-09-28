@@ -1,0 +1,65 @@
+::ng-deep {
+
+    .ngx-smart-table {
+        .inner {
+            width: 100%;
+            max-height: 98vh;
+            overflow: auto;
+        }
+        table {
+            font-family: "Fraunces", serif;
+            font-size: 125%;
+            white-space: nowrap;
+            margin: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+            table-layout: sticky;
+            border: 1px solid black;
+            td {
+                border: 1px solid black;
+                padding: 0.5rem 1rem;
+                background: #fff;
+                padding: 4px 5px;
+                text-align: center;
+            }
+            th {
+                border: 1px solid black;
+                padding: 0.5rem 1rem;
+            }
+            thead {
+                th {
+                    padding: 3px;
+                    position: sticky;
+                    top: 0;
+                    z-index: 1;
+                    width: 25vw;
+                    background: white;
+                    &:first-child {
+                        position: fixed;
+                        left: 0;
+                        z-index: 2;
+                    }
+                }
+            }
+            tbody {
+                th {
+                    font-weight: 100;
+                    font-style: italic;
+                    text-align: left;
+                    position: relative;
+                    position: sticky;
+                    left: 0;
+                    background: white;
+                    z-index: 1;
+                }
+            }
+        }
+        caption {
+            text-align: left;
+            padding: 0.25rem;
+            position: sticky;
+            left: 0;
+        }
+        
+    }
+}

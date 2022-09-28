@@ -27,6 +27,10 @@ export class Cell {
     return prepare.call(null, this.value, this.row.getData(), this);
   }
 
+  getRowSpan(): number {
+    return this.value.rowSpan;
+  }
+
   setValue(value: any): any {
     this.newValue = value;
   }
