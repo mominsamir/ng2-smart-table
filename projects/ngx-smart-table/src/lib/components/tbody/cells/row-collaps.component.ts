@@ -16,7 +16,6 @@ import { Grid } from "../../../lib/grid";
   
     @Input() grid: Grid;
     @Input() row: Row;
-    @Input() primaryField: string;
     @Input() column: Column;
     @Input() cell: Cell;
 
