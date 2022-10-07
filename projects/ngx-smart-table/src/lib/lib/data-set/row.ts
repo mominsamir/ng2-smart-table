@@ -19,6 +19,10 @@ export class Row {
     return this.cells.find(el => el.getColumn() === column);
   }
 
+  getCellById(column: string): Cell {
+    return this.cells.find(el => el.getColumn().id === column);
+  }
+
   getCells() {
     return this.cells;
   }

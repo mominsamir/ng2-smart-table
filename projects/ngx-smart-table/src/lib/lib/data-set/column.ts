@@ -6,7 +6,9 @@ export class Column {
   type: string = '';
   class: string = '';
   width: string = '';
+  groupBy: boolean = false;
   icon : any = '';
+  rowSpan: number = 1;
   hide: boolean = false;
   isSortable: boolean = false;
   isEditable: boolean = true;
@@ -66,6 +68,7 @@ export class Column {
     this.filterOperator = this.settings['filterOperator'];
     this.renderComponent = this.settings['renderComponent'];
     this.icon = this.settings['icon'];
+    this.groupBy = this.settings['groupBy'] ?? false;
 
     this.isFilterable = typeof this.settings['filter'] === 'undefined' ? true : !!this.settings['filter'];
     this.defaultSortDirection = ['asc', 'desc']

@@ -26,7 +26,7 @@ const THEAD_COMPONENTS = [
   TheadFitlersRowComponent,
   TheadFormRowComponent,
   TheadTitlesRowComponent,
-  Ng2SmartTableTheadComponent,
+  Ng2SmartTableTheadComponent
 ];
 
 @NgModule({

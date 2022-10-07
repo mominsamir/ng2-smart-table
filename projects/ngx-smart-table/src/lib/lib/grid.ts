@@ -11,10 +11,10 @@ import { DataSource } from './data-source/data-source';
 export class Grid {
 
   createFormShown: boolean = false;
-
   source: DataSource;
   settings: any;
   dataSet: DataSet;
+  columnSizeMap : Map<string, string> = new Map<string, string>();
 
   onSelectRowSource = new Subject<any>();
   onDeselectRowSource = new Subject<any>();
@@ -25,6 +25,7 @@ export class Grid {
   constructor(source: DataSource, settings: any) {
    this.setSettings(settings);
    this.setSource(source);
+   this.calcauteColumnSize();
   }
 
 
@@ -42,13 +43,16 @@ export class Grid {
   }
 
   isCurrentActionsPosition(position: string): boolean {
-    return position == this.getSetting('actions.position');
+    return position === this.getSetting('actions.position');
   }
 
   isActionsVisible(): boolean {
-    return this.getSetting('actions.add') || this.getSetting('actions.edit') || this.getSetting('actions.delete') || this.getSetting('actions.custom').length;
+    return this.getSetting('actions.add') || this.getSetting('actions.edit') || this.getSetting('actions.delete') || this.getSetting('actions').hasOwnProperty('position');
   }
 
+  isRowCollapsEnabled(): boolean {
+    return this.getSetting('actions.rowCollaps').enabled
+  }
   isMultiSelectVisible(): boolean {
     return this.getSetting('selectMode') === 'multi';
   }
@@ -63,7 +67,7 @@ export class Grid {
 
   setSettings(settings: Object) {
     this.settings = settings;
-    this.dataSet = new DataSet([], this.getSetting('columns'));
+    this.dataSet = new DataSet([], this.getSetting('columns'), this.getSetting('tableMode'));
     this.dataSet.setTrackByMultiSelectByColumn(this.getSetting('keyColumn'));
 
     if (this.source) {
@@ -383,4 +387,27 @@ export class Grid {
     const selectedRowIndex = Number(this.getSetting('selectedRowIndex'));
     return selectedRowIndex < 0;
   }
+
+  public getColumnSize(id: string): string {
+    return this.columnSizeMap[id]; 
+  }
+
+  calcauteColumnSize() {
+	  let currentSize = 0;
+    this.getColumns()
+      .filter(f=> f.groupBy)
+      .forEach((col,index)=> {
+        if(this.dataSet.getPrimaryPivotColumn() === col.id) {
+          this.columnSizeMap[col.id] =  `0px`;
+        } else {
+          if(col.width.toLowerCase().endsWith('px')) {
+            currentSize += parseFloat(col.width.replace('px', ''));
+            this.columnSizeMap[col.id] = `${currentSize}px - ${index-1}px`
+          } else {
+            currentSize += parseFloat(col.width.replace('%', ''));
+            this.columnSizeMap[col.id] = `${currentSize}% - ${index-1}px`;
+          } 
+        }
+      });
+	}
 }

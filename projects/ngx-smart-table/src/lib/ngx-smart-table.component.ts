@@ -38,6 +38,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
   isHideHeader: boolean;
   isHideSubHeader: boolean;
   isPagerDisplay: boolean;
+  isPagerLocationTop : boolean;
   rowClassFunction: Function;
 
   grid: Grid;
@@ -62,7 +63,13 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
       edit: true,
       delete: true,
       custom: [],
-      position: 'left', // left|right
+      position: 'right', // left|right,
+      rowCollaps :{
+        enabled: true,
+        filterColumn: undefined,
+        filterValue: undefined,
+        iconComponent: 'Expand'
+      }
     },
     filter: {
       inputClass: '',
@@ -96,6 +103,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
     columns: {},
     pager: {
       display: true,
+      location: 'bottom', //bottom , top
       page: 1,
       perPage: 10,
     },
@@ -125,7 +133,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
     this.isHideHeader = this.grid.getSetting('hideHeader');
     this.isHideSubHeader = this.grid.getSetting('hideSubHeader');
     this.isPagerDisplay = this.grid.getSetting('pager.display');
-    this.isPagerDisplay = this.grid.getSetting('pager.display');
+    this.isPagerLocationTop = this.grid.getSetting('pager.location') === 'top';
     this.perPageSelect = this.grid.getSetting('pager.perPageSelect');
     this.rowClassFunction = this.grid.getSetting('rowClassFunction');
   }

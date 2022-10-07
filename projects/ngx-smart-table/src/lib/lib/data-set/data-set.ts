@@ -6,6 +6,8 @@ export class DataSet {
 
   newRow: Row;
 
+  protected pivotColumns: Array<string> = [];
+  protected primaryPivotColumn: string;
   protected data: Array<any> = [];
   protected columns: Array<Column> = [];
   protected rows: Array<Row> = [];
@@ -15,10 +17,10 @@ export class DataSet {
   protected expandedRow: Row;
   protected willSelect: string;
 
-  constructor(data: Array<any> = [], protected columnSettings: Object) {
+  constructor(data: Array<any> = [], protected columnSettings: Object, protected tableType: string,) {
     this.createColumns(columnSettings);
     this.setData(data);
-
+    this.tableType = tableType;
     this.createNewRow();
   }
 
@@ -33,6 +35,14 @@ export class DataSet {
 
   getExpandedRow(): Row {
     return this.expandedRow;
+  }
+
+  getType(): string {
+    return this.tableType;
+  }
+
+  getPrimaryPivotColumn(): string {
+    return this.primaryPivotColumn;
   }
 
   getRows(): Array<Row> {
@@ -210,6 +220,12 @@ export class DataSet {
       }
     }
     for (const id in settings) {
+      if(settings[id].hasOwnProperty('groupBy')) {
+        
+        if (this.primaryPivotColumn === undefined) this.primaryPivotColumn = id;
+
+        this.pivotColumns.push(id);
+      }
       if (settings.hasOwnProperty(id)) {
         if (/^\d/.test(id) || id === 'action' && !settings[id].lastCellPosition) {
           this.columns.push(new Column(id, settings[id], this));
@@ -227,9 +243,14 @@ export class DataSet {
    */
   createRows() {
     this.rows = [];
-    let sortedData = sortAndGroupColumns(this.data, ['factorId','seasonName','seasonId']);
+    
+    let sortedData = [];
 
-    console.log(sortedData);
+    if(this.getType() === 'pivot') {
+      sortedData = sortAndGroupColumns(this.data, this.pivotColumns);
+    } else {
+      sortedData = this.data;
+    }
 
     sortedData.forEach((el, index) => {
       let row: Row = new Row(index, el, this);

@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, OnChanges} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 
 import { Grid } from '../../../lib/grid';
 import { DataSource } from '../../../lib/data-source/data-source';
@@ -15,14 +15,38 @@ import { Column } from "../../../lib/data-set/column";
     </th>
     <th *ngIf="isSingleSelectVisible"></th>
     <th ng2-st-actions-title *ngIf="showActionColumnLeft" [grid]="grid"></th>
-    <th *ngFor="let column of getVisibleColumns(grid.getColumns())"
-        class="ng2-smart-th {{ column.id }}"
-        [ngClass]="column.class"
-        [style.width]="column.width">
-      <ng2-st-column-title [source]="source" [column]="column" (sort)="sort.emit($event)"></ng2-st-column-title>
-    </th>
-    <th ng2-st-actions-title *ngIf="showActionColumnRight" [grid]="grid"></th>
+    <ng-container *ngFor="let column of getVisibleColumns(grid.getColumns())">
+      <th *ngIf="isPrimaryColumn(column.id) && rowCollapsEnabled()" 
+        class="ngx-fixed-header" [style.left]="'5%'"></th>
+      <th
+            *ngIf="column.groupBy" 
+            [ngStyle]=" {'left': 'calc('+grid.getColumnSize(column.id)+')' }"
+            class="ng2-smart-th {{ column.id }} ngx-fixed-header"
+            [ngClass]="column.class"
+            [style.width]="column.width"
+            [style.minWidth]="column.width"
+            [style.zIndex]="11">
+          <ng2-st-column-title [source]="source" [column]="column" (sort)="sort.emit($event)"></ng2-st-column-title>
+        </th>         
+      <th 
+          *ngIf="!column.groupBy"       
+          class="ng2-smart-th {{ column.id }} ngx-fixed-header"
+          [ngClass]="column.class"
+          [style.width]="column.width"
+          [style.minWidth]="column.width">
+        <ng2-st-column-title [source]="source" [column]="column" (sort)="sort.emit($event)"></ng2-st-column-title>
+      </th>
+    </ng-container>
+    <th ng2-st-actions-title *ngIf="showActionColumnRight && grid.getDataSet().getType()!=='pivot'" [grid]="grid"></th>
   `,
+  styles: [
+    ` .ngx-fixed-header {
+        position: sticky;
+        top: 0px;
+        background-color: white;
+      }    
+    `
+  ]
 })
 export class TheadTitlesRowComponent implements OnChanges {
 
@@ -40,7 +64,7 @@ export class TheadTitlesRowComponent implements OnChanges {
 
 
   ngOnChanges() {
-    this.isSingleSelectVisible = this.grid.isSingleSelectVisible();  
+    this.isSingleSelectVisible = this.grid.isSingleSelectVisible();
     this.isMultiSelectVisible = this.grid.isMultiSelectVisible();
     this.showActionColumnLeft = this.grid.showActionColumn('left');
     this.showActionColumnRight = this.grid.showActionColumn('right');
@@ -49,4 +73,12 @@ export class TheadTitlesRowComponent implements OnChanges {
   getVisibleColumns(columns: Array<Column>): Array<Column> {
     return (columns || []).filter((column: Column) => !column.hide);
   }
+
+  isPrimaryColumn(id: string): boolean {
+    return this.grid.getDataSet().getPrimaryPivotColumn() === id
+  }
+
+  rowCollapsEnabled(): boolean {
+		return this.grid.isRowCollapsEnabled();
+	}
 }
