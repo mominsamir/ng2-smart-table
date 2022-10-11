@@ -178,4 +178,8 @@ export class Ng2SmartTableTbodyComponent implements AfterViewInit, OnDestroy {
 		return this.grid.isRowCollapsEnabled();
 	}
 
+	rowCollapsWidth(): string {
+		return this.grid.getSetting('actions.rowCollaps.width', '50px');
+	}
+
 }

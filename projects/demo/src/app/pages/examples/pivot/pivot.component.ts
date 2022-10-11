@@ -26,6 +26,7 @@ export class SeasonComponents {
 	selector: 'icon',
 	template: `
     <span class="ng-column-icon" (click)="onExpandAction()">
+    asdsdas
       <svg width="25" height="25">
         <circle cx='5' cy='5' r='4' stroke='green' stroke-width='1' fill='black'></circle>
       </svg>

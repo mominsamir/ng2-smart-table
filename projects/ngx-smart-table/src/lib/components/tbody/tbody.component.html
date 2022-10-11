@@ -68,14 +68,17 @@
 
 		<ng-container *ngFor="let cell of getVisibleCells(row.cells); last as isLast; first as isFirst">
 			
-			<td *ngIf="!row.isInEditing && showActionColumnLeft && isFirst" class="ng2-smart-actions">
+			<td 
+				*ngIf="!row.isInEditing && showActionColumnLeft && isFirst" 
+				class="ng2-smart-actions" >
 				<ng2-st-tbody-custom [grid]="grid" (custom)="custom.emit($event)" [row]="row" [source]="source">
 				</ng2-st-tbody-custom>
 			</td>
 	
 			<td [rowSpan]="cell.getRowSpan()" 
+
 				*ngIf="cell.isFirstRow() && cell.isPrimaryPivotCell() && rowCollapsEnabled()"
-				class="ng2-smart-actions">
+				class="ng2-smart-actions ngx-freeze-col" [style.left]="'calc(0px)'" [style.minWidth]="rowCollapsWidth()">
 				<ng2-st-row-expand-collaps 
 					[grid]="grid" 
 					(custom)="custom.emit($event)" 

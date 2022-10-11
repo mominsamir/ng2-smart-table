@@ -53,6 +53,7 @@ export class Grid {
   isRowCollapsEnabled(): boolean {
     return this.getSetting('actions.rowCollaps').enabled
   }
+
   isMultiSelectVisible(): boolean {
     return this.getSetting('selectMode') === 'multi';
   }
@@ -63,6 +64,10 @@ export class Grid {
 
   getNewRow(): Row {
     return this.dataSet.newRow;
+  }
+
+  isTableTypePivot(): boolean {
+    return this.dataSet.getType() === 'pivot';
   }
 
   setSettings(settings: Object) {
@@ -394,11 +399,17 @@ export class Grid {
 
   calcauteColumnSize() {
 	  let currentSize = 0;
+    
+    //this is for expanded row;
+    if(this.isRowCollapsEnabled()){
+      currentSize = parseFloat(this.getSetting('actions.rowCollaps.width').replace('px', ''));
+    }
+
     this.getColumns()
       .filter(f=> f.groupBy)
       .forEach((col,index)=> {
         if(this.dataSet.getPrimaryPivotColumn() === col.id) {
-          this.columnSizeMap[col.id] =  `0px`;
+          this.columnSizeMap[col.id] =  `${currentSize}px`;
         } else {
           if(col.width.toLowerCase().endsWith('px')) {
             currentSize += parseFloat(col.width.replace('px', ''));

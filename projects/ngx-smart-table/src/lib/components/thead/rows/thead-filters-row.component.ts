@@ -14,14 +14,18 @@ import { Column } from "../../../lib/data-set/column";
                           (create)="create.emit($event)">
     </th>
     <ng-container *ngFor="let column of getVisibleColumns(grid.getColumns())">
-		<th *ngIf="isPrimaryColumn(column.id)  && rowCollapsEnabled()" class="ngx-fixed-header" [style.left]="'5%'">
+		<th 
+			*ngIf="isPrimaryColumn(column.id)  && rowCollapsEnabled()" 
+			[ngClass]="{'ngx-fixed-header': grid.isTableTypePivot()}"  
+			[style.left]="'calc(0px)'" [style.minWidth]="rowCollapsWidth()">
 		</th>
 		<th  
-			class="ng2-smart-th {{ column.id }} ngx-fixed-header" 
+			class="ng2-smart-th {{ column.id }}" 
 			*ngIf="column.groupBy"
 			[style.minWidth]="column.width" 
             [style.width]="column.width"
-            [style.zIndex]="11"			
+            [style.zIndex]="11"
+			[ngClass]="{'ngx-fixed-header': grid.isTableTypePivot()}"
 			[ngStyle]=" {'left': 'calc('+grid.getColumnSize(column.id)+')' }">
 			<ng2-smart-table-filter [source]="source"
 				[column]="column"
@@ -31,10 +35,11 @@ import { Column } from "../../../lib/data-set/column";
 		</th>
 
 		<th  
-			class="ng2-smart-th {{ column.id }} ngx-fixed-header" 
+			class="ng2-smart-th {{ column.id }}" 
 			*ngIf="!column.groupBy"
 			[style.minWidth]="column.width" 
-            [style.width]="column.width">
+            [style.width]="column.width"
+			[ngClass]="{'ngx-fixed-header': grid.isTableTypePivot()}">
 			<ng2-smart-table-filter [source]="source"
 				[column]="column"
 				[inputClass]="filterInputClass"
@@ -42,7 +47,7 @@ import { Column } from "../../../lib/data-set/column";
 			</ng2-smart-table-filter>
 		</th>		
     </ng-container>
-    <th ng2-st-add-button *ngIf="showActionColumnRight  && grid.getDataSet().getType()!=='pivot'"
+    <th ng2-st-add-button *ngIf="showActionColumnRight  && !grid.isTableTypePivot()"
                           [grid]="grid"
                           [source]="source"
                           (create)="create.emit($event)">
@@ -50,6 +55,7 @@ import { Column } from "../../../lib/data-set/column";
   `,
   styles: [
     ` .ngx-fixed-header {
+        position: -webkit-sticky;
         position: sticky;
         top: 40px;
         background-color: white;
@@ -86,9 +92,12 @@ export class TheadFitlersRowComponent implements OnChanges {
 	isPrimaryColumn(id: string): boolean {
 		return this.grid.getDataSet().getPrimaryPivotColumn() === id
 	}
-
 	
 	rowCollapsEnabled(): boolean {
 		return this.grid.isRowCollapsEnabled();
+	}
+
+	rowCollapsWidth(): string {
+		return this.grid.getSetting('actions.rowCollaps.width', '50px');
 	}
 }

@@ -64,8 +64,9 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
       delete: true,
       custom: [],
       position: 'right', // left|right,
-      rowCollaps :{
+      rowCollaps : {
         enabled: true,
+        width: '100px',
         filterColumn: undefined,
         filterValue: undefined,
         iconComponent: 'Expand'
