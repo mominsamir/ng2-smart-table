@@ -80,12 +80,19 @@ export class PivotDemoComponent {
 			"add": false,
 			"edit": false,
 			"delete": false,
-			"select": false
+			"select": false,
+            "rowCollapse" : true
 		},
 		"pager": {
 			"display": false,
-			"perPage": 1000
+			"perPage": 20
 		},
+        "rowCollapse" : {
+            "width": '100px',
+            "iconComponent" : IconComponents,
+            "excludeOnHideColmun": 'voltage',
+            "excludeOnHideFunction" : (value: any, columnId: string)  => value !== 'Total' && columnId === 'voltage',
+        },
 		"columns": {
 			"station": {
 				"title": "station",
@@ -113,6 +120,18 @@ export class PivotDemoComponent {
 				"title": "seasonId",
 				"groupBy": true,
                 "width": "150px"
+			},
+			"2012": {
+				"title": "2012",
+				"filter": false,
+				"type": "html",
+				"class": "actual"
+			},
+			"2013": {
+				"title": "2013",
+				"filter": false,
+				"type": "html",
+				"class": "actual"
 			},
 			"2020": {
 				"title": "2020",
@@ -191,7 +210,7 @@ export class PivotDemoComponent {
             "2023": 199.92419665776222,
             "2022": 199.57804522804952,
             "2021": 200.2538578157659,
-            "2020": 189.23640036299346,
+
             "voltage": "Total",
             "capacity": 562.5,
             "2019": 196.3101,

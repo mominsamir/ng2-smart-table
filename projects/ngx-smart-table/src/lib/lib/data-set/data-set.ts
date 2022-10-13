@@ -1,6 +1,6 @@
 import { Row } from './row';
 import { Column } from './column';
-import { sortAndGroupColumns } from '../helpers';
+import { fillDataGap, sortAndGroupColumns } from '../helpers';
 
 export class DataSet {
 
@@ -8,6 +8,7 @@ export class DataSet {
 
   protected pivotColumns: Array<string> = [];
   protected primaryPivotColumn: string;
+  protected lastPivotColumn: string;
   protected data: Array<any> = [];
   protected columns: Array<Column> = [];
   protected rows: Array<Row> = [];
@@ -43,6 +44,10 @@ export class DataSet {
 
   getPrimaryPivotColumn(): string {
     return this.primaryPivotColumn;
+  }
+
+  getLastPivotColumn(): string {
+    return this.lastPivotColumn;
   }
 
   getRows(): Array<Row> {
@@ -221,9 +226,7 @@ export class DataSet {
     }
     for (const id in settings) {
       if(settings[id].hasOwnProperty('groupBy')) {
-        
         if (this.primaryPivotColumn === undefined) this.primaryPivotColumn = id;
-
         this.pivotColumns.push(id);
       }
       if (settings.hasOwnProperty(id)) {
@@ -235,6 +238,8 @@ export class DataSet {
         }
       }
     }
+
+    this.lastPivotColumn = Object.keys(settings).filter((s: any) => settings[s].hasOwnProperty('groupBy')).pop();
   }
 
   /**
@@ -248,6 +253,7 @@ export class DataSet {
 
     if(this.getType() === 'pivot') {
       sortedData = sortAndGroupColumns(this.data, this.pivotColumns);
+      sortedData = fillDataGap(sortedData, this.getColumns());
     } else {
       sortedData = this.data;
     }

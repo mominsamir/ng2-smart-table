@@ -64,13 +64,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
       delete: true,
       custom: [],
       position: 'right', // left|right,
-      rowCollaps : {
-        enabled: true,
-        width: '100px',
-        filterColumn: undefined,
-        filterValue: undefined,
-        iconComponent: 'Expand'
-      }
+      rowCollapse: false,
     },
     filter: {
       inputClass: '',
@@ -95,6 +89,11 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
     },
     expand: {
       expandRowButtonContent: 'Expand'
+    },
+    rowCollapse : {
+      width: '100px',
+      excludeOnHideColmun : '',
+      excludeOnHideFunction : (string :any, column: string) => false,
     },
     attr: {
       id: '',
@@ -234,7 +233,6 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
   initGrid() {
     this.source = this.prepareSource();
     this.grid = new Grid(this.source, this.prepareSettings());
-
     this.subscribeToOnSelectRow();
     this.subscribeToOnDeselectRow();
   }
@@ -250,6 +248,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
   }
 
   prepareSettings(): Object {
+
     return deepExtend({}, this.defaultSettings, this.settings);
   }
 

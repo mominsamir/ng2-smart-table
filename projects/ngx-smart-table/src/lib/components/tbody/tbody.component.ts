@@ -78,7 +78,6 @@ export class Ng2SmartTableTbodyComponent implements AfterViewInit, OnDestroy {
 	ngOnDestroy(): void {
 		if (this.customComponent) this.customComponent.destroy();
 		if (this.emptyDataComponent) this.emptyDataComponent.destroy();
-
 	}
 
 	clear() {
@@ -179,7 +178,7 @@ export class Ng2SmartTableTbodyComponent implements AfterViewInit, OnDestroy {
 	}
 
 	rowCollapsWidth(): string {
-		return this.grid.getSetting('actions.rowCollaps.width', '50px');
+		return this.grid.getSetting('rowCollapse.width', '50px');
 	}
 
 }

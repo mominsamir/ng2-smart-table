@@ -1,4 +1,5 @@
 import { cloneDeep } from 'lodash';
+import { Column } from './data-set/column';
 
 /**
  * Extending object that entered in first argument.
@@ -220,6 +221,21 @@ export function sortAndGroupColumns(data: any[], groupCols: any[]): any[] {
 	}
 
 	return sortedData;
+}
+
+export function fillDataGap(data: any[], columns: Column[]): any[] {
+	data.forEach(row=> {
+		columns.forEach(c=> {
+			if(!row.hasOwnProperty(c.id)) {
+				row[c.id] = {
+					value: '',
+					rowSpan: 1,
+					firstRow: true,
+				};
+			}
+		});
+	});
+	return data;
 }
 
 

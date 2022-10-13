@@ -79,13 +79,13 @@
 
 				*ngIf="cell.isFirstRow() && cell.isPrimaryPivotCell() && rowCollapsEnabled()"
 				class="ng2-smart-actions ngx-freeze-col" [style.left]="'calc(0px)'" [style.minWidth]="rowCollapsWidth()">
-				<ng2-st-row-expand-collaps 
+				<ng2-st-row-expand-collapse 
 					[grid]="grid" 
 					(custom)="custom.emit($event)" 
 					[row]="row" 
 					[column]="cell.getColumn()"
 					[cell]="cell">
-				</ng2-st-row-expand-collaps>
+				</ng2-st-row-expand-collapse>
 			</td>
 
 			<td 
@@ -94,7 +94,7 @@
 				*ngIf="cell.isFirstRow() && cell.getColumn().groupBy" 
 				[ngStyle]=" {'left': 'calc('+grid.getColumnSize(cell.getColumn().id)+')' }" 
 				[style.minWidth]="cell.getColumn().width"
-				[ngClass]="{'ngx-cell-hidden': !cell.isCellVisible() && !cell.isPrimaryPivotCell()}">
+				[ngClass]="{'ngx-cell-hidden': !cell.isCellVisible() && !cell.isPrimaryPivotCell(), 'ngx-last-group-column' : grid.getDataSet().getLastPivotColumn()===cell.getColumn().id}">
 				<ng2-smart-table-cell [cell]="cell" [grid]="grid" [row]="row" [isNew]="false" [mode]="mode"
 					[editConfirm]="editConfirm" [inputClass]="editInputClass" [isInEditing]="false">
 				</ng2-smart-table-cell>
@@ -108,6 +108,7 @@
 				</ng2-smart-table-cell>
 			</td>
 
+<!--
 			<td 
 				*ngIf="!row.isInEditing && showActionColumnRight && isLast" 
 				class="ng2-smart-actions"
@@ -115,12 +116,10 @@
 				<ng2-st-tbody-custom [grid]="grid" (custom)="custom.emit($event)" [row]="row" [source]="source">
 				</ng2-st-tbody-custom>
 			</td>
+-->
+
 		</ng-container>
-
-
-
 	</tr>
-
 </ng-container>
 
 <tr class="ng2-smart-row ng2-smart-row-emtpy" *ngIf="grid.getRows().length == 0">

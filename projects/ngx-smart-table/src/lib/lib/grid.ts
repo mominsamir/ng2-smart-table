@@ -10,415 +10,423 @@ import { DataSource } from './data-source/data-source';
 
 export class Grid {
 
-  createFormShown: boolean = false;
-  source: DataSource;
-  settings: any;
-  dataSet: DataSet;
-  columnSizeMap : Map<string, string> = new Map<string, string>();
+	createFormShown: boolean = false;
+	source: DataSource;
+	settings: any;
+	dataSet: DataSet;
+	columnSizeMap: Map<string, string> = new Map<string, string>();
 
-  onSelectRowSource = new Subject<any>();
-  onDeselectRowSource = new Subject<any>();
+	onSelectRowSource = new Subject<any>();
+	onDeselectRowSource = new Subject<any>();
 
-  private sourceOnChangedSubscription: Subscription;
-  private sourceOnUpdatedSubscription: Subscription;
+	private sourceOnChangedSubscription: Subscription;
+	private sourceOnUpdatedSubscription: Subscription;
 
-  constructor(source: DataSource, settings: any) {
-   this.setSettings(settings);
-   this.setSource(source);
-   this.calcauteColumnSize();
-  }
+	constructor(source: DataSource, settings: any) {
+		this.setSettings(settings);
+		this.setSource(source);
+		this.calcauteColumnSize();
+	}
 
 
-  detach(): void {
-    if (this.sourceOnChangedSubscription) {
-      this.sourceOnChangedSubscription.unsubscribe();
-    }
-    if (this.sourceOnUpdatedSubscription) {
-      this.sourceOnUpdatedSubscription.unsubscribe();
-    }
-  }
+	detach(): void {
+		if (this.sourceOnChangedSubscription) {
+			this.sourceOnChangedSubscription.unsubscribe();
+		}
+		if (this.sourceOnUpdatedSubscription) {
+			this.sourceOnUpdatedSubscription.unsubscribe();
+		}
+	}
 
-  showActionColumn(position: string): boolean {
-    return this.isCurrentActionsPosition(position) && this.isActionsVisible();
-  }
+	showActionColumn(position: string): boolean {
+		return this.isCurrentActionsPosition(position) && this.isActionsVisible();
+	}
 
-  isCurrentActionsPosition(position: string): boolean {
-    return position === this.getSetting('actions.position');
-  }
+	isCurrentActionsPosition(position: string): boolean {
+		return position === this.getSetting('actions.position');
+	}
 
-  isActionsVisible(): boolean {
-    return this.getSetting('actions.add') || this.getSetting('actions.edit') || this.getSetting('actions.delete') || this.getSetting('actions').hasOwnProperty('position');
-  }
+	isActionsVisible(): boolean {
+		return this.getSetting('actions.add') || this.getSetting('actions.edit') || this.getSetting('actions.delete') || this.getSetting('actions').hasOwnProperty('position');
+	}
 
-  isRowCollapsEnabled(): boolean {
-    return this.getSetting('actions.rowCollaps').enabled
-  }
+	isRowCollapsEnabled(): boolean {
+		return this.getSetting('actions.rowCollapse');
+	}
 
-  isMultiSelectVisible(): boolean {
-    return this.getSetting('selectMode') === 'multi';
-  }
+	getRowCollpasIconComponent(): boolean {
+		return this.getSetting('rowCollapse').iconComponent
+	}
 
-  isSingleSelectVisible(): boolean {
-    return this.getSetting('selectMode') === 'single';
-  }
+	onPivotRowCollpse(): any {
+		return this.getSetting('rowCollapse.excludeOnHideFunction');
+	}
 
-  getNewRow(): Row {
-    return this.dataSet.newRow;
-  }
+	isMultiSelectVisible(): boolean {
+		return this.getSetting('selectMode') === 'multi';
+	}
 
-  isTableTypePivot(): boolean {
-    return this.dataSet.getType() === 'pivot';
-  }
+	isSingleSelectVisible(): boolean {
+		return this.getSetting('selectMode') === 'single';
+	}
 
-  setSettings(settings: Object) {
-    this.settings = settings;
-    this.dataSet = new DataSet([], this.getSetting('columns'), this.getSetting('tableMode'));
-    this.dataSet.setTrackByMultiSelectByColumn(this.getSetting('keyColumn'));
+	getNewRow(): Row {
+		return this.dataSet.newRow;
+	}
 
-    if (this.source) {
-      this.source.refresh();
-    }
-  }
+	isTableTypePivot(): boolean {
+		return this.dataSet.getType() === 'pivot';
+	}
 
-  getDataSet(): DataSet {
-    return this.dataSet;
-  }
+	setSettings(settings: Object) {
+		this.settings = settings;
+		this.dataSet = new DataSet([], this.getSetting('columns'), this.getSetting('tableMode'));
+		this.dataSet.setTrackByMultiSelectByColumn(this.getSetting('keyColumn'));
 
-  setSource(source: DataSource) {
-    this.source = this.prepareSource(source);
-    this.detach();
+		if (this.source) {
+			this.source.refresh();
+		}
+	}
 
-    this.sourceOnChangedSubscription = this.source.onChanged().subscribe((changes: any) => this.processDataChange(changes));
+	getDataSet(): DataSet {
+		return this.dataSet;
+	}
 
-    this.sourceOnUpdatedSubscription = this.source.onUpdated().subscribe((data: any) => {
-      const changedRow = this.dataSet.findRowByData(data);
-      changedRow.setData(data);
-    });
-  }
+	setSource(source: DataSource) {
+		this.source = this.prepareSource(source);
+		this.detach();
 
-  getSetting(name: string, defaultValue?: any): any {
-    return getDeepFromObject(this.settings, name, defaultValue);
-  }
+		this.sourceOnChangedSubscription = this.source.onChanged().subscribe((changes: any) => this.processDataChange(changes));
 
-  getColumns(): Array<Column> {
-    return this.dataSet.getColumns();
-  }
+		this.sourceOnUpdatedSubscription = this.source.onUpdated().subscribe((data: any) => {
+			const changedRow = this.dataSet.findRowByData(data);
+			changedRow.setData(data);
+		});
+	}
 
-  getRows(): Array<Row> {
-    return this.dataSet.getRows();
-  }
+	getSetting(name: string, defaultValue?: any): any {
+		return getDeepFromObject(this.settings, name, defaultValue);
+	}
 
-  selectRow(row: Row) {
-    this.dataSet.selectRow(row);
-  }
+	getColumns(): Array<Column> {
+		return this.dataSet.getColumns();
+	}
 
-  multipleSelectRow(row: Row) {
-    this.dataSet.multipleSelectRow(row);
-  }
+	getRows(): Array<Row> {
+		return this.dataSet.getRows();
+	}
 
-  onSelectRow(): Observable<any> {
-    return this.onSelectRowSource.asObservable();
-  }
+	selectRow(row: Row) {
+		this.dataSet.selectRow(row);
+	}
 
-  expandRow(row: Row){
-    this.dataSet.expandRow(row);
-  }
+	multipleSelectRow(row: Row) {
+		this.dataSet.multipleSelectRow(row);
+	}
 
-  onDeselectRow(): Observable<any> {
-    return this.onDeselectRowSource.asObservable();
-  }
+	onSelectRow(): Observable<any> {
+		return this.onSelectRowSource.asObservable();
+	}
 
-  edit(row: Row) {
-    row.isInEditing = true;
-  }
+	expandRow(row: Row) {
+		this.dataSet.expandRow(row);
+	}
 
-  hasKeyColumn = (): boolean => {
-    return this.settings.hasOwnProperty('keyColumn');
-  }
+	onDeselectRow(): Observable<any> {
+		return this.onDeselectRowSource.asObservable();
+	}
 
-  getKeyColumn = (): string => {
-    if(this.hasKeyColumn()) {
-        return this.settings.keyColumn;
-    }
-    return undefined; 
-  }
+	edit(row: Row) {
+		row.isInEditing = true;
+	}
 
-  create(row: Row, confirmEmitter: EventEmitter<any>) {
+	hasKeyColumn = (): boolean => {
+		return this.settings.hasOwnProperty('keyColumn');
+	}
 
-    const deferred = new Deferred();
-    deferred.promise.then((newData) => {
-      newData = newData ? newData : row.getNewData();
-      if (deferred.resolve.skipAdd) {
-        this.createFormShown = false;
-      } else {
-        this.source.prepend(newData).then(() => {
-          this.createFormShown = false;
-          this.dataSet.createNewRow();
-        });
-      }
-    }).catch((err) => {
-      // doing nothing
-    });
+	getKeyColumn = (): string => {
+		if (this.hasKeyColumn()) {
+			return this.settings.keyColumn;
+		}
+		return undefined;
+	}
 
-    if (this.getSetting('add.confirmCreate')) {
-      confirmEmitter.emit({
-        newData: row.getNewData(),
-        source: this.source,
-        confirm: deferred,
-      });
-    } else {
-      deferred.resolve();
-    }
-  }
+	create(row: Row, confirmEmitter: EventEmitter<any>) {
 
-  save(row: Row, confirmEmitter: EventEmitter<any>) {
+		const deferred = new Deferred();
+		deferred.promise.then((newData) => {
+			newData = newData ? newData : row.getNewData();
+			if (deferred.resolve.skipAdd) {
+				this.createFormShown = false;
+			} else {
+				this.source.prepend(newData).then(() => {
+					this.createFormShown = false;
+					this.dataSet.createNewRow();
+				});
+			}
+		}).catch((err) => {
+			// doing nothing
+		});
 
-    const deferred = new Deferred();
-    deferred.promise.then((newData) => {
-      newData = newData ? newData : row.getNewData();
-      if (deferred.resolve.skipEdit) {
-        row.isInEditing = false;
-      } else {
-        this.source.update(row.getData(), newData).then(() => {
-          row.isInEditing = false;
-        });
-      }
-    }).catch((err) => {
-      // doing nothing
-    });
+		if (this.getSetting('add.confirmCreate')) {
+			confirmEmitter.emit({
+				newData: row.getNewData(),
+				source: this.source,
+				confirm: deferred,
+			});
+		} else {
+			deferred.resolve();
+		}
+	}
 
-    if (this.getSetting('edit.confirmSave')) {
-      confirmEmitter.emit({
-        data: row.getData(),
-        newData: row.getNewData(),
-        source: this.source,
-        confirm: deferred,
-      });
-    } else {
-      deferred.resolve();
-    }
-  }
+	save(row: Row, confirmEmitter: EventEmitter<any>) {
 
-  delete(row: Row, confirmEmitter: EventEmitter<any>) {
+		const deferred = new Deferred();
+		deferred.promise.then((newData) => {
+			newData = newData ? newData : row.getNewData();
+			if (deferred.resolve.skipEdit) {
+				row.isInEditing = false;
+			} else {
+				this.source.update(row.getData(), newData).then(() => {
+					row.isInEditing = false;
+				});
+			}
+		}).catch((err) => {
+			// doing nothing
+		});
 
-    const deferred = new Deferred();
-    deferred.promise.then(() => {
-      this.source.remove(row.getData());
-    }).catch((err) => {
-      // doing nothing
-    });
+		if (this.getSetting('edit.confirmSave')) {
+			confirmEmitter.emit({
+				data: row.getData(),
+				newData: row.getNewData(),
+				source: this.source,
+				confirm: deferred,
+			});
+		} else {
+			deferred.resolve();
+		}
+	}
 
-    if (this.getSetting('delete.confirmDelete')) {
-      confirmEmitter.emit({
-        data: row.getData(),
-        source: this.source,
-        confirm: deferred,
-      });
-    } else {
-      deferred.resolve();
-    }
-  }
+	delete(row: Row, confirmEmitter: EventEmitter<any>) {
 
-  processDataChange(changes: any) {
-    if (this.shouldProcessChange(changes)) {
-      this.dataSet.setData(changes['elements']);
-      if (this.getSetting('selectMode') !== 'multi') {
-        const row = this.determineRowToSelect(changes);
+		const deferred = new Deferred();
+		deferred.promise.then(() => {
+			this.source.remove(row.getData());
+		}).catch((err) => {
+			// doing nothing
+		});
 
-        if (row) {
-          this.onSelectRowSource.next(row);
-        } else {
-          this.onDeselectRowSource.next(null);
-        }
-      }
-    } else {
-        console.warn("processChange ");
-    }
-  }
+		if (this.getSetting('delete.confirmDelete')) {
+			confirmEmitter.emit({
+				data: row.getData(),
+				source: this.source,
+				confirm: deferred,
+			});
+		} else {
+			deferred.resolve();
+		}
+	}
 
-  shouldProcessChange(changes: any): boolean {
-    if (['filter', 'sort', 'page', 'remove', 'refresh', 'load', 'paging'].indexOf(changes['action']) !== -1) {
-      return true;
-    } else if (['prepend', 'append'].indexOf(changes['action']) !== -1 && !this.getSetting('pager.display')) {
-      return true;
-    }
+	processDataChange(changes: any) {
+		if (this.shouldProcessChange(changes)) {
+			this.dataSet.setData(changes['elements']);
+			if (this.getSetting('selectMode') !== 'multi') {
+				const row = this.determineRowToSelect(changes);
 
-    return false;
-  }
+				if (row) {
+					this.onSelectRowSource.next(row);
+				} else {
+					this.onDeselectRowSource.next(null);
+				}
+			}
+		} else {
+			console.warn("processChange ");
+		}
+	}
 
-  /**
-   * @breaking-change 1.8.0
-   * Need to add `| null` in return type
-   *
-   * TODO: move to selectable? Separate directive
-   */
-  determineRowToSelect(changes: any): Row {
+	shouldProcessChange(changes: any): boolean {
+		if (['filter', 'sort', 'page', 'remove', 'refresh', 'load', 'paging'].indexOf(changes['action']) !== -1) {
+			return true;
+		} else if (['prepend', 'append'].indexOf(changes['action']) !== -1 && !this.getSetting('pager.display')) {
+			return true;
+		}
 
-    if (['load', 'page', 'filter', 'sort', 'refresh'].indexOf(changes['action']) !== -1) {
-      return this.dataSet.select(this.getRowIndexToSelect());
-    }
+		return false;
+	}
 
-    if (this.shouldSkipSelection()) {
-      return null;
-    }
+	/**
+	 * @breaking-change 1.8.0
+	 * Need to add `| null` in return type
+	 *
+	 * TODO: move to selectable? Separate directive
+	 */
+	determineRowToSelect(changes: any): Row {
 
-    if (changes['action'] === 'remove') {
-      if (changes['elements'].length === 0) {
-        // we have to store which one to select as the data will be reloaded
-        this.dataSet.willSelectLastRow();
-      } else {
-        return this.dataSet.selectPreviousRow();
-      }
-    }
-    if (changes['action'] === 'append') {
-      // we have to store which one to select as the data will be reloaded
-      this.dataSet.willSelectLastRow();
-    }
-    if (changes['action'] === 'add') {
-      return this.dataSet.selectFirstRow();
-    }
-    if (changes['action'] === 'update') {
-      return this.dataSet.selectFirstRow();
-    }
-    if (changes['action'] === 'prepend') {
-      // we have to store which one to select as the data will be reloaded
-      this.dataSet.willSelectFirstRow();
-    }
-    return null;
-  }
+		if (['load', 'page', 'filter', 'sort', 'refresh'].indexOf(changes['action']) !== -1) {
+			return this.dataSet.select(this.getRowIndexToSelect());
+		}
 
-  prepareSource(source: any): DataSource {
-    const initialSource: any = this.getInitialSort();
-    if (initialSource && initialSource['field'] && initialSource['direction']) {
-      source.setSort([initialSource], false);
-    }
-    if (this.getSetting('pager.display') === true) {
-      source.setPaging(this.getPageToSelect(source), this.getSetting('pager.perPage'), false);
-    }
+		if (this.shouldSkipSelection()) {
+			return null;
+		}
 
-    source.refresh();
-    return source;
-  }
+		if (changes['action'] === 'remove') {
+			if (changes['elements'].length === 0) {
+				// we have to store which one to select as the data will be reloaded
+				this.dataSet.willSelectLastRow();
+			} else {
+				return this.dataSet.selectPreviousRow();
+			}
+		}
+		if (changes['action'] === 'append') {
+			// we have to store which one to select as the data will be reloaded
+			this.dataSet.willSelectLastRow();
+		}
+		if (changes['action'] === 'add') {
+			return this.dataSet.selectFirstRow();
+		}
+		if (changes['action'] === 'update') {
+			return this.dataSet.selectFirstRow();
+		}
+		if (changes['action'] === 'prepend') {
+			// we have to store which one to select as the data will be reloaded
+			this.dataSet.willSelectFirstRow();
+		}
+		return null;
+	}
 
-  getInitialSort() {
-    const sortConf: any = {};
-    this.getColumns().forEach((column: Column) => {
-      if (column.isSortable && column.defaultSortDirection) {
-        sortConf['field'] = column.id;
-        sortConf['direction'] = column.defaultSortDirection;
-        sortConf['compare'] = column.getCompareFunction();
-      }
-    });
-    return sortConf;
-  }
+	prepareSource(source: any): DataSource {
+		const initialSource: any = this.getInitialSort();
+		if (initialSource && initialSource['field'] && initialSource['direction']) {
+			source.setSort([initialSource], false);
+		}
+		if (this.getSetting('pager.display') === true) {
+			source.setPaging(this.getPageToSelect(source), this.getSetting('pager.perPage'), false);
+		}
 
-  getSelectedRows(): Array<any> {
-    return Array.from(this.dataSet.getMultipleSelectedRows());
-  }
+		source.refresh();
+		return source;
+	}
 
-  selectAllRows(status: boolean) {
-      if(status) {
-        this.dataSet.getRows().forEach(row => {
-            row.isSelected = status;
-            this.dataSet.getMultipleSelectedRows().add(row)
-        });
-      } else {
-        this.dataSet.getRows().forEach(row => row.isSelected = status);
-        this.dataSet.getMultipleSelectedRows().clear();
-      }
-  }
+	getInitialSort() {
+		const sortConf: any = {};
+		this.getColumns().forEach((column: Column) => {
+			if (column.isSortable && column.defaultSortDirection) {
+				sortConf['field'] = column.id;
+				sortConf['direction'] = column.defaultSortDirection;
+				sortConf['compare'] = column.getCompareFunction();
+			}
+		});
+		return sortConf;
+	}
 
-  getFirstRow(): Row {
-    return this.dataSet.getFirstRow();
-  }
+	getSelectedRows(): Array<any> {
+		return Array.from(this.dataSet.getMultipleSelectedRows());
+	}
 
-  getLastRow(): Row {
-    return this.dataSet.getLastRow();
-  }
+	selectAllRows(status: boolean) {
+		if (status) {
+			this.dataSet.getRows().forEach(row => {
+				row.isSelected = status;
+				this.dataSet.getMultipleSelectedRows().add(row)
+			});
+		} else {
+			this.dataSet.getRows().forEach(row => row.isSelected = status);
+			this.dataSet.getMultipleSelectedRows().clear();
+		}
+	}
 
-  private getSelectionInfo(): { perPage: number, page: number, selectedRowIndex: number, switchPageToSelectedRowPage: boolean } {
-    const switchPageToSelectedRowPage: boolean = this.getSetting('switchPageToSelectedRowPage');
-    const selectedRowIndex: number = Number(this.getSetting('selectedRowIndex', 0)) || 0;
-    const { perPage, page }: { perPage: number, page: number } = this.getSetting('pager');
-    return { perPage, page, selectedRowIndex, switchPageToSelectedRowPage };
-  }
+	getFirstRow(): Row {
+		return this.dataSet.getFirstRow();
+	}
 
-  private getRowIndexToSelect(): number {
-    const { switchPageToSelectedRowPage, selectedRowIndex, perPage } = this.getSelectionInfo();
-    const dataAmount: number = this.source.count();
-    /**
-     * source - contains all table data
-     * dataSet - contains data for current page
-     * selectedRowIndex - contains index for data in all data
-     *
-     * because of that, we need to count index for a specific row in page
-     * if
-     * `switchPageToSelectedRowPage` - we need to change page automatically
-     * `selectedRowIndex < dataAmount && selectedRowIndex >= 0` - index points to existing data
-     * (if index points to non-existing data and we calculate index for current page - we will get wrong selected row.
-     *  if we return index witch not points to existing data - no line will be highlighted)
-     */
-    return (
-      switchPageToSelectedRowPage &&
-      selectedRowIndex < dataAmount &&
-      selectedRowIndex >= 0
-    ) ?
-      selectedRowIndex % perPage :
-      selectedRowIndex;
-  }
+	getLastRow(): Row {
+		return this.dataSet.getLastRow();
+	}
 
-  private getPageToSelect(source: DataSource): number {
-    const { switchPageToSelectedRowPage, selectedRowIndex, perPage, page } = this.getSelectionInfo();
-    let pageToSelect: number = Math.max(1, page);
-    if (switchPageToSelectedRowPage && selectedRowIndex >= 0) {
-      pageToSelect = getPageForRowIndex(selectedRowIndex, perPage);
-    }
-    const maxPageAmount: number = Math.ceil(source.count() / perPage);
-    return maxPageAmount ? Math.min(pageToSelect, maxPageAmount) : pageToSelect;
-  }
+	private getSelectionInfo(): { perPage: number, page: number, selectedRowIndex: number, switchPageToSelectedRowPage: boolean } {
+		const switchPageToSelectedRowPage: boolean = this.getSetting('switchPageToSelectedRowPage');
+		const selectedRowIndex: number = Number(this.getSetting('selectedRowIndex', 0)) || 0;
+		const { perPage, page }: { perPage: number, page: number } = this.getSetting('pager');
+		return { perPage, page, selectedRowIndex, switchPageToSelectedRowPage };
+	}
 
-  private shouldSkipSelection(): boolean {
-    /**
-     * For backward compatibility when using `selectedRowIndex` with non-number values - ignored.
-     *
-     * Therefore, in order to select a row after some changes,
-     * the `selectedRowIndex` value must be invalid or >= 0 (< 0 means that no row is selected).
-     *
-     * `Number(value)` returns `NaN` on all invalid cases, and comparisons with `NaN` always return `false`.
-     *
-     * !!! We should skip a row only in cases when `selectedRowIndex` < 0
-     * because when < 0 all lines must be deselected
-     */
-    const selectedRowIndex = Number(this.getSetting('selectedRowIndex'));
-    return selectedRowIndex < 0;
-  }
+	private getRowIndexToSelect(): number {
+		const { switchPageToSelectedRowPage, selectedRowIndex, perPage } = this.getSelectionInfo();
+		const dataAmount: number = this.source.count();
+		/**
+		 * source - contains all table data
+		 * dataSet - contains data for current page
+		 * selectedRowIndex - contains index for data in all data
+		 *
+		 * because of that, we need to count index for a specific row in page
+		 * if
+		 * `switchPageToSelectedRowPage` - we need to change page automatically
+		 * `selectedRowIndex < dataAmount && selectedRowIndex >= 0` - index points to existing data
+		 * (if index points to non-existing data and we calculate index for current page - we will get wrong selected row.
+		 *  if we return index witch not points to existing data - no line will be highlighted)
+		 */
+		return (
+			switchPageToSelectedRowPage &&
+			selectedRowIndex < dataAmount &&
+			selectedRowIndex >= 0
+		) ?
+			selectedRowIndex % perPage :
+			selectedRowIndex;
+	}
 
-  public getColumnSize(id: string): string {
-    return this.columnSizeMap[id]; 
-  }
+	private getPageToSelect(source: DataSource): number {
+		const { switchPageToSelectedRowPage, selectedRowIndex, perPage, page } = this.getSelectionInfo();
+		let pageToSelect: number = Math.max(1, page);
+		if (switchPageToSelectedRowPage && selectedRowIndex >= 0) {
+			pageToSelect = getPageForRowIndex(selectedRowIndex, perPage);
+		}
+		const maxPageAmount: number = Math.ceil(source.count() / perPage);
+		return maxPageAmount ? Math.min(pageToSelect, maxPageAmount) : pageToSelect;
+	}
 
-  calcauteColumnSize() {
-	  let currentSize = 0;
-    
-    //this is for expanded row;
-    if(this.isRowCollapsEnabled()){
-      currentSize = parseFloat(this.getSetting('actions.rowCollaps.width').replace('px', ''));
-    }
+	private shouldSkipSelection(): boolean {
+		/**
+		 * For backward compatibility when using `selectedRowIndex` with non-number values - ignored.
+		 *
+		 * Therefore, in order to select a row after some changes,
+		 * the `selectedRowIndex` value must be invalid or >= 0 (< 0 means that no row is selected).
+		 *
+		 * `Number(value)` returns `NaN` on all invalid cases, and comparisons with `NaN` always return `false`.
+		 *
+		 * !!! We should skip a row only in cases when `selectedRowIndex` < 0
+		 * because when < 0 all lines must be deselected
+		 */
+		const selectedRowIndex = Number(this.getSetting('selectedRowIndex'));
+		return selectedRowIndex < 0;
+	}
 
-    this.getColumns()
-      .filter(f=> f.groupBy)
-      .forEach((col,index)=> {
-        if(this.dataSet.getPrimaryPivotColumn() === col.id) {
-          this.columnSizeMap[col.id] =  `${currentSize}px`;
-        } else {
-          if(col.width.toLowerCase().endsWith('px')) {
-            currentSize += parseFloat(col.width.replace('px', ''));
-            this.columnSizeMap[col.id] = `${currentSize}px - ${index-1}px`
-          } else {
-            currentSize += parseFloat(col.width.replace('%', ''));
-            this.columnSizeMap[col.id] = `${currentSize}% - ${index-1}px`;
-          } 
-        }
-      });
+	public getColumnSize(id: string): string {
+		return this.columnSizeMap[id];
+	}
+
+	calcauteColumnSize() {
+		let currentSize = 0;
+
+		//this is for expanded row;
+		if (this.isRowCollapsEnabled()) {
+			currentSize = parseFloat(this.getSetting('rowCollapse.width').replace('px', ''));
+		}
+
+		this.getColumns()
+			.filter(f => f.groupBy)
+			.forEach((col, index) => {
+				if (this.dataSet.getPrimaryPivotColumn() === col.id) {
+					this.columnSizeMap[col.id] = `${currentSize}px`;
+				} else {
+					if (col.width.toLowerCase().endsWith('px')) {
+						currentSize += parseFloat(col.width.replace('px', ''));
+						this.columnSizeMap[col.id] = `${currentSize}px - ${index - 1}px`
+					} else {
+						currentSize += parseFloat(col.width.replace('%', ''));
+						this.columnSizeMap[col.id] = `${currentSize}% - ${index - 1}px`;
+					}
+				}
+			});
 	}
 }

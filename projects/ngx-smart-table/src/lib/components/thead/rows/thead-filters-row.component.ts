@@ -17,7 +17,9 @@ import { Column } from "../../../lib/data-set/column";
 		<th 
 			*ngIf="isPrimaryColumn(column.id)  && rowCollapsEnabled()" 
 			[ngClass]="{'ngx-fixed-header': grid.isTableTypePivot()}"  
-			[style.left]="'calc(0px)'" [style.minWidth]="rowCollapsWidth()">
+			[style.left]="'calc(0px)'"
+			[style.zIndex]="11"
+			[style.minWidth]="rowCollapsWidth()">
 		</th>
 		<th  
 			class="ng2-smart-th {{ column.id }}" 
@@ -98,6 +100,6 @@ export class TheadFitlersRowComponent implements OnChanges {
 	}
 
 	rowCollapsWidth(): string {
-		return this.grid.getSetting('actions.rowCollaps.width', '50px');
+		return this.grid.getSetting('rowCollapse.width', '50px');
 	}
 }

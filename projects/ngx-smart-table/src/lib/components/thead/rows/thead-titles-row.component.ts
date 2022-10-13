@@ -17,13 +17,15 @@ import { Column } from "../../../lib/data-set/column";
     <th ng2-st-actions-title *ngIf="showActionColumnLeft" [grid]="grid"></th>
     <ng-container *ngFor="let column of getVisibleColumns(grid.getColumns())">
       <th *ngIf="isPrimaryColumn(column.id) && rowCollapsEnabled()" 
-        [ngClass]="{'ngx-fixed-header': grid.isTableTypePivot()}"
-        [style.left]="'calc(0px)'" [style.minWidth]="rowCollapsWidth()">
+          [ngClass]="{'ngx-fixed-header': grid.isTableTypePivot()}"
+          [style.left]="'calc(0px)'" 
+          [style.zIndex]="11"
+          [style.minWidth]="rowCollapsWidth()">
       </th>
       <th
             *ngIf="column.groupBy" 
             [ngStyle]=" {'left': 'calc('+grid.getColumnSize(column.id)+')' }"
-            class="ng2-smart-th {{ column.id }}"
+            class="ng2-smart-th {{ column.id }} {{ column.class }}"
             [ngClass]="column.class"
             [style.width]="column.width"
             [style.minWidth]="column.width"
@@ -33,8 +35,7 @@ import { Column } from "../../../lib/data-set/column";
         </th>         
       <th 
           *ngIf="!column.groupBy"       
-          class="ng2-smart-th {{ column.id }}"
-          [ngClass]="column.class"
+          class="ng2-smart-th {{ column.id }} {{ column.class }}"
           [style.width]="column.width"
           [ngClass]="{'ngx-fixed-header': grid.isTableTypePivot()}"
           [style.minWidth]="column.width">
@@ -88,6 +89,6 @@ export class TheadTitlesRowComponent implements OnChanges {
 	}
 
   rowCollapsWidth(): string {
-		return this.grid.getSetting('actions.rowCollaps.width', '50px');
+		return this.grid.getSetting('rowCollapse.width', '50px');
 	}
 }
