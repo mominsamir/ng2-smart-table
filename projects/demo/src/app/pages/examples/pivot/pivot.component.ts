@@ -1,9 +1,43 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 //import { DataSource } from 'dist/@mominsamir/ngx-smart-table/lib/lib/data-source/data-source';
 //import { ServerDataSource } from 'dist/@mominsamir/ngx-smart-table/public-api';
 import { LocalDataSource, ServerDataSource } from 'ngx-smart-table';
 
+@Component({
+    selector: 'ngx-row-expand',
+    template: `
+        <div class="d-flex justify-content-center">
+            {{customFlag}}
+            <svg width="25" height="25">
+                <circle cx='5' cy='5' r='4' stroke='green' stroke-width='1' fill='black'></circle>
+            </svg>
+            <ng-container [ngSwitch]="customFlag">
+                <div *ngSwitchDefault class="expand-icon-container" (click)="onExpandAction()">
+                </div>
+                <div *ngSwitchCase="true" class="expand-icon-container" (click)="onExpandAction()">
+                    <nb-icon icon="arrow-ios-upward-outline" status="basic" class="icon"></nb-icon>
+                </div>
+            </ng-container>
+        </div>
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class PivotRowExpandComponent {
+    @Input() value: string | number;
+    @Input() rowData: any;
+    customFlag = true;
+
+    onExpandAction() {
+        this.customFlag = !this.customFlag;
+        this.rowData = {
+            ...this.rowData,
+            expand: this.customFlag,
+        };
+    }
+
+    constructor() {}
+}
 
 @Component({
 	selector: 'season',
@@ -89,8 +123,8 @@ export class PivotDemoComponent {
 		},
         "rowCollapse" : {
             "width": '100px',
-            "iconComponent" : IconComponents,
-            "excludeOnHideColmun": 'voltage',
+            "iconComponent" : PivotRowExpandComponent,
+            "excludeOnHideColumn": 'voltage',
             "excludeOnHideFunction" : (value: any, columnId: string)  => value !== 'Total' && columnId === 'voltage',
         },
 		"columns": {
@@ -98,18 +132,18 @@ export class PivotDemoComponent {
 				"title": "station",
 				"filter": true,
 				"groupBy": true,
-                "width": "150px"
+                "width": "100px"
 			},
 			"voltage": {
 				"title": "voltage",
 				"filter": false,
 				"groupBy": true,
-                "width": "150px"
+                "width": "100px"
 			},
 			"capacity": {
 				"title": "capacity",
 				"groupBy": true,
-                "width": "150px"
+                "width": "165px"
 			},
 			"powerFactor": {
 				"title": "powerFactor",

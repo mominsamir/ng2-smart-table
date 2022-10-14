@@ -1,5 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, QueryList, TemplateRef, ViewChild, ViewChildren, ViewContainerRef } from "@angular/core";
-import { delay } from "rxjs/operators";
+import { 
+        AfterViewInit, 
+        ChangeDetectionStrategy, 
+        Component, 
+        ComponentFactoryResolver, 
+        Input, 
+        OnDestroy, 
+        ViewChild, 
+        ViewContainerRef 
+} from "@angular/core";
 import { Cell } from "../../../lib/data-set/cell";
 import { Column } from "../../../lib/data-set/column";
 import { Row } from "../../../lib/data-set/row";
@@ -16,23 +24,23 @@ import { Grid } from "../../../lib/grid";
          </div>
         </a>
     `,
-  })
-  export class TRowExpandCollapsComponent implements AfterViewInit, OnDestroy {
-    
+})
+export class TRowExpandCollapsComponent implements AfterViewInit, OnDestroy {
+
     @Input() grid: Grid;
     @Input() row: Row;
     @Input() column: Column;
     @Input() cell: Cell;
     isExpanded: boolean;
 
-    @ViewChild('vc', {read:ViewContainerRef}) vc: ViewContainerRef;
+    @ViewChild('vc', { read: ViewContainerRef }) vc: ViewContainerRef;
 
-	constructor(private resolver: ComponentFactoryResolver) { }
+    constructor(private resolver: ComponentFactoryResolver) { }
 
 
     ngAfterViewInit(): void {
         let cmp = this.grid.getSetting('rowCollapse.iconComponent');
-        if(cmp) {
+        if (cmp) {
             const factory = this.resolver.resolveComponentFactory(cmp);
             this.vc.createComponent(factory);
         }
@@ -45,26 +53,27 @@ import { Grid } from "../../../lib/grid";
 
         let isValidFunction = this.grid.onPivotRowCollpse() instanceof Function;
 
-        const additionalFilterColumn  = this.grid.getSetting('rowCollapse.excludeOnHideColmun');
+        const additionalFilterColumn = this.grid.getSetting('rowCollapse.excludeOnHideColumn');
 
         let rows = []
 
-        if(this.grid.isRowCollapsEnabled() && additionalFilterColumn && isValidFunction) {
-            rows = this.grid.getRows().filter(r=> 
-                r.getCell(this.column).getValue() === this.cell.getValue() 
-                && this.grid.onPivotRowCollpse().call(null,r.getCellById(additionalFilterColumn).getValue(), additionalFilterColumn)
+        if (this.grid.isRowCollapsEnabled() && additionalFilterColumn && isValidFunction) {
+            rows = this.grid.getRows().filter(r =>
+                r.getCell(this.column).getValue() === this.cell.getValue()
+                && this.grid.onPivotRowCollpse()
+                        .call(null, r.getCellById(additionalFilterColumn).getValue(), additionalFilterColumn)
             );
         } else {
-            rows = this.grid.getRows().filter(r=> 
+            rows = this.grid.getRows().filter(r =>
                 r.getCell(this.column).getValue() === this.cell.getValue());
         }
 
-        rows.forEach(r=> r.getCells().forEach(c =>  c.toogleVisibility()));
+        rows.forEach(r => r.getCells().forEach(c => c.toogleVisibility()));
     }
 
 
     ngOnDestroy(): void {
         this.vc.clear();
-	}
+    }
 
-  }
+}

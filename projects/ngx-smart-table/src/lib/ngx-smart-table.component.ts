@@ -92,7 +92,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
     },
     rowCollapse : {
       width: '100px',
-      excludeOnHideColmun : '',
+      excludeOnHideColumn : '',
       excludeOnHideFunction : (string :any, column: string) => false,
     },
     attr: {

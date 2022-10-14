@@ -418,13 +418,14 @@ export class Grid {
 			.forEach((col, index) => {
 				if (this.dataSet.getPrimaryPivotColumn() === col.id) {
 					this.columnSizeMap[col.id] = `${currentSize}px`;
+					currentSize += parseFloat(col.width.replace('px', ''));
 				} else {
 					if (col.width.toLowerCase().endsWith('px')) {
+						this.columnSizeMap[col.id] = `${currentSize}px`
 						currentSize += parseFloat(col.width.replace('px', ''));
-						this.columnSizeMap[col.id] = `${currentSize}px - ${index - 1}px`
 					} else {
-						currentSize += parseFloat(col.width.replace('%', ''));
 						this.columnSizeMap[col.id] = `${currentSize}% - ${index - 1}px`;
+						currentSize += parseFloat(col.width.replace('%', ''));
 					}
 				}
 			});
