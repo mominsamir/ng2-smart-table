@@ -70,20 +70,22 @@
 			
 			<td 
 				*ngIf="!row.isInEditing && showActionColumnLeft && isFirst" 
-				class="ng2-smart-actions" >
+				class="ngx-smart-actions" >
 				<ng2-st-tbody-custom [grid]="grid" (custom)="custom.emit($event)" [row]="row" [source]="source">
 				</ng2-st-tbody-custom>
 			</td>
 	
 			<td [rowSpan]="cell.getRowSpan()" 
-
 				*ngIf="cell.isFirstRow() && cell.isPrimaryPivotCell() && rowCollapsEnabled()"
-				class="ng2-smart-actions ngx-freeze-col" [style.left]="'calc(0px)'" [style.minWidth]="rowCollapsWidth()">
+				class="ngx-expand-row-action ngx-freeze-col" 
+				[style.left]="'calc(0px)'" 
+				[style.minWidth]="rowCollapsWidth()">
 				<ng2-st-row-expand-collapse 
 					[grid]="grid" 
 					(custom)="custom.emit($event)" 
 					[row]="row" 
 					[column]="cell.getColumn()"
+					[expanded]="grid.isDefualtRowCollapsed()"
 					[cell]="cell">
 				</ng2-st-row-expand-collapse>
 			</td>
@@ -107,16 +109,6 @@
 					[editConfirm]="editConfirm" [inputClass]="editInputClass" [isInEditing]="false">
 				</ng2-smart-table-cell>
 			</td>
-
-<!--
-			<td 
-				*ngIf="!row.isInEditing && showActionColumnRight && isLast" 
-				class="ng2-smart-actions"
-				[ngClass]="{'ngx-cell-hidden': !cell.isCellVisible()}">
-				<ng2-st-tbody-custom [grid]="grid" (custom)="custom.emit($event)" [row]="row" [source]="source">
-				</ng2-st-tbody-custom>
-			</td>
--->
 
 		</ng-container>
 	</tr>

@@ -31,6 +31,7 @@ export class TRowExpandCollapsComponent implements AfterViewInit, OnDestroy {
     @Input() row: Row;
     @Input() column: Column;
     @Input() cell: Cell;
+    @Input() expanded :boolean = false;
     isExpanded: boolean;
 
     @ViewChild('vc', { read: ViewContainerRef }) vc: ViewContainerRef;
@@ -39,18 +40,28 @@ export class TRowExpandCollapsComponent implements AfterViewInit, OnDestroy {
 
 
     ngAfterViewInit(): void {
+        //create icon component and attach to dom
         let cmp = this.grid.getSetting('rowCollapse.iconComponent');
         if (cmp) {
             const factory = this.resolver.resolveComponentFactory(cmp);
-            this.vc.createComponent(factory);
+            let compoRef = this.vc.createComponent(factory);
+            Object.assign(compoRef.instance, {}, {
+                rowData: this.row,
+                expanded: this.expanded
+            });
         }
+        //check default setting to expand all rows or not
+        if(this.expanded) this.defaultVisibiltiy();
     }
 
 
     onRowExpandCollapse(event: any) {
         event.preventDefault();
         event.stopPropagation();
+        this.defaultVisibiltiy();
+    }
 
+    defaultVisibiltiy ( ) {
         let isValidFunction = this.grid.onPivotRowCollpse() instanceof Function;
 
         const additionalFilterColumn = this.grid.getSetting('rowCollapse.excludeOnHideColumn');
@@ -68,7 +79,7 @@ export class TRowExpandCollapsComponent implements AfterViewInit, OnDestroy {
                 r.getCell(this.column).getValue() === this.cell.getValue());
         }
 
-        rows.forEach(r => r.getCells().forEach(c => c.toogleVisibility()));
+        rows.forEach(r => r.getCells().forEach((c : Cell) => c.toogleVisibility()));
     }
 
 

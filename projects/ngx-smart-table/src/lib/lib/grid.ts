@@ -50,6 +50,10 @@ export class Grid {
 		return this.getSetting('actions.add') || this.getSetting('actions.edit') || this.getSetting('actions.delete') || this.getSetting('actions').hasOwnProperty('position');
 	}
 
+	isDefualtRowCollapsed(): boolean {
+		return this.getSetting('rowCollapse.rowCollapsed');
+	}
+
 	isRowCollapsEnabled(): boolean {
 		return this.getSetting('actions.rowCollapse');
 	}
@@ -82,6 +86,7 @@ export class Grid {
 		this.settings = settings;
 		this.dataSet = new DataSet([], this.getSetting('columns'), this.getSetting('tableMode'));
 		this.dataSet.setTrackByMultiSelectByColumn(this.getSetting('keyColumn'));
+		this.dataSet.setPivotSort(this.getSetting('enablePivotSort'));
 
 		if (this.source) {
 			this.source.refresh();

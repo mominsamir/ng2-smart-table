@@ -127,25 +127,9 @@ export function calculateValueChange(obj: any, keyInd: number, currentValue: any
 	return obj.hasOwnProperty(keyInd) && (obj[keyInd].value !== currentValue);
 }
 
-// TODO: remvoe?
-export function hasParentValueChanged(obj: any, keyInd: number): boolean {
-	//	obj[key]
-	if (Object.keys(obj).length === 0) return false;
-
-	//	check if key has parent, in that case we should check parent has changed?
-	if (obj.hasOwnProperty(keyInd - 1)) {
-		//			console.log("hasParentValueChanged IS PARENT " + obj[keyInd-1].key + " " + obj[keyInd-1].hasChanged);
-		return obj[keyInd - 1].hasChanged;
-	} else {
-		//			console.log("hasParentValueChanged Key NOT exists "+ keyInd);
-	}
-	return false;
-}
-
-export function sortAndGroupColumns(data: any[], groupCols: any[]): any[] {
+export function sortAndGroupColumns(sortedData: any[], groupCols: any[]): any[] {
 	let currentValueMapIndex = {}; // current row
 	let previousValueMapIndex = {}; // previous row
-	var sortedData = data.sort(fieldSorter(groupCols));
 
 	for (let index = sortedData.length - 1; index >= 0; index--) {
 		// Temporary: for simplicity, introduce a separate data holder for previous and current rows

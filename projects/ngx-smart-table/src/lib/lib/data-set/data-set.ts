@@ -1,6 +1,6 @@
 import { Row } from './row';
 import { Column } from './column';
-import { fillDataGap, sortAndGroupColumns } from '../helpers';
+import { fieldSorter, fillDataGap, sortAndGroupColumns } from '../helpers';
 
 export class DataSet {
 
@@ -17,6 +17,7 @@ export class DataSet {
   protected selectedRow: Row;
   protected expandedRow: Row;
   protected willSelect: string;
+  protected enablePivotSort: boolean;
 
   constructor(data: Array<any> = [], protected columnSettings: Object, protected tableType: string,) {
     this.createColumns(columnSettings);
@@ -29,6 +30,10 @@ export class DataSet {
     this.data = data;
     this.createRows();
   }
+
+  setPivotSort(isSortEnabled: boolean):void {
+    this.enablePivotSort = isSortEnabled;
+  } 
 
   getColumns(): Array<Column> {
     return this.columns;
@@ -252,6 +257,10 @@ export class DataSet {
     let sortedData = [];
 
     if(this.getType() === 'pivot') {
+
+      if(this.enablePivotSort) {
+        sortedData = this.data.sort(fieldSorter(this.pivotColumns));
+      }
       sortedData = sortAndGroupColumns(this.data, this.pivotColumns);
       sortedData = fillDataGap(sortedData, this.getColumns());
     } else {

@@ -57,6 +57,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
     hideHeader: false,
     hideSubHeader: false,
     keyColumn: undefined,
+    enablePivotSort: false, 
     actions: {
       columnTitle: 'Actions',
       add: true,
@@ -92,6 +93,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
     },
     rowCollapse : {
       width: '100px',
+      rowCollapsed: true,
       excludeOnHideColumn : '',
       excludeOnHideFunction : (string :any, column: string) => false,
     },

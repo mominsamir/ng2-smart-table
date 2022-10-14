@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 //import { DataSource } from 'dist/@mominsamir/ngx-smart-table/lib/lib/data-source/data-source';
 //import { ServerDataSource } from 'dist/@mominsamir/ngx-smart-table/public-api';
 import { LocalDataSource, ServerDataSource } from 'ngx-smart-table';
@@ -68,11 +68,16 @@ export class SeasonComponents {
   `,
 
 })
-export class IconComponents {
+export class IconComponents implements OnChanges{
+
 	@Input() value: string | number;
+
 	@Input() rowData: any;
+
 	customFlag = false;
+    
 	onExpandAction() {
+        console.log(this.value);
 		this.customFlag = !this.customFlag;
 		this.rowData = {
 			...this.rowData,
@@ -81,6 +86,9 @@ export class IconComponents {
 	}
 	constructor() {
 	}
+    ngOnChanges(changes: SimpleChanges): void {
+        console.log(changes);
+    }
 }
 
 @Component({
@@ -124,6 +132,7 @@ export class PivotDemoComponent {
         "rowCollapse" : {
             "width": '100px',
             "iconComponent" : PivotRowExpandComponent,
+            "rowCollapsed" : false,
             "excludeOnHideColumn": 'voltage',
             "excludeOnHideFunction" : (value: any, columnId: string)  => value !== 'Total' && columnId === 'voltage',
         },
