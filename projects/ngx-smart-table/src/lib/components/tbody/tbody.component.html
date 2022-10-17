@@ -67,34 +67,34 @@
 
 
 		<ng-container *ngFor="let cell of getVisibleCells(row.cells); last as isLast; first as isFirst">
-			
-			<td 
-				*ngIf="!row.isInEditing && showActionColumnLeft && isFirst" 
+
+			<td
+				*ngIf="!row.isInEditing && showActionColumnLeft && isFirst"
 				class="ngx-smart-actions" >
 				<ng2-st-tbody-custom [grid]="grid" (custom)="custom.emit($event)" [row]="row" [source]="source">
 				</ng2-st-tbody-custom>
 			</td>
-	
-			<td [rowSpan]="cell.getRowSpan()" 
+
+			<td [rowSpan]="cell.getRowSpan()"
 				*ngIf="cell.isFirstRow() && cell.isPrimaryPivotCell() && rowCollapsEnabled()"
-				class="ngx-expand-row-action ngx-freeze-col" 
-				[style.left]="'calc(0px)'" 
-				[style.minWidth]="rowCollapsWidth()">
-				<ng2-st-row-expand-collapse 
-					[grid]="grid" 
-					(custom)="custom.emit($event)" 
-					[row]="row" 
+				class="ngx-expand-row-action ngx-freeze-col"
+				[style.left]="'calc(0px)'"
+				[style.minWidth]="rowCollapsWidth()" [style.width]="rowCollapsWidth()" [style.maxWidth]="rowCollapsWidth()">
+				<ng2-st-row-expand-collapse
+					[grid]="grid"
+					(custom)="custom.emit($event)"
+					[row]="row"
 					[column]="cell.getColumn()"
 					[expanded]="grid.isDefualtRowCollapsed()"
 					[cell]="cell">
 				</ng2-st-row-expand-collapse>
 			</td>
 
-			<td 
-				class="ngx-freeze-col" 
-				[rowSpan]="cell.getRowSpan()" 
-				*ngIf="cell.isFirstRow() && cell.getColumn().groupBy" 
-				[ngStyle]=" {'left': 'calc('+grid.getColumnSize(cell.getColumn().id)+')' }" 
+			<td
+				class="ngx-freeze-col"
+				[rowSpan]="cell.getRowSpan()"
+				*ngIf="cell.isFirstRow() && cell.getColumn().groupBy"
+				[ngStyle]=" {'left': 'calc('+grid.getColumnSize(cell.getColumn().id)+')' }"
 				[style.minWidth]="cell.getColumn().width"
 				[ngClass]="{'ngx-cell-hidden': !cell.isCellVisible() && !cell.isPrimaryPivotCell(), 'ngx-last-group-column' : grid.getDataSet().getLastPivotColumn()===cell.getColumn().id}">
 				<ng2-smart-table-cell [cell]="cell" [grid]="grid" [row]="row" [isNew]="false" [mode]="mode"
@@ -102,7 +102,7 @@
 				</ng2-smart-table-cell>
 			</td>
 
-			<td [rowSpan]="cell.getRowSpan()" 
+			<td [rowSpan]="cell.getRowSpan()"
 				*ngIf="cell.isFirstRow() && !cell.getColumn().groupBy"
 				class="ngx-cell-collapsible" [ngClass]="{'ngx-cell-hidden': !cell.isCellVisible()}">
 				<ng2-smart-table-cell [cell]="cell" [grid]="grid" [row]="row" [isNew]="false" [mode]="mode"

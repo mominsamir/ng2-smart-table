@@ -1,17 +1,18 @@
-import { 
-        AfterViewInit, 
-        ChangeDetectionStrategy, 
-        Component, 
-        ComponentFactoryResolver, 
-        Input, 
-        OnDestroy, 
-        ViewChild, 
-        ViewContainerRef 
-} from "@angular/core";
-import { Cell } from "../../../lib/data-set/cell";
-import { Column } from "../../../lib/data-set/column";
-import { Row } from "../../../lib/data-set/row";
-import { Grid } from "../../../lib/grid";
+import {
+        AfterViewInit,
+        ChangeDetectionStrategy,
+        Component,
+        ComponentFactoryResolver,
+        Input,
+        OnDestroy,
+        ViewChild,
+        ViewContainerRef,
+        ChangeDetectorRef,
+} from '@angular/core';
+import { Cell } from '../../../lib/data-set/cell';
+import { Column } from '../../../lib/data-set/column';
+import { Row } from '../../../lib/data-set/row';
+import { Grid } from '../../../lib/grid';
 
 @Component({
     selector: 'ng2-st-row-expand-collapse',
@@ -31,42 +32,44 @@ export class TRowExpandCollapsComponent implements AfterViewInit, OnDestroy {
     @Input() row: Row;
     @Input() column: Column;
     @Input() cell: Cell;
-    @Input() expanded :boolean = false;
+    @Input() expanded = false;
     isExpanded: boolean;
 
     @ViewChild('vc', { read: ViewContainerRef }) vc: ViewContainerRef;
 
-    constructor(private resolver: ComponentFactoryResolver) { }
+    constructor(private resolver: ComponentFactoryResolver, private cd: ChangeDetectorRef) { }
 
 
     ngAfterViewInit(): void {
-        //create icon component and attach to dom
-        let cmp = this.grid.getSetting('rowCollapse.iconComponent');
+        // create icon component and attach to dom
+        const cmp = this.grid.getSetting('rowCollapse.iconComponent');
         if (cmp) {
             const factory = this.resolver.resolveComponentFactory(cmp);
-            let compoRef = this.vc.createComponent(factory);
+            const compoRef = this.vc.createComponent(factory);
             Object.assign(compoRef.instance, {}, {
                 rowData: this.row,
                 expanded: this.expanded
             });
+
+            this.cd.detectChanges();
         }
-        //check default setting to expand all rows or not
-        if(this.expanded) this.defaultVisibiltiy();
+        // check default setting to expand all rows or not
+        if (this.expanded) { this.defaultVisibility(); }
     }
 
 
     onRowExpandCollapse(event: any) {
         event.preventDefault();
         event.stopPropagation();
-        this.defaultVisibiltiy();
+        this.defaultVisibility();
     }
 
-    defaultVisibiltiy ( ) {
-        let isValidFunction = this.grid.onPivotRowCollpse() instanceof Function;
+    defaultVisibility( ) {
+        const isValidFunction = this.grid.onPivotRowCollpse() instanceof Function;
 
         const additionalFilterColumn = this.grid.getSetting('rowCollapse.excludeOnHideColumn');
 
-        let rows = []
+        let rows = [];
 
         if (this.grid.isRowCollapsEnabled() && additionalFilterColumn && isValidFunction) {
             rows = this.grid.getRows().filter(r =>
@@ -79,12 +82,10 @@ export class TRowExpandCollapsComponent implements AfterViewInit, OnDestroy {
                 r.getCell(this.column).getValue() === this.cell.getValue());
         }
 
-        rows.forEach(r => r.getCells().forEach((c : Cell) => c.toogleVisibility()));
+        rows.forEach(r => r.getCells().forEach((c: Cell) => c.toogleVisibility()));
     }
-
 
     ngOnDestroy(): void {
         this.vc.clear();
     }
-
 }

@@ -14,17 +14,17 @@ import { Column } from "../../../lib/data-set/column";
                           (create)="create.emit($event)">
     </th>
     <ng-container *ngFor="let column of getVisibleColumns(grid.getColumns())">
-		<th 
-			*ngIf="isPrimaryColumn(column.id)  && rowCollapsEnabled()" 
-			[ngClass]="{'ngx-fixed-header': grid.isTableTypePivot()}"  
+		<th
+			*ngIf="isPrimaryColumn(column.id)  && rowCollapsEnabled()"
+			[ngClass]="{'ngx-fixed-header': grid.isTableTypePivot()}"
 			[style.left]="'calc(0px)'"
 			[style.zIndex]="11"
 			[style.minWidth]="rowCollapsWidth()">
 		</th>
-		<th  
-			class="ng2-smart-th {{ column.id }}" 
+		<th
+			class="ng2-smart-th {{ column.id }}"
 			*ngIf="column.groupBy"
-			[style.minWidth]="column.width" 
+			[style.minWidth]="column.width"
             [style.width]="column.width"
             [style.zIndex]="11"
 			[ngClass]="{'ngx-fixed-header': grid.isTableTypePivot()}"
@@ -36,10 +36,10 @@ import { Column } from "../../../lib/data-set/column";
 			</ng2-smart-table-filter>
 		</th>
 
-		<th  
-			class="ng2-smart-th {{ column.id }}" 
+		<th
+			class="ng2-smart-th {{ column.id }}"
 			*ngIf="!column.groupBy"
-			[style.minWidth]="column.width" 
+			[style.minWidth]="column.width"
             [style.width]="column.width"
 			[ngClass]="{'ngx-fixed-header': grid.isTableTypePivot()}">
 			<ng2-smart-table-filter [source]="source"
@@ -47,7 +47,7 @@ import { Column } from "../../../lib/data-set/column";
 				[inputClass]="filterInputClass"
 				(filter)="filter.emit($event)">
 			</ng2-smart-table-filter>
-		</th>		
+		</th>
     </ng-container>
     <th ng2-st-add-button *ngIf="showActionColumnRight  && !grid.isTableTypePivot()"
                           [grid]="grid"
@@ -59,9 +59,9 @@ import { Column } from "../../../lib/data-set/column";
     ` .ngx-fixed-header {
         position: -webkit-sticky;
         position: sticky;
-        top: 40px;
+        top: 39px;
         background-color: white;
-      }    
+      }
     `
   ]
 })
@@ -94,7 +94,7 @@ export class TheadFitlersRowComponent implements OnChanges {
 	isPrimaryColumn(id: string): boolean {
 		return this.grid.getDataSet().getPrimaryPivotColumn() === id
 	}
-	
+
 	rowCollapsEnabled(): boolean {
 		return this.grid.isRowCollapsEnabled();
 	}
