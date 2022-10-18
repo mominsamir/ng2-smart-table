@@ -25,7 +25,6 @@ export class Grid {
 	constructor(source: DataSource, settings: any) {
 		this.setSettings(settings);
 		this.setSource(source);
-		this.calcauteColumnSize();
 	}
 
 
@@ -91,6 +90,8 @@ export class Grid {
 		if (this.source) {
 			this.source.refresh();
 		}
+
+    this.calcauteColumnSize();
 	}
 
 	getDataSet(): DataSet {

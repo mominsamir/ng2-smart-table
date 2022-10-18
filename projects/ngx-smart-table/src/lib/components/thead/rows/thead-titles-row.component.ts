@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core
 
 import { Grid } from '../../../lib/grid';
 import { DataSource } from '../../../lib/data-source/data-source';
-import { Column } from "../../../lib/data-set/column";
+import { Column } from '../../../lib/data-set/column';
 
 @Component({
   selector: '[ng2-st-thead-titles-row]',
@@ -16,31 +16,21 @@ import { Column } from "../../../lib/data-set/column";
     <th *ngIf="isSingleSelectVisible"></th>
     <th ng2-st-actions-title *ngIf="showActionColumnLeft" [grid]="grid"></th>
     <ng-container *ngFor="let column of getVisibleColumns(grid.getColumns())">
-      <th *ngIf="isPrimaryColumn(column.id) && rowCollapsEnabled()" 
-          [ngClass]="{'ngx-fixed-header': grid.isTableTypePivot()}"
-          [style.left]="'calc(0px)'" 
+      <th *ngIf="isPrimaryColumn(column.id) && rowCollapsEnabled()"
+          [class.ngx-fixed-header]="grid.isTableTypePivot()"
+          [style.left]="'0'"
           [style.zIndex]="11"
+          [style.width]="rowCollapsWidth()"
           [style.minWidth]="rowCollapsWidth()">
       </th>
-      <th
-            *ngIf="column.groupBy" 
-            [ngStyle]=" {'left': 'calc('+grid.getColumnSize(column.id)+')' }"
-            class="ng2-smart-th {{ column.id }} {{ column.class }}"
-            [ngClass]="column.class"
+      <th class="ng2-smart-th {{ column.id }} {{ column.class }}"
+            [class.ngx-fixed-header]="grid.isTableTypePivot()"
             [style.width]="column.width"
             [style.minWidth]="column.width"
-            [ngClass]="{'ngx-fixed-header': grid.isTableTypePivot()}"
-            [style.zIndex]="11">
+            [style.left]="column.groupBy && 'calc('+grid.getColumnSize(column.id)+')'"
+            [style.zIndex]="column.groupBy && 11">
           <ng2-st-column-title [source]="source" [column]="column" (sort)="sort.emit($event)"></ng2-st-column-title>
-        </th>         
-      <th 
-          *ngIf="!column.groupBy"       
-          class="ng2-smart-th {{ column.id }} {{ column.class }}"
-          [style.width]="column.width"
-          [ngClass]="{'ngx-fixed-header': grid.isTableTypePivot()}"
-          [style.minWidth]="column.width">
-        <ng2-st-column-title [source]="source" [column]="column" (sort)="sort.emit($event)"></ng2-st-column-title>
-      </th>
+        </th>
     </ng-container>
     <th ng2-st-actions-title *ngIf="showActionColumnRight && !grid.isTableTypePivot()" [grid]="grid"></th>
   `,
@@ -48,9 +38,9 @@ import { Column } from "../../../lib/data-set/column";
     ` .ngx-fixed-header {
         position: -webkit-sticky;
         position: sticky;
-        top: 0px;
+        top: 0;
         background-color: white;
-      }    
+      }
     `
   ]
 })
@@ -81,7 +71,7 @@ export class TheadTitlesRowComponent implements OnChanges {
   }
 
   isPrimaryColumn(id: string): boolean {
-    return this.grid.getDataSet().getPrimaryPivotColumn() === id
+    return this.grid.getDataSet().getPrimaryPivotColumn() === id;
   }
 
   rowCollapsEnabled(): boolean {
