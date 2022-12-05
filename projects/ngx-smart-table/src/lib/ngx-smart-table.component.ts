@@ -105,7 +105,7 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
     noDataMessage: 'No data found',
     columns: {},
     pager: {
-      mode: 'custom',
+      mode: 'default',
       display: true,
       location: 'bottom', //bottom , top
       page: 1,
