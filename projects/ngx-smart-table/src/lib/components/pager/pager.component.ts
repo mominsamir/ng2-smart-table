@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { DataSource } from '../../lib/data-source/data-source';
@@ -7,7 +14,7 @@ import { DataSource } from '../../lib/data-source/data-source';
   selector: 'ng2-smart-table-pager',
   styleUrls: ['./pager.component.scss'],
   template: `
-    <ng-container [ngSwitch]="pagerMode">
+    <ng-container [ngSwitch]="pagerSetting.mode">
       <ng-container *ngSwitchCase="'custom'">
         <nav *ngIf="shouldShow()" class="ng2-smart-pagination-nav">
           <ul class="ng2-smart-pagination pagination">
@@ -15,7 +22,9 @@ import { DataSource } from '../../lib/data-source/data-source';
             <li class="ng2-smart-page-item page-item" [ngClass]="{disabled: getPage() == 1}">
               <a class="ng2-smart-page-link page-link page-link-prev" href="#"
                  (click)="getPage() == 1 ? false : prev()" aria-label="Prev">
-                <span aria-hidden="true" class="prev-link"></span>
+                <span aria-hidden="true" class="prev-link">
+                  <ng2-custom-pager-button [pagerSetting]="pagerSetting" [position]="'prev'"></ng2-custom-pager-button>
+                </span>
                 <span class="sr-only">Prev</span>
               </a>
             </li>
@@ -39,6 +48,15 @@ import { DataSource } from '../../lib/data-source/data-source';
             </li>
 
             <li class="ng2-smart-page-item page-item"
+                [ngClass]="{disabled: getPage() == getLast()}" *ngIf="nextPageShow()">
+              <a class="ng2-smart-page-link page-link" href="#"
+                 (click)="getPage() == getLast() ? false : nextPage(page)" aria-label="NextPage">
+                <span aria-hidden="true">{{getLastNumber()}}</span>
+                <span class="sr-only">NextPage</span>
+              </a>
+            </li>
+
+            <li class="ng2-smart-page-item page-item"
                 [ngClass]="{disabled: getPage() == getLast()}" *ngIf="getPage() !== getLast()">
               <a class="ng2-smart-page-link page-link" href="#"
                  (click)="getPage() == getLast() ? false : paginate(getLast())" aria-label="Last">
@@ -51,7 +69,9 @@ import { DataSource } from '../../lib/data-source/data-source';
                 [ngClass]="{disabled: getPage() == getLast()}">
               <a class="ng2-smart-page-link page-link page-link-next" href="#"
                  (click)="getPage() == getLast() ? false : next()" aria-label="Next">
-                <span aria-hidden="true" class="next-link"></span>
+                <span aria-hidden="true" class="next-link">
+                  <ng2-custom-pager-button [pagerSetting]="pagerSetting" [position]="'next'"></ng2-custom-pager-button>
+                </span>
                 <span class="sr-only">Next</span>
               </a>
             </li>
@@ -129,7 +149,7 @@ import { DataSource } from '../../lib/data-source/data-source';
 export class PagerComponent implements OnChanges {
 
   @Input() source: DataSource;
-  @Input() pagerMode;
+  @Input() pagerSetting;
   @Input() perPageSelect: any[] = [];
 
   @Output() changePage = new EventEmitter<any>();
@@ -144,6 +164,7 @@ export class PagerComponent implements OnChanges {
   protected dataChangedSub: Subscription;
 
   ngOnChanges(changes: SimpleChanges) {
+
     if (changes.source) {
       if (!changes.source.firstChange) {
         this.dataChangedSub.unsubscribe();
@@ -188,7 +209,12 @@ export class PagerComponent implements OnChanges {
     this.changePage.emit({ page });
     return false;
   }
-
+  nextPageShow(): boolean {
+    return !this.getPages().includes(this.getLast() - 1);
+  }
+  nextPage(page): boolean {
+    return this.paginate(Math.max(...this.getPages()) + 1);
+  }
   next(): boolean {
     return this.paginate(this.getPage() + 1);
   }
@@ -207,6 +233,15 @@ export class PagerComponent implements OnChanges {
 
   getLast(): number {
     return Math.ceil(this.count / this.perPage);
+  }
+  getLastNumber(): any {
+    let lastNumber;
+    if (this.getLast() > 4) {
+      lastNumber = '...';
+    } else if(this.getLast()) {
+      lastNumber = Math.ceil(this.count / this.perPage);
+    }
+    return lastNumber;
   }
 
   isPageOutOfBounce(): boolean {

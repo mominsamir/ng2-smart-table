@@ -13,7 +13,7 @@ import { AdvancedExampleConfirmComponent } from './various/advanced-example-conf
 import { AdvancedExamplesCustomEditorComponent } from './custom-edit-view/advanced-example-custom-editor.component';
 import { AdvancedExamplesTypesComponent } from './custom-edit-view/advanced-example-types.component';
 import { AdvancedExampleServerComponent } from './server/advanced-example-server.component';
-import { BasicExampleLoadComponent } from './server/basic-example-load.component';
+import {BasicExampleLoadComponent, NextComponent, PrevComponent} from './server/basic-example-load.component';
 import { BasicExampleMultiSelectComponent } from './various/basic-example-multi-select.component';
 import { SingleSelectComponent } from './various/single-select.component';
 import { CustomEditorComponent } from './custom-edit-view/custom-editor.component';
@@ -87,6 +87,8 @@ const EXAMPLES_COMPONENTS = [
   declarations: [
     ExamplesComponent,
     ...EXAMPLES_COMPONENTS,
+    PrevComponent,
+    NextComponent
   ],
 })
 export class ExamplesModule { }
