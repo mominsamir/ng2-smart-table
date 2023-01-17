@@ -4,7 +4,7 @@ import {AfterViewInit, Component, ComponentFactoryResolver, Input, ViewChild, Vi
   selector: 'ng2-custom-pager-button',
   styleUrls: ['./pager.component.scss'],
   template: `
-                      <ng-template #dynamicTarget></ng-template>`
+    <ng-template #dynamicTarget></ng-template>`
 })
 export class CustomPagerButtonComponent implements AfterViewInit {
   @Input() pagerSetting;
@@ -12,19 +12,20 @@ export class CustomPagerButtonComponent implements AfterViewInit {
 
   constructor(private resolver: ComponentFactoryResolver) {
   }
+
   @ViewChild('dynamicTarget', {read: ViewContainerRef, static: true}) dynamicTarget: any;
 
   ngAfterViewInit() {
     if (this.pagerSetting.mode === 'custom') {
-      let prevComponentFactory;
+      let componentFactory;
       switch (this.position) {
         case 'prev':
-          prevComponentFactory = this.resolver.resolveComponentFactory(this.pagerSetting.prevComponent);
-          this.dynamicTarget.createComponent(prevComponentFactory);
+          componentFactory = this.resolver.resolveComponentFactory(this.pagerSetting.prevComponent);
+          this.dynamicTarget.createComponent(componentFactory);
           break;
         case 'next':
-          prevComponentFactory = this.resolver.resolveComponentFactory(this.pagerSetting.prevComponent);
-          this.dynamicTarget.createComponent(prevComponentFactory);
+          componentFactory = this.resolver.resolveComponentFactory(this.pagerSetting.nextComponent);
+          this.dynamicTarget.createComponent(componentFactory);
           break;
         default:
           break;
