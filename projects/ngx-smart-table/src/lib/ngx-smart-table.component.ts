@@ -110,6 +110,8 @@ export class NgxSmartTableComponent implements OnChanges, OnDestroy {
       location: 'bottom', //bottom , top
       page: 1,
       perPage: 10,
+      prevComponent: null,
+      nextComponent: null,
     },
     rowClassFunction: () => '',
   };

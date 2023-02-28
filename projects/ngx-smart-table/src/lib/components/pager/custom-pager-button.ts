@@ -1,31 +1,34 @@
-import {AfterViewInit, Component, ComponentFactoryResolver, Input, ViewChild, ViewContainerRef} from '@angular/core';
+import {OnInit, Component, ComponentFactoryResolver, Input, ViewChild, ViewContainerRef} from '@angular/core';
 
 @Component({
   selector: 'ng2-custom-pager-button',
   styleUrls: ['./pager.component.scss'],
   template: `
-    <ng-template #dynamicTarget></ng-template>`
+    <ng-template #dynamicTarget1></ng-template>
+    <ng-template #dynamicTarget2></ng-template>
+  `
 })
-export class CustomPagerButtonComponent implements AfterViewInit {
+export class CustomPagerButtonComponent implements OnInit {
   @Input() pagerSetting;
   @Input() position;
 
   constructor(private resolver: ComponentFactoryResolver) {
   }
 
-  @ViewChild('dynamicTarget', {read: ViewContainerRef, static: true}) dynamicTarget: any;
+  @ViewChild('dynamicTarget1', {read: ViewContainerRef, static: true}) dynamicTarget1: any;
+  @ViewChild('dynamicTarget2', {read: ViewContainerRef, static: true}) dynamicTarget2: any;
 
-  ngAfterViewInit() {
+  ngOnInit() {
     if (this.pagerSetting.mode === 'custom') {
       let componentFactory;
       switch (this.position) {
         case 'prev':
           componentFactory = this.resolver.resolveComponentFactory(this.pagerSetting.prevComponent);
-          this.dynamicTarget.createComponent(componentFactory);
+          this.dynamicTarget1.createComponent(componentFactory);
           break;
         case 'next':
           componentFactory = this.resolver.resolveComponentFactory(this.pagerSetting.nextComponent);
-          this.dynamicTarget.createComponent(componentFactory);
+          this.dynamicTarget2.createComponent(componentFactory);
           break;
         default:
           break;
@@ -33,3 +36,4 @@ export class CustomPagerButtonComponent implements AfterViewInit {
     }
   }
 }
+
