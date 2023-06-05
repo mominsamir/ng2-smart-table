@@ -5,7 +5,7 @@ import { ServerDataSource } from 'projects/ngx-smart-table/src/public-api';
 @Component({
   selector: 'single-select-server',
   template: `
-    <ngx-smart-table [settings]="settings" [source]="source"></ngx-smart-table>
+    <ngx-smart-table [settings]="settings" [source]="source" (userRowSelect)="onUserRowSelect($event)"></ngx-smart-table>
   `,
 })
 export class SingleSelectComponent {
@@ -34,4 +34,6 @@ export class SingleSelectComponent {
   constructor(http: HttpClient) {
     this.source = new ServerDataSource(http, { endPoint: 'https://jsonplaceholder.typicode.com/photos' });
   }
+
+  onUserRowSelect = (data) => console.log('singleSelect:', data);
 }

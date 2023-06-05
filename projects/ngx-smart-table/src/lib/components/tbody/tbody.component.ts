@@ -73,7 +73,8 @@ export class Ng2SmartTableTbodyComponent implements AfterViewInit, OnDestroy {
 		}
 		this.cdr.detectChanges();
 
-	}
+    this.grid.onSelectRowSource.subscribe(row => this.userSelectRow.emit(row));
+  }
 
 	ngOnDestroy(): void {
 		if (this.customComponent) this.customComponent.destroy();
