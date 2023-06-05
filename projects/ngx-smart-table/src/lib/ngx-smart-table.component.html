@@ -1,7 +1,8 @@
 <ng2-smart-table-pager *ngIf="isPagerDisplay && isPagerLocationTop"
                         [source]="source"
                         [perPageSelect]="perPageSelect"
-                        (changePage)="changePage($event)">
+                        (changePage)="changePage($event)"
+                        [pagerSetting]="pagerSetting">
 </ng2-smart-table-pager>
 
 <table [id]="tableId" [ngClass]="tableClass">
@@ -37,5 +38,6 @@
 <ng2-smart-table-pager *ngIf="isPagerDisplay && !isPagerLocationTop"
                         [source]="source"
                         [perPageSelect]="perPageSelect"
-                        (changePage)="changePage($event)">
+                        (changePage)="changePage($event)"
+                        [pagerSetting]="pagerSetting">
 </ng2-smart-table-pager>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { PagerComponent } from './pager.component';
+import {CustomPagerButtonComponent} from './custom-pager-button';
 
 @NgModule({
   imports: [
@@ -11,6 +12,7 @@ import { PagerComponent } from './pager.component';
   ],
   declarations: [
     PagerComponent,
+    CustomPagerButtonComponent
   ],
   exports: [
     PagerComponent,

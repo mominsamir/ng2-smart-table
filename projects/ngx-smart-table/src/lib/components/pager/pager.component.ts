@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { DataSource } from '../../lib/data-source/data-source';
@@ -7,63 +14,142 @@ import { DataSource } from '../../lib/data-source/data-source';
   selector: 'ng2-smart-table-pager',
   styleUrls: ['./pager.component.scss'],
   template: `
-    <nav *ngIf="shouldShow()" class="ng2-smart-pagination-nav">
-      <ul class="ng2-smart-pagination pagination">
-        <li class="ng2-smart-page-item page-item" [ngClass]="{disabled: getPage() == 1}">
-          <a class="ng2-smart-page-link page-link" href="#"
-          (click)="getPage() == 1 ? false : paginate(1)" aria-label="First">
-            <span aria-hidden="true">&laquo;</span>
-            <span class="sr-only">First</span>
-          </a>
-        </li>
-        <li class="ng2-smart-page-item page-item" [ngClass]="{disabled: getPage() == 1}">
-          <a class="ng2-smart-page-link page-link page-link-prev" href="#"
-             (click)="getPage() == 1 ? false : prev()" aria-label="Prev">
-            <span aria-hidden="true">&lt;</span>
-            <span class="sr-only">Prev</span>
-          </a>
-        </li>
-        <li class="ng2-smart-page-item page-item"
-        [ngClass]="{active: getPage() == page}" *ngFor="let page of getPages()">
-          <span class="ng2-smart-page-link page-link"
-          *ngIf="getPage() == page">{{ page }} <span class="sr-only">(current)</span></span>
-          <a class="ng2-smart-page-link page-link" href="#"
-          (click)="paginate(page)" *ngIf="getPage() != page">{{ page }}</a>
-        </li>
+    <ng-container [ngSwitch]="pagerSetting.mode">
+      <ng-container *ngSwitchCase="'custom'">
+        <nav *ngIf="shouldShow()" class="ng2-smart-pagination-nav">
+          <ul class="ng2-smart-pagination pagination">
 
-        <li class="ng2-smart-page-item page-item"
-            [ngClass]="{disabled: getPage() == getLast()}">
-          <a class="ng2-smart-page-link page-link page-link-next" href="#"
-             (click)="getPage() == getLast() ? false : next()" aria-label="Next">
-            <span aria-hidden="true">&gt;</span>
-            <span class="sr-only">Next</span>
-          </a>
-        </li>
-        
-        <li class="ng2-smart-page-item page-item"
-        [ngClass]="{disabled: getPage() == getLast()}">
-          <a class="ng2-smart-page-link page-link" href="#"
-          (click)="getPage() == getLast() ? false : paginate(getLast())" aria-label="Last">
-            <span aria-hidden="true">&raquo;</span>
-            <span class="sr-only">Last</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-    
-    <nav *ngIf="perPageSelect && perPageSelect.length > 0" class="ng2-smart-pagination-per-page">
-      <label for="per-page">
-        Per Page:
-      </label>
-      <select (change)="onChangePerPage($event)" [(ngModel)]="currentPerPage" id="per-page">
-        <option *ngFor="let item of perPageSelect" [value]="item">{{ item }}</option>
-      </select>
-    </nav>
+            <li class="ng2-smart-page-item page-item" [ngClass]="{disabled: getPage() == 1}">
+              <a class="ng2-smart-page-link page-link page-link-prev" href="#"
+                 (click)="getPage() == 1 ? false : prev()" aria-label="Prev">
+                <span aria-hidden="true" class="prev-link">
+                  <ng2-custom-pager-button [pagerSetting]="pagerSetting" [position]="'prev'"></ng2-custom-pager-button>
+                </span>
+                <span class="sr-only">Prev</span>
+              </a>
+            </li>
+
+            <li class="ng2-smart-page-item page-item" [ngClass]="{disabled: getPage() == 1}" *ngIf="getPage() !== 1">
+              <a class="ng2-smart-page-link page-link" href="#"
+                 (click)="getPage() == 1 ? false : paginate(1) " aria-label="First">
+                <span aria-hidden="true">1</span>
+                <span class="sr-only">First</span>
+              </a>
+            </li>
+
+
+
+            <li class="ng2-smart-page-item page-item"
+                [ngClass]="{active: getPage() == page}" *ngFor="let page of getPages()">
+          <span class="ng2-smart-page-link page-link"
+                *ngIf="getPage() == page ">{{ page }} <span class="sr-only">(current)</span></span>
+              <a class="ng2-smart-page-link page-link" href="#"
+                 (click)="paginate(page)" *ngIf="getPage() != page && page !== 1 && page !== getLast()">{{ page }}</a>
+            </li>
+
+            <li class="ng2-smart-page-item page-item"
+                [ngClass]="{disabled: getPage() == getLast()}" *ngIf="nextPageShow()">
+              <a class="ng2-smart-page-link page-link" href="#"
+                 (click)="getPage() == getLast() ? false : nextPage(page)" aria-label="NextPage">
+                <span aria-hidden="true">{{getLastNumber()}}</span>
+                <span class="sr-only">NextPage</span>
+              </a>
+            </li>
+
+            <li class="ng2-smart-page-item page-item"
+                [ngClass]="{disabled: getPage() == getLast()}" *ngIf="getPage() !== getLast()">
+              <a class="ng2-smart-page-link page-link" href="#"
+                 (click)="getPage() == getLast() ? false : paginate(getLast())" aria-label="Last">
+                <span aria-hidden="true">{{getLast()}}</span>
+                <span class="sr-only">Last</span>
+              </a>
+            </li>
+
+            <li class="ng2-smart-page-item page-item"
+                [ngClass]="{disabled: getPage() == getLast()}">
+              <a class="ng2-smart-page-link page-link page-link-next" href="#"
+                 (click)="getPage() == getLast() ? false : next()" aria-label="Next">
+                <span aria-hidden="true" class="next-link">
+                  <ng2-custom-pager-button [pagerSetting]="pagerSetting" [position]="'next'"></ng2-custom-pager-button>
+                </span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+
+
+          </ul>
+        </nav>
+        <nav *ngIf="perPageSelect && perPageSelect.length > 0" class="ng2-smart-pagination-per-page">
+          <label for="per-page">
+            Per Page:
+          </label>
+          <select (change)="onChangePerPage($event)" [(ngModel)]="currentPerPage" id="per-page">
+            <option *ngFor="let item of perPageSelect" [value]="item">{{ item }}</option>
+          </select>
+        </nav>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'default'">
+        <nav *ngIf="shouldShow()" class="ng2-smart-pagination-nav">
+          <ul class="ng2-smart-pagination pagination">
+            <li class="ng2-smart-page-item page-item" [ngClass]="{disabled: getPage() == 1}">
+              <a class="ng2-smart-page-link page-link" href="#"
+                 (click)="getPage() == 1 ? false : paginate(1)" aria-label="First">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">First</span>
+              </a>
+            </li>
+            <li class="ng2-smart-page-item page-item" [ngClass]="{disabled: getPage() == 1}">
+              <a class="ng2-smart-page-link page-link page-link-prev" href="#"
+                 (click)="getPage() == 1 ? false : prev()" aria-label="Prev">
+                <span aria-hidden="true">&lt;</span>
+                <span class="sr-only">Prev</span>
+              </a>
+            </li>
+            <li class="ng2-smart-page-item page-item"
+                [ngClass]="{active: getPage() == page}" *ngFor="let page of getPages()">
+          <span class="ng2-smart-page-link page-link"
+                *ngIf="getPage() == page">{{ page }} <span class="sr-only">(current)</span></span>
+              <a class="ng2-smart-page-link page-link" href="#"
+                 (click)="paginate(page)" *ngIf="getPage() != page">{{ page }}</a>
+            </li>
+
+            <li class="ng2-smart-page-item page-item"
+                [ngClass]="{disabled: getPage() == getLast()}">
+              <a class="ng2-smart-page-link page-link page-link-next" href="#"
+                 (click)="getPage() == getLast() ? false : next()" aria-label="Next">
+                <span aria-hidden="true">&gt;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+
+            <li class="ng2-smart-page-item page-item"
+                [ngClass]="{disabled: getPage() == getLast()}">
+              <a class="ng2-smart-page-link page-link" href="#"
+                 (click)="getPage() == getLast() ? false : paginate(getLast())" aria-label="Last">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Last</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <nav *ngIf="perPageSelect && perPageSelect.length > 0" class="ng2-smart-pagination-per-page">
+          <label for="per-page">
+            Per Page:
+          </label>
+          <select (change)="onChangePerPage($event)" [(ngModel)]="currentPerPage" id="per-page">
+            <option *ngFor="let item of perPageSelect" [value]="item">{{ item }}</option>
+          </select>
+        </nav>
+      </ng-container>
+    </ng-container>
   `,
 })
 export class PagerComponent implements OnChanges {
 
   @Input() source: DataSource;
+  @Input() pagerSetting;
   @Input() perPageSelect: any[] = [];
 
   @Output() changePage = new EventEmitter<any>();
@@ -71,13 +157,14 @@ export class PagerComponent implements OnChanges {
   currentPerPage: any;
 
   protected pages: Array<any>;
-  protected page: number;
+  public page: number;
   protected count: number = 0;
   protected perPage: number;
 
   protected dataChangedSub: Subscription;
 
   ngOnChanges(changes: SimpleChanges) {
+
     if (changes.source) {
       if (!changes.source.firstChange) {
         this.dataChangedSub.unsubscribe();
@@ -122,7 +209,12 @@ export class PagerComponent implements OnChanges {
     this.changePage.emit({ page });
     return false;
   }
-
+  nextPageShow(): boolean {
+    return !this.getPages().includes(this.getLast() - 1);
+  }
+  nextPage(page): boolean {
+    return this.paginate(Math.max(...this.getPages()) + 1);
+  }
   next(): boolean {
     return this.paginate(this.getPage() + 1);
   }
@@ -141,6 +233,15 @@ export class PagerComponent implements OnChanges {
 
   getLast(): number {
     return Math.ceil(this.count / this.perPage);
+  }
+  getLastNumber(): any {
+    let lastNumber;
+    if (this.getLast() > 4) {
+      lastNumber = '...';
+    } else if(this.getLast()) {
+      lastNumber = Math.ceil(this.count / this.perPage);
+    }
+    return lastNumber;
   }
 
   isPageOutOfBounce(): boolean {
