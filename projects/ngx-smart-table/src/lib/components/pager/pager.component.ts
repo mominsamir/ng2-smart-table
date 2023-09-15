@@ -37,6 +37,14 @@ import { DataSource } from '../../lib/data-source/data-source';
               </a>
             </li>
 
+            <li class="ng2-smart-page-item page-item"
+                [ngClass]="{disabled: getPage() == 1}" *ngIf="prevPageShow()">
+              <a class="ng2-smart-page-link page-link" href="#"
+                 (click)="getPage() == 1 ? false : PrevPage(page)" aria-label="PrevPage">
+                <span aria-hidden="true">{{getLastNumber()}}</span>
+                <span class="sr-only">PrevPage</span>
+              </a>
+            </li>
 
 
             <li class="ng2-smart-page-item page-item"
@@ -212,8 +220,14 @@ export class PagerComponent implements OnChanges {
   nextPageShow(): boolean {
     return !this.getPages().includes(this.getLast() - 1);
   }
+  prevPageShow(): boolean {
+    return !this.getPages().includes(1);
+  }
   nextPage(page): boolean {
     return this.paginate(Math.max(...this.getPages()) + 1);
+  }
+  PrevPage(page): boolean {
+    return this.paginate(Math.min(...this.getPages()) - 1);
   }
   next(): boolean {
     return this.paginate(this.getPage() + 1);
