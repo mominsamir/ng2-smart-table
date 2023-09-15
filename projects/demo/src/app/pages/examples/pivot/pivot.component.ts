@@ -1,7 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-//import { DataSource } from 'dist/@mominsamir/ngx-smart-table/lib/lib/data-source/data-source';
-//import { ServerDataSource } from 'dist/@mominsamir/ngx-smart-table/public-api';
 import { LocalDataSource, ServerDataSource } from 'ngx-smart-table';
 
 @Component({
@@ -75,7 +73,7 @@ export class IconComponents implements OnChanges{
 	@Input() rowData: any;
 
 	customFlag = false;
-    
+
 	onExpandAction() {
         console.log(this.value);
 		this.customFlag = !this.customFlag;
@@ -235,7 +233,7 @@ export class PivotDemoComponent {
 				"filter": false,
 				"type": "html",
 				"class": "forecast"
-			},			
+			},
 			"action": {
 				"title": "Action",
 				"type": "custom",
@@ -246,7 +244,7 @@ export class PivotDemoComponent {
 		}
 	}
 
-  
+
 
 	data = [
         {
