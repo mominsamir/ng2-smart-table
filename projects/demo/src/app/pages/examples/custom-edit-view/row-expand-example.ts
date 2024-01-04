@@ -7,23 +7,23 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
       <table>
         <thead>
           <tr>
-            <th>Id</th>          
+            <th>Id</th>
             <th>Name</th>
             <th>Email</th>
             <th>User Name</th>
             <th>inner Action</th>
- 
+
             </tr>
         </thead>
         <tbody>
           <tr>
-            <td>{{ rowData?.id }}</td>          
+            <td>{{ rowData?.id }}</td>
             <td>{{ rowData?.name }}</td>
             <td>{{ rowData?.email }}</td>
             <td>{{ rowData?.username }}</td>
             <td><button (click)="onClick()">click me</button></td>
           </tr>
-        </tbody>        
+        </tbody>
       </table>
     </div>
   `,
@@ -41,9 +41,9 @@ export class DivViewComponent {
 @Component({
   selector: 'icon',
   template: `
-    <svg width="5" height="5">
+    <svg width="15" height="15">
       <circle cx='5' cy='5' r='4' stroke='green' stroke-width='1' fill='yellow'></circle>
-    </svg>  
+    </svg>
   `,
 })
 export class IconComponent {
@@ -60,10 +60,15 @@ export class RowExpandComponent implements OnInit {
 
   settings = {
     expandedRowComponent: DivViewComponent,
+    actions: {
+      position: 'right',
+      add:false,
+      edit:false,
+      delete:false,
+    },
     columns: {
       id: {
         title: 'ID',
-        icon :IconComponent
       },
       name: {
         title: 'Full Name',
@@ -73,7 +78,16 @@ export class RowExpandComponent implements OnInit {
       },
       email: {
         title: 'Email',
-      }
+      },
+      button: {
+        title: '',
+        width: '7%',
+        type: 'custom-action',
+        action: 'expand',
+        sort: false,
+        filter: false,
+        renderComponent: IconComponent,
+      },
     },
   };
 

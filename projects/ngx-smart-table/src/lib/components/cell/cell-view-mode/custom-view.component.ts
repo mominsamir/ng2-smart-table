@@ -23,7 +23,7 @@ export class CustomViewComponent implements OnInit, OnDestroy {
   @Input() cell: Cell;
   @ViewChild('dynamicTarget', { read: ViewContainerRef, static: true }) dynamicTarget: any;
 
-  constructor(private resolver: ComponentFactoryResolver) {
+  constructor(public resolver: ComponentFactoryResolver) {
   }
 
   ngOnInit() {

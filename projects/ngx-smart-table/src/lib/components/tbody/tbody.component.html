@@ -31,7 +31,7 @@
 
 		<td *ngFor="let cell of getVisibleCells(row.cells)">
 			<ng2-smart-table-cell [cell]="cell" [grid]="grid" [row]="row" [isNew]="false" [mode]="mode"
-				[editConfirm]="editConfirm" [inputClass]="editInputClass" [isInEditing]="row.isInEditing">
+				[editConfirm]="editConfirm" [inputClass]="editInputClass" [isInEditing]="row.isInEditing" (onExpandRow)="onExpandRow.emit(row)">
 			</ng2-smart-table-cell>
 		</td>
 

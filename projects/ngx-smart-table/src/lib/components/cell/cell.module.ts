@@ -16,6 +16,7 @@ import { CustomViewComponent } from './cell-view-mode/custom-view.component';
 import { ViewCellComponent } from './cell-view-mode/view-cell.component';
 import { EditCellDefault } from './cell-edit-mode/edit-cell-default';
 import { DefaultEditor } from './cell-editors/default-editor';
+import {CustomActionComponent} from './cell-view-mode/custom-action.component';
 //import { NgxFreezeColumnDirective } from './ngx-freeze-column.directive';
 
 const CELL_COMPONENTS = [
@@ -31,6 +32,7 @@ const CELL_COMPONENTS = [
   SelectEditorComponent,
   TextareaEditorComponent,
   CustomViewComponent,
+  CustomActionComponent,
   ViewCellComponent,
 
 ];
@@ -42,7 +44,7 @@ const CELL_COMPONENTS = [
     Ng2CompleterModule,
   ],
   declarations: [
-    ...CELL_COMPONENTS,    
+    ...CELL_COMPONENTS,
   ],
   exports: [
     ...CELL_COMPONENTS,

@@ -1,7 +1,7 @@
 import { DataSet } from './data-set';
 
 export class Column {
-
+  action: string = '';
   title: string = '';
   type: string = '';
   class: string = '';
@@ -16,7 +16,7 @@ export class Column {
   isFilterable: boolean = false;
   sortDirection: string = '';
   defaultSortDirection: string = '';
-  filterOperator: string = 'LIKE'; 
+  filterOperator: string = 'LIKE';
   editor: { type: string, config: any, component: any } = { type: '', config: {}, component: null };
   filter: { type: string, config: any, component: any } = { type: '', config: {}, component: null };
   renderComponent: any = null;
@@ -58,6 +58,7 @@ export class Column {
   }
 
   protected process() {
+    this.action = this.settings['action'];
     this.title = this.settings['title'];
     this.class = this.settings['class'];
     this.width = this.settings['width'];

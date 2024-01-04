@@ -129,10 +129,11 @@ export class Ng2SmartTableTbodyComponent implements AfterViewInit, OnDestroy {
 	isActionAdd: boolean;
 	isActionEdit: boolean;
 	isActionDelete: boolean;
+  isActionExpand: boolean;
 	noDataMessage: String;
 
 	get tableColumnsCount() {
-		const actionColumns = this.isActionAdd || this.isActionEdit || this.isActionDelete ? 1 : 0;
+    const actionColumns = this.isActionAdd || this.isActionEdit || this.isActionDelete || this.isActionExpand ? 1 : 0;
 		const selectColumns = this.isMultiSelectVisible || this.isSingleSelectVisible ? 1 : 0;
 		return this.grid.getColumns().length + actionColumns + selectColumns;
 	}
@@ -147,6 +148,7 @@ export class Ng2SmartTableTbodyComponent implements AfterViewInit, OnDestroy {
 		this.isActionAdd = this.grid.getSetting('actions.add');
 		this.isActionEdit = this.grid.getSetting('actions.edit');
 		this.isActionDelete = this.grid.getSetting('actions.delete');
+    this.isActionExpand = this.grid.getSetting('actions.expand');
 		this.noDataMessage = this.grid.getSetting('noDataMessage');
 	}
 
