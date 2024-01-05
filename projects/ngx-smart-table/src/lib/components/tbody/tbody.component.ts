@@ -101,6 +101,7 @@ export class Ng2SmartTableTbodyComponent implements AfterViewInit, OnDestroy {
 					this.customComponent = item.first.createComponent(componentFactory);
 					Object.assign(this.customComponent.instance, this.grid.dataSet.expandRow, {
 						rowData: this.grid.dataSet.getExpandedRow().getData(),
+            row: this.grid.dataSet.getExpandedRow(),
 					});
 				}
 			});

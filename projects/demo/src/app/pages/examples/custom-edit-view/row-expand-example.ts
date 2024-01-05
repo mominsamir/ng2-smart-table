@@ -4,6 +4,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   selector: 'div-view',
   template: `
     <div >
+      <button (click)="collapseRow()">Collapse Row</button>
       <table>
         <thead>
           <tr>
@@ -12,7 +13,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
             <th>Email</th>
             <th>User Name</th>
             <th>inner Action</th>
-
             </tr>
         </thead>
         <tbody>
@@ -31,10 +31,14 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class DivViewComponent {
 
   @Input() rowData: any;
+  @Input() row: any;
 
 
   onClick() {
     alert(this.rowData.name);
+  }
+  collapseRow(){
+    this.row.isExpanded = false;
   }
 }
 
