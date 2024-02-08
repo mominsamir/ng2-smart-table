@@ -70,6 +70,11 @@ export class ServerDataSource extends LocalDataSource {
 
   protected requestElements(): Observable<any> {
     let httpParams = this.createRequestParams();
+
+    if(this.conf?.method === 'post') {
+      return this.http.post(this.conf.endPoint, this.conf.req, { params: httpParams, observe: 'response' });
+    }
+
     return this.http.get(this.conf.endPoint, { params: httpParams, observe: 'response' });
   }
 

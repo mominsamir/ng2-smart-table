@@ -10,6 +10,8 @@ export class ServerSourceConf {
   protected static readonly DATA_KEY = '';
 
   endPoint: string;
+  method: string;
+  req: any;
 
   sortFieldKey: string;
   sortDirKey: string;
@@ -21,11 +23,16 @@ export class ServerSourceConf {
   dataKey: string;
 
   constructor(
-    { endPoint = '', sortFieldKey = '', sortDirKey = '',
+    { 
+      endPoint = '', method = '', req = null,
+      sortFieldKey = '', sortDirKey = '',
       pagerPageKey = '', pagerLimitKey = '', filterFieldKey = '', totalKey = '', dataKey = '', filterFieldOperator = '' 
     } = {}) {
 
     this.endPoint = endPoint ? endPoint : '';
+    this.method = method ? method : 'get';
+    this.req = req  ? req : {};
+
 
     this.sortFieldKey = sortFieldKey ? sortFieldKey : ServerSourceConf.SORT_FIELD_KEY;
     this.sortDirKey = sortDirKey ? sortDirKey : ServerSourceConf.SORT_DIR_KEY;
